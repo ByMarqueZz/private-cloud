@@ -1,0 +1,90 @@
+.container {
+    text-align: center;
+
+}
+
+/* .tituloLogin {
+    font-size: 30px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 50px;
+    margin-top: -80px;
+    position: flex;
+}
+.loginButton {
+    margin-top: 30px;
+    background-image: url(loginButton.png);
+    background-size: 60px 60px;
+    background-repeat: no-repeat;
+    border: none;
+    width: 21%;
+    height: 60px;
+    border-radius: 5px;
+    background-color: white;
+    animation: none;
+}
+.username {
+    border: 1px solid #000;
+    background-image: url(userLoginIcon.png);
+    background-size: 33px 33px;
+    background-repeat: no-repeat;
+    background-position: 3px 2px;
+    padding-left: 20px;
+    width: 80%;
+    text-align: center;
+    display: flex;
+    margin: auto;
+}
+.password {
+    background-image: url(userPasswordIcon.png);
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: 3px 2.5px;
+    border: 1px solid #000;
+    padding-left: 30px;
+    width: 80%;
+    text-align: center;
+    display: flex;
+    margin: auto;
+}
+.userPass {
+    margin-top: 20px;
+} */
+.iconLogin {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+.divInputLogin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.formLogin {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 2rem;
+}
+
+.inputLogin {
+    width:90%;
+}
+.tituloLogin {
+    padding-bottom: 5%;
+}
+.loginButtonImg {
+    width: 50px
+}
+.loginButton {
+    border: 0;
+    background-color: transparent;
+    transition: 1s all;
+}
+.loginButton:hover {
+    cursor: pointer;
+    scale: 1.2;
+}

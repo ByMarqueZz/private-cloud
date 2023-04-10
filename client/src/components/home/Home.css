@@ -1,0 +1,45 @@
+.parent-directory-button-div-image {
+    width: 50px;
+}
+.parent-directory-button-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid black;
+    border-radius: 16px;
+    transition: 0.3s;
+}
+
+.parent-directory-button-div:hover {
+    background-color: #e6e6e6;
+}
+
+.path-div {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    width: 100%;
+    align-content: center;
+    justify-content: center;
+    padding-bottom: 1rem;
+}
+
+.link {
+    text-decoration: none;
+    color: black;
+}
+
+.logo-upload-button {
+    width: 50px;
+}
+
+.button-uplaod-files {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 16px;
+}
