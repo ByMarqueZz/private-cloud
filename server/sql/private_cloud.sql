@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost:8889
--- Tiempo de generación: 10-04-2023 a las 09:29:03
--- Versión del servidor: 5.7.34
--- Versión de PHP: 7.2.34
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 10-04-2023 a las 16:49:21
+-- Versión del servidor: 10.4.22-MariaDB
+-- Versión de PHP: 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -36,7 +36,7 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `hash` varchar(255) NOT NULL,
   `profile_picture` varchar(255) NOT NULL,
-  `registered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `registered` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname`, `email`, `password`, `username`, `hash`, `profile_picture`, `registered`) VALUES
-(1, 'Juan Antonio', 'Marquez', 'bymarquezz2@gmail.com', '123456', 'ByMarqueZz', '$2b$13$CC10rF.CUqFliNhofv9w2.', 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.softzone.es%2F2018%2F04%2F19%2Fcambiar-imagen-usuario-defecto-windows-10%2F&psig=AOvVaw1NxtgMxsf8zyWDrfcm36JD&ust=1681205121918000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCOi-xKL_nv4CFQAAAAAdAAAAABAE', '2023-04-10 09:25:32');
+(1, 'Juan Antonio', 'Marquez', 'bymarquezz2@gmail.com', '123456', 'ByMarqueZz', '$2b$13$CC10rF.CUqFliNhofv9w2.', '/assets/perfil.png', '2023-04-10 09:25:32');
 
 --
 -- Índices para tablas volcadas

@@ -23,6 +23,9 @@ function Delete(props) {
 
     return (
         <div className='div-form-delete'>
+            <div className='close-modal'>
+                <button type="button" className="btn-close" aria-label="Close" onClick={() => props.show(false)}></button>
+            </div>
             <form onSubmit={handleSubmit} className='form-input-file'>
                 {
                     props.type == 'folder' ? <p>¿Estás seguro de borrar el directorio {props.file} completo?</p> : <p>¿Estás seguro de borrar el archivo {props.file}?</p>
