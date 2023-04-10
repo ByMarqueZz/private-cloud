@@ -43,3 +43,10 @@
     padding: 1rem;
     border-radius: 16px;
 }
+
+.content-clickable-directory{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}

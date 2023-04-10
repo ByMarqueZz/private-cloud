@@ -6,7 +6,7 @@ function Upload(props) {
     const [file, setFile] = useState(null);
 
     function handleSubmit(event) {
-        console.log(file)
+        props.show(false);
         event.preventDefault();
         const formData = new FormData();
         formData.append('file', file);

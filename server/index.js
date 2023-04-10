@@ -121,6 +121,22 @@ app.post('/api/createFolder', async (req, res) => {
     res.json('Folder created')
 })
 
+app.post('/api/delete', async (req, res) => {
+    let path = req.body.path
+    let name = req.body.file
+    let type = req.body.type
+
+    if(path.includes('-')) {
+        path = path.replace(/-/g, '/')
+    }
+    if(type === 'file') {
+        fs.rmSync('./'+path+'/'+name)
+    } else {
+        fs.rmdirSync('./'+path+'/'+name, { recursive: true })
+    }
+    res.json('Deleted')
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })

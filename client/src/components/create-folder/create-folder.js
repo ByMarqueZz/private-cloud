@@ -7,6 +7,7 @@ function CreateFolder(props) {
 
     function handleSubmit(event) {
         event.preventDefault();
+        props.show(false);
         fetch(props.url+'/api/createFolder', {
             method: 'POST',
             headers: {
