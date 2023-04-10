@@ -69,6 +69,14 @@ function Home(props) {
 
   return (
       <>
+        <div className='button-uplaod-files'>
+              <button className='btn btn-primary' onClick={() => {
+                  setShowUpload(!showUpload)
+              }}><img src='/assets/upload.png' className="logo-upload-button"/></button>
+              <button className='btn btn-primary' onClick={() => {
+                  setShowCreateFolder(!showCreateFolder)
+              }}><img src='/assets/add-folder.png' className="logo-upload-button"/></button>
+          </div>
           <div className='path-div'>
               {
                   path.includes('-') ?
@@ -122,14 +130,6 @@ function Home(props) {
                       }
                   })
               }
-          </div>
-          <div className='button-uplaod-files'>
-              <button className='btn btn-primary' onClick={() => {
-                  setShowUpload(!showUpload)
-              }}><img src='/assets/upload.png' className="logo-upload-button"/></button>
-              <button className='btn btn-primary' onClick={() => {
-                  setShowCreateFolder(!showCreateFolder)
-              }}><img src='/assets/add-folder.png' className="logo-upload-button"/></button>
           </div>
 
           {

@@ -10,10 +10,12 @@
     border: 1px solid black;
     border-radius: 16px;
     transition: 0.3s;
+    background-color: #e6e6e6;
+    min-width: 250px;
 }
 
 .parent-directory-button-div:hover {
-    background-color: #e6e6e6;
+    background-color: #b5b5b5;
 }
 
 .path-div {

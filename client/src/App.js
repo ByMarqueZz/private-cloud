@@ -4,7 +4,7 @@ import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Home from './components/home/Home';
 import Login from './components/login/login';
 import Header from './components/header/header';
-import Upload from './components/upload/upload';
+import Register from './components/register/register';
 
 function App() {
     const [userHash, setUserHash] = useState(null);
@@ -82,6 +82,7 @@ function App() {
                     <div className='main'>
                         <Routes>
                             <Route path="/" element={<Login user={null} functionLogged={isLogged} url={url}/>}></Route>
+                            <Route path="/register" element={<Register user={null} functionLogged={isLogged} url={url}/>}></Route>
                             **<Route path="*" element={<Login user={null} functionLogged={isLogged} url={url}/>}></Route>**
                         </Routes>
                     </div>

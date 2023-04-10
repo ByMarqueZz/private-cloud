@@ -22,19 +22,25 @@ function CreateFolder(props) {
     }
 
     return (
-        <>
+        <div className='div-create-folder'>
+            <div className='close-modal'>
+                <button type="button" className="btn-close" aria-label="Close" onClick={() => props.show(false)}></button>
+            </div>
             <form onSubmit={handleSubmit} className='form-input-file'>
                 <div className='divInputLogin'>
                     <img src='/assets/expediente.png' className='iconLogin'/>
                     <div className="form-floating inputLogin">
-                        <input type="text" className="form-control" id="floatingInput" onChange={(event) => setName(event.target.value)}/>
+                        <input type="text" className="form-control" id="floatingInput" onChange={(event) => {
+                                if (event.target.value.length > 20) return;
+                                setName(event.target.value)
+                            }}/>
                         <label htmlFor="floatingInput">Nombre de la carpeta</label>
                     </div>
                 </div>
 
                 <button type="submit" className='btn btn-primary'>Subir</button>
             </form>
-        </>
+        </div>
     );
 }
 
