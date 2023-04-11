@@ -7,17 +7,34 @@ const mysql = require('mysql')
 const bcrypt = require('bcrypt')
 const fileUpload = require('express-fileupload')
 const nodemailer = require("nodemailer");
-const port = 3090
+const https = require('https')
+const port = 8282
 
 app.use(cors())
 app.use(express.json());
 app.use(cookieParser());
 app.use(fileUpload());
 
+// UBUNTU PARA EL SERVIDOR DE PRODUCCIÓN
+/**
+ * ANTES DE SUBIR A PRODUCCIÓN HAY QUE DESCOMENTAR lAS LINEAS DEL FINAL
+ */
+// const options = {
+//     cert: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/fullchain.pem'),
+//     key: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/privkey.pem')
+// };
+// var db_config = {
+//     host: '127.0.0.1',
+//     user: 'root',
+//     password: 'tY3rbpYG8&@W1l^t.a',
+//     database: 'private_cloud'
+// }
+
+//SERVIDOR LOCAL
 const db_config = {
   host: '127.0.0.1',
   user: 'root',
-  password: '',
+  password: 'root',
   database: 'private_cloud'
 }
 
@@ -58,11 +75,73 @@ app.post('/api/login', async (req, res) => {
 
 app.post('/api/user', async (req, res) => {
     const { hash } = req.body;
-    connection.query('SELECT id, username, profile_picture FROM users WHERE hash = ?', [hash], (err, rows, fields) => {
+    connection.query('SELECT * FROM users WHERE hash = ?', [hash], (err, rows, fields) => {
         if (err) throw err
         res.json(rows)
     })
 });
+
+app.get('/api/getUser/:id', async (req, res) => {
+    const { id } = req.params;
+    connection.query('SELECT * FROM users WHERE id = ?', [id], (err, rows, fields) => {
+        if (err) throw err
+        res.json(rows)
+    })
+})
+
+app.get('/api/getReadme/:path', async (req, res) => {
+    const { path } = req.params;
+    let files = [];
+    fs.readdir('./'+path, (err, result) => {
+        if(err) {
+            console.error(err)
+            throw Error(err)
+        }
+        files = result
+        if(files.includes('README.md')) {
+            res.sendFile(path+'/README.md', { root: __dirname })
+        }
+    })
+})
+
+app.get('/api/getifFollow/:user_id/:user_logged_hash', async (req, res) => {
+    const { user_id, user_logged_hash } = req.params;
+    connection.query('SELECT * FROM follows WHERE following_id = ? AND follower_id = (SELECT id FROM users WHERE hash = ?)', [user_id, user_logged_hash], (err, rows, fields) => {
+        if (err) throw err
+        res.json(rows)
+    })
+})
+
+app.get('/api/follow/:user_id/:user_logged_hash', async (req, res) => {
+const { user_id, user_logged_hash } = req.params;
+    connection.query('INSERT INTO follows (following_id, follower_id) VALUES (?, (SELECT id FROM users WHERE hash = ?))', [user_id, user_logged_hash], (err, rows, fields) => {
+        if (err) throw err
+        res.json(true)
+    })
+})
+
+app.get('/api/unfollow/:user_id/:user_logged_hash', async (req, res) => {
+    const { user_id, user_logged_hash } = req.params;
+    connection.query('DELETE FROM follows WHERE following_id = ? AND follower_id = (SELECT id FROM users WHERE hash = ?)', [user_id, user_logged_hash], (err, rows, fields) => {
+        if (err) throw err
+        res.json(true)
+    })
+})
+
+app.get('/api/getFollowers/:id', async (req, res) => {
+    const { id } = req.params;
+    let followers = 0
+    let following = 0
+    connection.query('SELECT * FROM follows WHERE following_id = ?', [id], (err, rows, fields) => {
+        if (err) throw err
+        followers = rows.length
+    })
+    connection.query('SELECT * FROM follows WHERE follower_id = ?', [id], (err, rows, fields) => {
+        if (err) throw err
+        following = rows.length
+        res.json({ followers, following })
+    })
+})
 
 app.get('/api/getPath/:path?', (req, res) => {
     let path = '/'
@@ -74,6 +153,28 @@ app.get('/api/getPath/:path?', (req, res) => {
     }
     const files = fs.readdirSync('.'+path)
     res.send(files)
+})
+
+app.post('/api/editProfile', async (req, res) => {
+    console.log(req.body)
+    console.log(req.files)
+
+    /**
+     * const fields = Object.keys(req.body);
+     const values = Object.values(req.body);
+     const placeholders = fields.map(() => '?').join(', ');
+     let sql = `UPDATE users SET ${fields.map(f => `${f} = ?`).join(', ')} WHERE hash = ?`;
+     let params = [...values, req.body.hash];
+
+     if (req.files && req.files.file) {
+  sql = `UPDATE users SET ${fields.map(f => `${f} = ?`).join(', ')}, profile_picture = ? WHERE hash = ?`;
+  params = [...values, req.files.file.name, req.body.hash];
+}
+
+     connection.query(sql, params, (err, rows, fields) => {
+  // ...
+});
+     * */
 })
 
 app.get('/api/download/:path/:file', (req, res) => {
@@ -90,6 +191,18 @@ app.get('/api/download/:path/:file', (req, res) => {
     })
 })
 
+app.get("/api/image/:path/:file", (req, res) => {
+    if(req.params.path.includes('-')) {
+        req.params.path = req.params.path.replace(/-/g, '/')
+    }
+    let path = './'+req.params.path+'/'+req.params.file
+    if (fs.existsSync(path)) {
+        res.sendFile(path, { root: __dirname });
+    } else {
+        res.sendStatus(404);
+    }
+});
+
 app.post('/api/upload', async (req, res) => {
     if(!req.files) {
         res.json('No file uploaded')
@@ -104,8 +217,15 @@ app.post('/api/upload', async (req, res) => {
         file = [file]
     }
 
+    let files_in_path = fs.readdirSync('./'+path)
+
     for(let i=0; i<file.length; i++) {
-        file[i].mv('./'+path+'/'+file[i].name, (err) => {
+        let fileName = file[i].name
+        if(files_in_path.includes(fileName)) {
+            fileName = getUniqueFileName(path, fileName)
+            file[i].name = fileName
+        }
+        file[i].mv('./'+path+'/'+fileName, (err) => {
             if (err) {
                 console.log(err)
             } else {
@@ -116,11 +236,38 @@ app.post('/api/upload', async (req, res) => {
     res.json('Files uploaded')
 })
 
+function getUniqueFileName(path, fileName) {
+    let fileCount = 0
+    let name = fileName.replace(/\(\d+\)/, '');
+    while (fs.existsSync(`${path}/${name}`)) {
+        fileCount++
+        const extension = name.split('.').pop()
+        let nameWithoutparentheses = name.replace(/\(\d+\)/, '')
+        const fileNameWithoutExtension = nameWithoutparentheses.replace(`.${extension}`, '')
+        name = `${fileNameWithoutExtension}(${fileCount}).${extension}`
+    }
+    return name
+}
+
+function getUniqueFolderName(path, folderName) {
+    let folderCount = 0;
+    let name = folderName.replace(/\(\d+\)/, ''); // eliminar paréntesis y su contenido
+    while (fs.existsSync(`${path}/${name}`)) {
+        folderCount++;
+        name = `${folderName}(${folderCount})`;
+    }
+    return name;
+}
+
 app.post('/api/createFolder', async (req, res) => {
     let path = req.body.path
     let folderName = req.body.name
     if(path.includes('-')) {
         path = path.replace(/-/g, '/')
+    }
+    let files_in_path = fs.readdirSync('./'+path)
+    if(files_in_path.includes(folderName)) {
+        folderName = getUniqueFolderName(path, folderName)
     }
 //    crear carpeta
     fs.mkdirSync('./'+path+'/'+folderName)
@@ -206,5 +353,11 @@ app.get('/api/sendMailVerification/:email', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Servidor HTTP listening on port ${port}`)
 })
+
+// const server = https.createServer(options, app);
+//
+// server.listen(port, () => {
+//     console.log('Servidor HTTPS escuchando en el puerto ' + port);
+// });

@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import Upload from '../upload/upload';
 import CreateFolder from '../create-folder/create-folder';
 import Delete from '../delete/delete';
+import File from '../file/file';
 
 function Home(props) {
   const [path, setPath] = useState(props.path);
@@ -68,12 +69,12 @@ function Home(props) {
     }
 
   return (
-      <>
-        <div className='button-uplaod-files'>
-              <button className='btn btn-primary' onClick={() => {
+      <div className='container-home'>
+          <div className='button-upload-no-buttons'>
+              <button className='btn btn-upload' onClick={() => {
                   setShowUpload(!showUpload)
               }}><img src='/assets/upload.png' className="logo-upload-button"/></button>
-              <button className='btn btn-primary' onClick={() => {
+              <button className='btn btn-upload' onClick={() => {
                   setShowCreateFolder(!showCreateFolder)
               }}><img src='/assets/add-folder.png' className="logo-upload-button"/></button>
           </div>
@@ -94,23 +95,7 @@ function Home(props) {
                   files.map((file, index) => {
                       if (file.includes('.')) {
                             return (
-                                <Link className='link' key={index}>
-                                    <div className='parent-directory-button-div'>
-                                        <div className='content-clickable-directory' onClick={() => {
-                                            download(path, file)
-                                        }}>
-                                            {
-                                                file.includes('.png') || file.includes('.jpg') || file.includes('.jpeg') ? <img className='parent-directory-button-div-image' src='/assets/imagen.png'></img>
-                                                    : <img className='parent-directory-button-div-image' src='/assets/expediente.png'></img>
-                                            }
-                                            <span>{file}</span>
-                                        </div>
-
-                                        <img className='logo' src='/assets/options.png' onClick={() => {
-                                            modalDelete(file, 'file')
-                                        }}></img>
-                                    </div>
-                                </Link>
+                                <File url={props.url} file={file} path={path} modalDelete={modalDelete} download={download} key={index}></File>
                             )
                       } else {
                             return (
@@ -143,7 +128,7 @@ function Home(props) {
           {
                 showDelete ? <Delete show={setShowDelete} type={type} file={fileDelete} path={path} url={props.url} reload={getPath}/> : ''
           }
-    </>
+    </div>
   );
 }
 

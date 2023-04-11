@@ -5,12 +5,17 @@ import Home from './components/home/Home';
 import Login from './components/login/login';
 import Header from './components/header/header';
 import Register from './components/register/register';
+import Profile from './components/profile/profile';
+import EditProfile from './components/edit-profile/edit-profile';
 
 function App() {
     const [userHash, setUserHash] = useState(null);
     const [user, setUser] = useState(null);
-    const [url, setUrl] = useState('http://localhost:3090');
     const [isLoading, setIsLoading] = useState(true);
+
+    // URL de la API
+    const [url, setUrl] = useState('http://localhost:8282');
+    // const [url, setUrl] = useState('https://jointscounter.com:8282');
 
     useEffect(() => {
         isLogged();
@@ -64,7 +69,8 @@ function App() {
 
     function logout() {
         document.cookie = 'id=; Max-Age=-99999999;';
-        window.location.href='/';
+        window.location.reload();
+        return <Navigate to="/login"/>
     }
 
     const RequireAuth = ({hash, children}) => {
@@ -96,7 +102,9 @@ function App() {
             <Header user={user} logout={logout}/>
               <div className='main'>
                   <Routes>
-                      <Route path="/:path?" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} logout={logout}/></RequireAuth>} />
+                      <Route path="/:path?" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} logout={logout}/></RequireAuth>}/>
+                      <Route path="/profile/:id" element={<RequireAuth hash={userHash}><Profile url={url} userHash={userHash} logout={logout}></Profile></RequireAuth>}></Route>
+                      <Route path="/editProfile" element={<RequireAuth hash={userHash}><EditProfile url={url} user={user}></EditProfile></RequireAuth>}></Route>
                       **<Route path="*" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} logout={logout}/></RequireAuth>}></Route>**
                   </Routes>
               </div>

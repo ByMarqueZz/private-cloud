@@ -1,0 +1,59 @@
+.form-edit-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.container-edit-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 16px;
+    width: 60%;
+}
+
+.container-edit-profile-form {
+    width: 100%;
+}
+
+.loginButtons {
+    border: 0.5px solid dimgray;
+}
+
+.loginButtons:hover {
+    background: #b0aeae;
+    border: 0.5px solid dimgray;
+}
+
+.fotoAddPhotoUpload , .filePreviewImg {
+    max-width: 300px;
+    border-radius: 50%;
+    margin: 0 auto;
+    border: 1px solid dimgray;
+}
+
+.div-edit-photo-profile {
+    text-align: center;
+}
+
+.indicative-text-edit-profile {
+    text-align: center;
+}
+
+.input-emaill-edit-profile {
+    color: gray;
+}
+
+@media screen and (max-width: 800px) {
+    .container-edit-profile {
+        width: 90%;
+    }
+}

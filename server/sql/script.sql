@@ -9,3 +9,11 @@ CREATE TABLE users (
     profile_picture VARCHAR(255) NOT NULL,
     registered TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE follows (
+    id int PRIMARY KEY AUTO_INCREMENT,
+    follower_id int NOT NULL,
+    following_id int NOT NULL,
+    FOREIGN KEY (follower_id) REFERENCES users(id),
+    FOREIGN KEY (following_id) REFERENCES users(id)
+);

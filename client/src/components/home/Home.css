@@ -1,5 +1,5 @@
 .parent-directory-button-div-image {
-    width: 50px;
+    max-height: 50px;
 }
 .parent-directory-button-div {
     display: flex;
@@ -46,9 +46,34 @@
     border-radius: 16px;
 }
 
+.button-upload-no-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 16px;
+}
+
+.btn-upload {
+    border: 1px solid black;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+.btn-upload:hover {
+    background-color: #b5b5b5;
+    border: 1px solid black;
+}
+
 .content-clickable-directory{
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
+}
+
+.container-home {
+    background: white;
+    border-radius: 16px;
+    padding: 1rem;
 }
