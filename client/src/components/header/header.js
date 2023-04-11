@@ -8,12 +8,12 @@ function Header(props) {
       <>
           <div className="header">
               <div className="titulo">
-                  <Link to="/" className="nav-link active"><span className="titulo">Private Cloud</span></Link>
+                  <Link to="/" className="nav-link active"><span className="titulo"><img src='/assets/cloud-logo.png' className='logo-header'/></span></Link>
               </div>
               <div className="botones">
                   <ul className="listaBotonesHeader">
                       <li>
-                          <Link to="/" className="nav-link active" aria-current="page" ><img src={props.user.profile_picture} className="logo"/></Link>
+                          <Link to={"/profile/"+props.user.id} className="nav-link active" aria-current="page" ><img src={props.user.profile_picture} className="logo"/></Link>
                       </li>
                       <li>
                           <button className='btn btn-primary' onClick={props.logout}>Cerrar sesión</button>
