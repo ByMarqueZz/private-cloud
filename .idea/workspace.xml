@@ -4,37 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7e1391bf-46c7-4071-8aa7-8b47223cda56" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client/public/404.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/public/assets/book.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/public/assets/cloud-logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/public/assets/cloud.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/public/assets/follows.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/public/assets/loading.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/public/assets/point.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/edit-profile/edit-profile.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/edit-profile/edit-profile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/file/file.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/file/file.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/profile/profile.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/profile/profile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/ByMarqueZz/README.md" afterDir="false" />
+    <list default="true" id="32894c48-c79d-4576-8a77-14a1ae9a8670" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/delete/delete.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/delete/delete.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/file/file.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/file/file.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/header/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/header/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/login/login.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/login/login.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/login/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/login/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/profile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/upload/upload.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/upload/upload.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/private_cloud.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/upload/upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/upload/upload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/server/sql/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/archivo1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/image.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/path1/archivo1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/perfil.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/paco/fotos boda/admin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/private_cloud.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/private_cloud.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/sql/private_cloud.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/sql/private_cloud.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/sql/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/sql/script.sql" afterDir="false" />
     </list>
@@ -42,15 +34,6 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="JavaScript File" />
-        <option value="CSS File" />
-        <option value="HTML File" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -60,15 +43,7 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitSEFilterConfiguration">
-    <file-type-list>
-      <filtered-out-file-type name="LOCAL_BRANCH" />
-      <filtered-out-file-type name="REMOTE_BRANCH" />
-      <filtered-out-file-type name="TAG" />
-      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
-    </file-type-list>
-  </component>
-  <component name="ProjectId" id="2OE1cPQeoMSzrGyWMmClU3aPFnu" />
+  <component name="ProjectId" id="2OJd1AZue7xvI7gfYKRDbcoIL8X" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -77,49 +52,29 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/client/public" />
-    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/client/public" />
-      <recent name="$PROJECT_DIR$/client/public/assets" />
-      <recent name="$PROJECT_DIR$/client/src/components" />
-      <recent name="$PROJECT_DIR$/server/ByMarqueZz" />
-      <recent name="$PROJECT_DIR$/client/src/components/header" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/client/build" />
-      <recent name="$PROJECT_DIR$/client/public/assets" />
-      <recent name="$PROJECT_DIR$/server/ByMarqueZz" />
       <recent name="$PROJECT_DIR$/server/sql" />
-      <recent name="$PROJECT_DIR$/client/src/components/home" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="7e1391bf-46c7-4071-8aa7-8b47223cda56" name="Changes" comment="" />
-      <created>1681111005415</created>
+      <changelist id="32894c48-c79d-4576-8a77-14a1ae9a8670" name="Changes" comment="" />
+      <created>1681282403419</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1681111005415</updated>
-      <workItem from="1681111007034" duration="2767000" />
-      <workItem from="1681113940238" duration="15637000" />
-      <workItem from="1681131175233" duration="67000" />
-      <workItem from="1681194032036" duration="49000" />
-      <workItem from="1681194086926" duration="21625000" />
+      <updated>1681282403419</updated>
+      <workItem from="1681282405168" duration="13959000" />
     </task>
     <servers />
   </component>

@@ -17,3 +17,13 @@ CREATE TABLE follows (
     FOREIGN KEY (follower_id) REFERENCES users(id),
     FOREIGN KEY (following_id) REFERENCES users(id)
 );
+
+CREATE TABLE files (
+    id int PRIMARY KEY AUTO_INCREMENT,
+    user_id int NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    path VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    permissions BOOLEAN NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);

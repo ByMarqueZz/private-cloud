@@ -1,9 +1,14 @@
 import {useEffect, useState} from 'react';
 import './create-folder.css';
 import {Link} from 'react-router-dom';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 function CreateFolder(props) {
     const [name, setName] = useState(null);
+    const [labelSwitch, setLabelSwitch] = useState('Public');
+    const [permission, setPermission] = useState(true);
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -13,12 +18,21 @@ function CreateFolder(props) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({name, path: props.path}),
+            body: JSON.stringify({name, path: props.path, user_id: props.user.id, permissions: permission}),
         })
         .then((response) => response.json())
         .then((data) => {
             props.reload();
         })
+    }
+    function onChangeSwitch(e) {
+        if(e.target.checked) {
+            setLabelSwitch('Public');
+            setPermission(true);
+        } else {
+            setLabelSwitch('Private');
+            setPermission(false);
+        }
     }
 
     return (
@@ -36,6 +50,12 @@ function CreateFolder(props) {
                             }}/>
                         <label htmlFor="floatingInput">Nombre de la carpeta</label>
                     </div>
+                </div>
+
+                <div className='divInputLogin'>
+                    <FormGroup>
+                        <FormControlLabel control={<Switch onChange={(e) => {onChangeSwitch(e)}} defaultChecked />} label={labelSwitch} />
+                    </FormGroup>
                 </div>
 
                 <button type="submit" className='btn btn-primary'>Subir</button>
