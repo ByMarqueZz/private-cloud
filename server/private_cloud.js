@@ -19,24 +19,24 @@ app.use(fileUpload());
 /**
  * ANTES DE SUBIR A PRODUCCIÓN HAY QUE DESCOMENTAR lAS LINEAS DEL FINAL
  */
-// const options = {
-//     cert: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/fullchain.pem'),
-//     key: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/privkey.pem')
-// };
-// var db_config = {
-//     host: '127.0.0.1',
-//     user: 'root',
-//     password: 'tY3rbpYG8&@W1l^t.a',
-//     database: 'private_cloud'
-// }
+const options = {
+    cert: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/privkey.pem')
+};
+var db_config = {
+    host: '127.0.0.1',
+    user: 'root',
+    password: 'tY3rbpYG8&@W1l^t.a',
+    database: 'private_cloud'
+}
 
 //SERVIDOR LOCAL
-const db_config = {
-  host: '127.0.0.1',
-  user: 'root',
-  password: 'root',
-  database: 'private_cloud'
-}
+// const db_config = {
+//   host: '127.0.0.1',
+//   user: 'root',
+//   password: 'root',
+//   database: 'private_cloud'
+// }
 
 let connection
 function handleDisconnect() {
@@ -331,7 +331,7 @@ app.get('/api/solicitudRegistro/:email/:name/:surname/:password/:username', (req
 });
 
 app.get('/api/getUsersNames', (req, res) => {
-    connection.query('SELECT username FROM users', (err, rows, fields) => {
+    connection.query('SELECT id, username, profile_picture FROM users', (err, rows, fields) => {
         if (err) throw err
         res.json(rows)
     })
@@ -382,12 +382,12 @@ app.get('/api/sendMailVerification/:email', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Servidor HTTP listening on port ${port}`)
-})
+// app.listen(port, () => {
+//     console.log(`Servidor HTTP listening on port ${port}`)
+// })
 
-// const server = https.createServer(options, app);
-//
-// server.listen(port, () => {
-//     console.log('Servidor HTTPS escuchando en el puerto ' + port);
-// });
+const server = https.createServer(options, app);
+
+server.listen(port, () => {
+    console.log('Servidor HTTPS escuchando en el puerto ' + port);
+});
