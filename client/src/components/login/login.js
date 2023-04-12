@@ -57,6 +57,12 @@ function Login(props) {
                       </div>
                   </div>
 
+                  {
+                      userIncorrect ?  <div className="alert alert-danger" role="alert">
+                          {userIncorrect}
+                      </div>: ''
+                  }
+
                   <div className='divLinkRegister'>
                       <Link to='/register' className='linkRegister'>¿No tienes cuenta? Regístrate</Link>
                   </div>

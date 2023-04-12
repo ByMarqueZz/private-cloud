@@ -12,6 +12,11 @@
     transition: 0.3s;
     background-color: #e6e6e6;
     min-width: 250px;
+    cursor: pointer;
+}
+
+.path-home-show {
+    text-align: center;
 }
 
 .parent-directory-button-div:hover {

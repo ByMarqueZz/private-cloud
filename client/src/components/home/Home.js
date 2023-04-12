@@ -14,17 +14,21 @@ function Home(props) {
   const [showDelete, setShowDelete] = useState(false);
   const [fileDelete, setFileDelete] = useState(null);
   const [type, setType] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         getPath();
     }, [path]);
 
     function getPath() {
+        setFiles([]);
+        setIsLoading(true);
         fetch(props.url + '/api/getPath/'+path)
         .then(response => response.json())
         .then(data => {
-            let files = orderFiles(data);
+            let files = orderFiles(data.rows);
             setFiles(files);
+            setIsLoading(false);
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -35,7 +39,7 @@ function Home(props) {
         let filesOrdered = [];
         data.forEach((file) => {
         //    si incluye el punto es un archivo y añadimos al final, primero los archivos y luego las carpetas
-            if (file.includes('.')) {
+            if (file.name.includes('.')) {
                 filesOrdered.push(file);
             } else {
                 filesOrdered.unshift(file);
@@ -70,59 +74,109 @@ function Home(props) {
 
   return (
       <div className='container-home'>
+          {
+              props.isPublic == false ? <p className='path-home-show'>{path}</p> : ''
+          }
           <div className='button-upload-no-buttons'>
-              <button className='btn btn-upload' onClick={() => {
-                  setShowUpload(!showUpload)
-              }}><img src='/assets/upload.png' className="logo-upload-button"/></button>
-              <button className='btn btn-upload' onClick={() => {
-                  setShowCreateFolder(!showCreateFolder)
-              }}><img src='/assets/add-folder.png' className="logo-upload-button"/></button>
+              {
+                  props.isPublic == false ?
+                      <>
+                          <button className='btn btn-upload' onClick={() => {
+                              setShowUpload(!showUpload)
+                          }}><img src='/assets/upload.png' className="logo-upload-button"/></button>
+                          <button className='btn btn-upload' onClick={() => {
+                              setShowCreateFolder(!showCreateFolder)
+                          }}><img src='/assets/add-folder.png' className="logo-upload-button"/></button>
+                      </> : ''
+              }
           </div>
           <div className='path-div'>
               {
                   path.includes('-') ?
-                    <Link className='link' to={'/'+path.split('-').slice(0, -1).join('-')} onClick={() => {
-                        setPath(path.split('-').slice(0, -1).join('-'))}
-                    }>
-                        <div className='parent-directory-button-div'>
-                            <img className='parent-directory-button-div-image' src='/assets/carpeta_padre.png'></img>
-                            <span>Directorio anterior</span>
-                        </div>
-                    </Link>
+                            props.isPublic == false ? <Link className='link' to={'/'+path.split('-').slice(0, -1).join('-')} onClick={() => {
+                              setPath(path.split('-').slice(0, -1).join('-'))}
+                          }>
+                              <div className='parent-directory-button-div'>
+                                  <img className='parent-directory-button-div-image' src='/assets/carpeta_padre.png'></img>
+                                  <span>Directorio anterior</span>
+                              </div>
+                          </Link> :
+                              <div className='parent-directory-button-div' onClick={() => {
+
+                                  setPath(path.split('-').slice(0, -1).join('-'));
+                                  //quita el ultimo directorio del path
+                                    let pathArray = path.split('-');
+                                    pathArray.pop();
+                                    pathArray = pathArray.join('-');
+                                    props.setDetails(pathArray+'-');
+                              }}>
+                                  <img className='parent-directory-button-div-image' src='/assets/carpeta_padre.png'></img>
+                                  <span>Directorio anterior</span>
+                              </div>
                   : ''
               }
               {
-                  files.map((file, index) => {
-                      if (file.includes('.')) {
-                            return (
-                                <File url={props.url} file={file} path={path} modalDelete={modalDelete} download={download} key={index}></File>
-                            )
-                      } else {
-                            return (
-                                <Link className='link' to={'/'+path+'-'+file}
-                                 key={index}>
-                                    <div className='parent-directory-button-div'>
-                                        <div className='content-clickable-directory' onClick={() => {setPath(path+'-'+file)}}>
-                                            <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
-                                            <span>{file}</span>
-                                        </div>
-                                        <img className='logo' src='/assets/options.png' onClick={() => {
-                                            modalDelete(file, 'folder')
-                                        }}></img>
-                                    </div>
-                                </Link>
-                            )
-                      }
-                  })
+                  isLoading == false ?
+                      <>
+                          {
+                              files.length == 0 ? props.isPublic ? <div className='container-home'><div className='loading'>NO HAY ARCHIVOS PÚBLICOS</div></div> : <div className='container-home'><div className='loading'>NO HAY ARCHIVOS</div></div> :
+                                  files.map((file, index) => {
+                                      if(props.isPublic == true && file.permissions == 0) {
+                                            return '';
+                                      }
+                                      if (file.name.includes('.')) {
+                                          return (
+                                              <File isPublic={props.isPublic} url={props.url} file={file} path={path} modalDelete={modalDelete} download={download} key={index}></File>
+                                          )
+                                      } else {
+                                          return(
+                                              <div className='parent-directory-button-div' key={index}>
+                                                  {
+                                                        props.isPublic == false ? <Link className='link' to={'/'+path+'-'+file.name}>
+                                                            <div className='content-clickable-directory' onClick={() => {
+                                                                setPath(path+'-'+file.name);
+                                                            }}>
+                                                                <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
+                                                                <span>{file.name}</span>
+                                                            </div>
+                                                        </Link> :
+                                                            <div className='content-clickable-directory' onClick={() => {
+                                                                setPath(path+'-'+file.name)
+                                                                props.setDetails(path+'-'+file.name);
+                                                            }}>
+                                                                <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
+                                                                <span>{file.name}</span>
+                                                            </div>
+                                                  }
+
+                                                  {
+                                                      props.isPublic == false ?
+                                                          <img className='logo' src='/assets/options.png' onClick={() => {
+                                                              modalDelete(file.name, 'folder')
+                                                          }}></img>
+                                                          : ''
+                                                  }
+                                              </div>
+                                              )
+
+                                          }
+                                  })
+                            }
+                      </>
+                      : <div className='container-home'><div className='loading'>CARGANDO</div></div>
               }
           </div>
 
           {
-                showUpload ? <Upload show={setShowUpload} path={path} url={props.url} reload={getPath}/> : ''
+                showUpload ? <Upload user={props.user} show={setShowUpload} path={path} url={props.url} reload={() => {
+                    setTimeout(() => {
+                        getPath();
+                    }, 500);
+                }}/> : ''
           }
 
           {
-                showCreateFolder ? <CreateFolder show={setShowCreateFolder} path={path} url={props.url} reload={getPath}/> : ''
+                showCreateFolder ? <CreateFolder user={props.user} show={setShowCreateFolder} path={path} url={props.url} reload={getPath}/> : ''
           }
 
           {

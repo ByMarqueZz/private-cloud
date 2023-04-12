@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon private_cloud.js"
+    "start": "nodemon private_cloud.js",
+    "export_db": "mysqldump -u root -p private_cloud > sql/private_cloud.sql"
   },
   "author": "",
   "license": "ISC",

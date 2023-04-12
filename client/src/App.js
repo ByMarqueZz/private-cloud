@@ -102,10 +102,10 @@ function App() {
             <Header user={user} logout={logout}/>
               <div className='main'>
                   <Routes>
-                      <Route path="/:path?" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} logout={logout}/></RequireAuth>}/>
+                      <Route path="/:path?" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} user={user} isPublic={false} logout={logout}/></RequireAuth>}/>
                       <Route path="/profile/:id" element={<RequireAuth hash={userHash}><Profile url={url} userHash={userHash} logout={logout}></Profile></RequireAuth>}></Route>
                       <Route path="/editProfile" element={<RequireAuth hash={userHash}><EditProfile url={url} user={user}></EditProfile></RequireAuth>}></Route>
-                      **<Route path="*" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} logout={logout}/></RequireAuth>}></Route>**
+                      **<Route path="*" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} user={user} isPublic={false} logout={logout}/></RequireAuth>}></Route>**
                   </Routes>
               </div>
           </BrowserRouter>

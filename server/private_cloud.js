@@ -151,8 +151,15 @@ app.get('/api/getPath/:path?', (req, res) => {
     if(path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
+    let pathDataBase = req.params.path
+    if(pathDataBase.includes('-')) {
+        pathDataBase = pathDataBase.replace(/-/g, '/')
+    }
     const files = fs.readdirSync('.'+path)
-    res.send(files)
+    connection.query('SELECT * FROM files WHERE path = ?', [pathDataBase], (err, rows, fields) => {
+        if (err) throw err
+        res.json({ files, rows })
+    })
 })
 
 app.post('/api/editProfile', async (req, res) => {
@@ -178,10 +185,10 @@ app.post('/api/editProfile', async (req, res) => {
 })
 
 app.get('/api/download/:path/:file', (req, res) => {
-    let path = './'+req.params.path+'/'+req.params.file
-    if(path.includes('-')) {
+    if(req.params.path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
+    let path = './'+req.params.path+'/'+req.params.file
     res.download(path, (err) => {
         if (err) {
             console.log(err)
@@ -198,8 +205,6 @@ app.get("/api/image/:path/:file", (req, res) => {
     let path = './'+req.params.path+'/'+req.params.file
     if (fs.existsSync(path)) {
         res.sendFile(path, { root: __dirname });
-    } else {
-        res.sendStatus(404);
     }
 });
 
@@ -216,6 +221,10 @@ app.post('/api/upload', async (req, res) => {
     if(file.length === undefined) {
         file = [file]
     }
+    let permissions = false
+    if(req.body.permissions === 'true') {
+        permissions = true
+    }
 
     let files_in_path = fs.readdirSync('./'+path)
 
@@ -225,11 +234,15 @@ app.post('/api/upload', async (req, res) => {
             fileName = getUniqueFileName(path, fileName)
             file[i].name = fileName
         }
+        let fileExtension = fileName.split('.').pop()
         file[i].mv('./'+path+'/'+fileName, (err) => {
             if (err) {
                 console.log(err)
             } else {
                 console.log('File uploaded')
+                connection.query('INSERT INTO files (name, path, user_id, type, permissions) VALUES (?, ?, ?, ?, ?)', [fileName, path, req.body.user_id, fileExtension, permissions], (err, rows, fields) => {
+                    if (err) throw err
+                })
             }
         })
     }
@@ -271,6 +284,9 @@ app.post('/api/createFolder', async (req, res) => {
     }
 //    crear carpeta
     fs.mkdirSync('./'+path+'/'+folderName)
+    connection.query('INSERT INTO files (name, path, user_id, type, permissions) VALUES (?, ?, ?, ?, ?)', [folderName, path, req.body.user_id, 'folder', req.body.permissions], (err, rows, fields) => {
+        if (err) throw err
+    })
     res.json('Folder created')
 })
 
@@ -287,7 +303,21 @@ app.post('/api/delete', async (req, res) => {
     } else {
         fs.rmdirSync('./'+path+'/'+name, { recursive: true })
     }
+    connection.query('DELETE FROM files WHERE name = ? AND path = ?', [name, path], (err, rows, fields) => {
+        if (err) throw err
+    })
     res.json('Deleted')
+})
+
+app.get('/api/getIsPublic/:path/:file', (req, res) => {
+    let path = req.params.path
+    if(path.includes('-')) {
+        path = path.replace(/-/g, '/')
+    }
+    connection.query('SELECT permissions FROM files WHERE path = ? AND name = ?', [path, req.params.file], (err, rows, fields) => {
+        if (err) throw err
+        res.json(rows[0].permissions)
+    })
 })
 
 app.get('/api/solicitudRegistro/:email/:name/:surname/:password/:username', (req, res) => {

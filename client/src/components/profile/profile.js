@@ -16,6 +16,7 @@ function Profile(props) {
     const [isFollowing, setIsFollowing] = useState(false);
     const [followers, setFollowers] = useState(null);
     const [following, setFollowing] = useState(null);
+    const [pathDetails, setPathDetails] = useState(null);
 
     useEffect(() => {
         getUser();
@@ -30,6 +31,7 @@ function Profile(props) {
                     setUser(data[0]);
                     setIsLoading(false);
                     getFollowers(data[0].id)
+                    setPathDetails(data[0].username+'-');
                     if (data[0].hash === props.userHash) {
                         setIsOwner(true);
                     } else {
@@ -43,7 +45,6 @@ function Profile(props) {
         fetch(props.url+'/api/getifFollow/'+id+'/'+props.userHash)
             .then((response) => response.text())
             .then((data) => {
-                console.log(data)
                 //comprueba si data es un array vacio
                 if(data != '[]') {
                     setIsFollowing(true);
@@ -169,8 +170,8 @@ function Profile(props) {
 
                     {
                         showFiles ? <div>
-                            <p>{user.username}/</p>
-                            <Home url={props.url} path={user.username} logout={props.logout}></Home>
+                            <p>{pathDetails}</p>
+                            <Home setDetails={setPathDetails} isPublic={true} url={props.url} path={user.username} logout={props.logout}></Home>
                         </div> : null
                     }
 

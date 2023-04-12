@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import FileViewer from 'react-file-viewer';
 import "./file.css";
 
 function File(props) {
     const [imageUrl, setImageUrl] = useState(null);
 
     useEffect(() => {
-        if (props.file.match(/\.(png|jpe?g)$/i)) {
-            fetch(`${props.url}/api/image/${props.path}/${props.file}`)
+        if (props.file.name.match(/\.(png|jpe?g)$/i)) {
+            fetch(`${props.url}/api/image/${props.path}/${props.file.name}`)
                 .then((res) => res.blob())
                 .then((blob) => {
                     setImageUrl(URL.createObjectURL(blob));
                 })
                 .catch((err) => console.error(err));
         }
-    }, [props.file, props.path]);
+    }, [props.file.name, props.path]);
 
     return (
         <>
@@ -23,26 +24,32 @@ function File(props) {
                     <div
                         className="content-clickable-directory"
                         onClick={() => {
-                            props.download(props.path, props.file);
+                            props.download(props.path, props.file.name);
                         }}
                     >
                         {imageUrl ? (
                             <img className="parent-directory-button-div-image" src={imageUrl}></img>
-                        ) : props.file.match(/\.(png|jpe?g)$/i) ? (
+                        ) : props.file.name.match(/\.(png|jpe?g)$/i) ? (
                             <div className="parent-directory-button-div-image-loading">Loading...</div>
                         ) : (
-                            <img className="parent-directory-button-div-image" src="/assets/expediente.png"></img>
+                            <>
+                                <img className="parent-directory-button-div-image" src="/assets/expediente.png"></img>
+                                {/*<FileViewer fileType={'pdf'} filePath={props.path+props.file}/>*/}
+                            </>
                         )}
-                        <span>{props.file}</span>
+                        <span>{props.file.name}</span>
                     </div>
 
-                    <img
-                        className="logo"
-                        src="/assets/options.png"
-                        onClick={() => {
-                            props.modalDelete(props.file, "file");
-                        }}
-                    ></img>
+                    {
+                        props.isPublic == false ? <img
+                            className="logo"
+                            src="/assets/options.png"
+                            onClick={() => {
+                                props.modalDelete(props.file.name, "file");
+                            }}
+                        ></img> : ''
+                    }
+
                 </div>
             </Link>
         </>
