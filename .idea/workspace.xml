@@ -7,28 +7,13 @@
     <list default="true" id="32894c48-c79d-4576-8a77-14a1ae9a8670" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/file/file.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/file/file.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/header/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/header/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/login/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/login/login.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/upload/upload.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/upload/upload.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/upload/upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/upload/upload.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/server/sql/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/archivo1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/image.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/path1/archivo1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/perfil.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/private_cloud.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/private_cloud.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/sql/private_cloud.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/sql/private_cloud.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/sql/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/sql/script.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

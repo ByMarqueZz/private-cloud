@@ -20,7 +20,7 @@ function Profile(props) {
 
     useEffect(() => {
         getUser();
-    }, []);
+    }, [props.id_profile]);
 
     function getUser() {
         fetch(props.url+'/api/getUser/'+id)
@@ -163,7 +163,9 @@ function Profile(props) {
                                         <p>{user.username}/README.md</p>
                                         <div dangerouslySetInnerHTML={{__html: readme}}></div>
                                     </div> :
-                                    <p>Si quieres crear un archivo que se muestre en tu perfil en modo presentación, tienes que crear un archivo titulado `README.md` en la raíz de tus archivos. Ten en cuenta las mayúsculas.</p>
+                                    props.id_profile == props.user.id ?
+                                    <p>Si quieres crear un archivo que se muestre en tu perfil en modo presentación, tienes que crear un archivo titulado `README.md` en la raíz de tus archivos. Ten en cuenta las mayúsculas.</p> :
+                                        <p>El usuario no tiene ningún archivo de presentación</p>
                             }
                         </div> : null
                     }

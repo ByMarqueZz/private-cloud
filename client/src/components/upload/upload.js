@@ -7,7 +7,7 @@ import Switch from '@mui/material/Switch';
 
 function Upload(props) {
     const [files, setFiles] = useState([]);
-    const [labelSwitch, setLabelSwitch] = useState('Public');
+    const [labelSwitch, setLabelSwitch] = useState('Público');
     const [permission, setPermission] = useState(true);
 
     useEffect(() => {
@@ -36,10 +36,10 @@ function Upload(props) {
 
     function onChangeSwitch(e) {
         if(e.target.checked) {
-            setLabelSwitch('Public');
+            setLabelSwitch('Público');
             setPermission(true);
         } else {
-            setLabelSwitch('Private');
+            setLabelSwitch('Privado');
             setPermission(false);
         }
     }

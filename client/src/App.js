@@ -12,10 +12,11 @@ function App() {
     const [userHash, setUserHash] = useState(null);
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [idProfile, setIdProfile] = useState(null);
 
     // URL de la API
-    const [url, setUrl] = useState('http://localhost:8282');
-    // const [url, setUrl] = useState('https://jointscounter.com:8282');
+    // const [url, setUrl] = useState('http://localhost:8282');
+    const [url, setUrl] = useState('https://jointscounter.com:8282');
 
     useEffect(() => {
         isLogged();
@@ -99,14 +100,14 @@ function App() {
       return (
         <>
           <BrowserRouter>
-            <Header user={user} logout={logout}/>
+              <Header setId={setIdProfile} url={url} user={user} logout={logout}/>
               <div className='main'>
-                  <Routes>
+                <Routes>
                       <Route path="/:path?" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} user={user} isPublic={false} logout={logout}/></RequireAuth>}/>
-                      <Route path="/profile/:id" element={<RequireAuth hash={userHash}><Profile url={url} userHash={userHash} logout={logout}></Profile></RequireAuth>}></Route>
+                      <Route path="/profile/:id" element={<RequireAuth hash={userHash}><Profile id_profile={idProfile} user={user} url={url} userHash={userHash} logout={logout}></Profile></RequireAuth>}></Route>
                       <Route path="/editProfile" element={<RequireAuth hash={userHash}><EditProfile url={url} user={user}></EditProfile></RequireAuth>}></Route>
                       **<Route path="*" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} user={user} isPublic={false} logout={logout}/></RequireAuth>}></Route>**
-                  </Routes>
+                </Routes>
               </div>
           </BrowserRouter>
         </>

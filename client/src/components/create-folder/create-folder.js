@@ -7,7 +7,7 @@ import Switch from '@mui/material/Switch';
 
 function CreateFolder(props) {
     const [name, setName] = useState(null);
-    const [labelSwitch, setLabelSwitch] = useState('Public');
+    const [labelSwitch, setLabelSwitch] = useState('Público');
     const [permission, setPermission] = useState(true);
 
     function handleSubmit(event) {
@@ -27,10 +27,10 @@ function CreateFolder(props) {
     }
     function onChangeSwitch(e) {
         if(e.target.checked) {
-            setLabelSwitch('Public');
+            setLabelSwitch('Público');
             setPermission(true);
         } else {
-            setLabelSwitch('Private');
+            setLabelSwitch('Privado');
             setPermission(false);
         }
     }
