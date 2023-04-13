@@ -165,23 +165,43 @@ app.get('/api/getPath/:path?', (req, res) => {
 app.post('/api/editProfile', async (req, res) => {
     console.log(req.body)
     console.log(req.files)
+    console.log(req.body.hash)
 
-    /**
-     * const fields = Object.keys(req.body);
+    if(req.body.username) {
+        connection.query('SELECT * FROM users WHERE username = ?', [req.body.username], (err, rows, fields) => {
+            if (err) throw err
+            if(rows.length > 0) {
+                res.json({ message: 'El nombre de usuario ya existe.' })
+            }
+        })
+    }
+
+     const fields = Object.keys(req.body);
      const values = Object.values(req.body);
      const placeholders = fields.map(() => '?').join(', ');
      let sql = `UPDATE users SET ${fields.map(f => `${f} = ?`).join(', ')} WHERE hash = ?`;
      let params = [...values, req.body.hash];
 
      if (req.files && req.files.file) {
-  sql = `UPDATE users SET ${fields.map(f => `${f} = ?`).join(', ')}, profile_picture = ? WHERE hash = ?`;
-  params = [...values, req.files.file.name, req.body.hash];
-}
+        const file = req.files.file;
+        let ext = file.name.split('.').pop();
+        const path = './uploads';
+        let fileName = file.name + '-' + Date.now() + '.'+ext;
+        file.mv(path+'/'+fileName, (err) => {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log('File uploaded')
+                sql = `UPDATE users SET ${fields.map(f => `${f} = ?`).join(', ')}, profile_picture = ? WHERE hash = ?`;
+                params = [...values, fileName, req.body.hash];
+            }
+        });
+    }
 
      connection.query(sql, params, (err, rows, fields) => {
-  // ...
-});
-     * */
+            if (err) throw err
+            res.json({ message: 'Perfil actualizado.' })
+     })
 })
 
 app.get('/api/download/:path/:file', (req, res) => {
@@ -298,16 +318,20 @@ app.post('/api/delete', async (req, res) => {
     if(path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
+
     if(type === 'file') {
         fs.rmSync('./'+path+'/'+name)
     } else {
-        fs.rmdirSync('./'+path+'/'+name, { recursive: true })
+        fs.rmSync('./'+path+'/'+name, { recursive: true })
     }
+
     connection.query('DELETE FROM files WHERE name = ? AND path = ?', [name, path], (err, rows, fields) => {
         if (err) throw err
     })
+
     res.json('Deleted')
 })
+
 
 app.get('/api/getIsPublic/:path/:file', (req, res) => {
     let path = req.params.path
