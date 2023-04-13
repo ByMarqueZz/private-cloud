@@ -5,14 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32894c48-c79d-4576-8a77-14a1ae9a8670" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/client/public/assets/empty.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/header/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/header/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/upload/upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/upload/upload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/edit-profile/edit-profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/edit-profile/edit-profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/file/file.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/file/file.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/private_cloud.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/private_cloud.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -40,6 +40,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/client/public/assets" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -47,6 +48,9 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/client/public/assets" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/server/sql" />
     </key>
@@ -60,6 +64,7 @@
       <option name="presentableId" value="Default" />
       <updated>1681282403419</updated>
       <workItem from="1681282405168" duration="13959000" />
+      <workItem from="1681365777355" duration="12765000" />
     </task>
     <servers />
   </component>

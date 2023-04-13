@@ -42,7 +42,7 @@ function File(props) {
 
                     {
                         props.isPublic == false ? <img
-                            className="logo"
+                            className="options-files-home"
                             src="/assets/options.png"
                             onClick={() => {
                                 props.modalDelete(props.file.name, "file");

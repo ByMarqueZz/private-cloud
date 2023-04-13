@@ -17,13 +17,14 @@ function EditProfile(props) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        if(usersAlreadyRegistered.includes(username)) {
+        if(usersAlreadyRegistered.includes(username.toLowerCase())) {
             setNameAlreadyRegistered(true);
             return;
         } else {
             setNameAlreadyRegistered(false);
         }
         const formData = new FormData();
+        formData.append('hash', props.hash)
         if (file) {
             formData.append('file', file);
         }

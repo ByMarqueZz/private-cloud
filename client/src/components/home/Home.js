@@ -5,6 +5,7 @@ import Upload from '../upload/upload';
 import CreateFolder from '../create-folder/create-folder';
 import Delete from '../delete/delete';
 import File from '../file/file';
+import Grid from '@mui/material/Grid';
 
 function Home(props) {
   const [path, setPath] = useState(props.path);
@@ -91,16 +92,20 @@ function Home(props) {
               }
           </div>
           <div className='path-div'>
+              <Grid container spacing={2}>
               {
                   path.includes('-') ?
-                            props.isPublic == false ? <Link className='link' to={'/'+path.split('-').slice(0, -1).join('-')} onClick={() => {
+                            props.isPublic == false ? <Grid item xs={12} sm={6} md={6} lg={6} xl={6}><Link className='link' to={'/'+path.split('-').slice(0, -1).join('-')} onClick={() => {
                               setPath(path.split('-').slice(0, -1).join('-'))}
                           }>
                               <div className='parent-directory-button-div'>
-                                  <img className='parent-directory-button-div-image' src='/assets/carpeta_padre.png'></img>
-                                  <span>Directorio anterior</span>
+                                  <div className='content-clickable-directory'>
+                                      <img className='parent-directory-button-div-image' src='/assets/carpeta_padre.png'></img>
+                                      <span>Directorio anterior</span>
+                                  </div>
                               </div>
-                          </Link> :
+                                </Link></Grid> :
+                                <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                               <div className='parent-directory-button-div' onClick={() => {
 
                                   setPath(path.split('-').slice(0, -1).join('-'));
@@ -110,53 +115,66 @@ function Home(props) {
                                     pathArray = pathArray.join('-');
                                     props.setDetails(pathArray+'-');
                               }}>
-                                  <img className='parent-directory-button-div-image' src='/assets/carpeta_padre.png'></img>
-                                  <span>Directorio anterior</span>
-                              </div>
+                                  <div className='content-clickable-directory'>
+                                      <img className='parent-directory-button-div-image' src='/assets/carpeta_padre.png'></img>
+                                      <span>Directorio anterior</span>
+                                    </div>
+                              </div></Grid>
                   : ''
               }
               {
                   isLoading == false ?
                       <>
                           {
-                              files.length == 0 ? props.isPublic ? <div className='container-home'><div className='loading'>NO HAY ARCHIVOS PÚBLICOS</div></div> : <div className='container-home'><div className='loading'>NO HAY ARCHIVOS</div></div> :
+                              files.length == 0 ? props.isPublic ? <div className='container-home'><div className='loading'>NO HAY ARCHIVOS PÚBLICOS</div></div> : <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                                      <div className='parent-directory-button-div'>
+                                          <div className='content-clickable-directory'>
+                                              <img className='parent-directory-button-div-image' src='/assets/empty.png'></img>
+                                              <span>Directorio vacío</span>
+                                          </div>
+                                      </div>
+                                  </Grid> :
                                   files.map((file, index) => {
                                       if(props.isPublic == true && file.permissions == 0) {
                                             return '';
                                       }
                                       if (file.name.includes('.')) {
                                           return (
-                                              <File isPublic={props.isPublic} url={props.url} file={file} path={path} modalDelete={modalDelete} download={download} key={index}></File>
+                                                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={index}>
+                                                    <File isPublic={props.isPublic} url={props.url} file={file} path={path} modalDelete={modalDelete} download={download}></File>
+                                                </Grid>
                                           )
                                       } else {
                                           return(
-                                              <div className='parent-directory-button-div' key={index}>
-                                                  {
-                                                        props.isPublic == false ? <Link className='link' to={'/'+path+'-'+file.name}>
-                                                            <div className='content-clickable-directory' onClick={() => {
-                                                                setPath(path+'-'+file.name);
-                                                            }}>
-                                                                <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
-                                                                <span>{file.name}</span>
-                                                            </div>
-                                                        </Link> :
-                                                            <div className='content-clickable-directory' onClick={() => {
-                                                                setPath(path+'-'+file.name)
-                                                                props.setDetails(path+'-'+file.name);
-                                                            }}>
-                                                                <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
-                                                                <span>{file.name}</span>
-                                                            </div>
-                                                  }
+                                                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={index}>
+                                                  <div className='parent-directory-button-div'>
+                                                      {
+                                                            props.isPublic == false ? <Link className='link' to={'/'+path+'-'+file.name}>
+                                                                <div className='content-clickable-directory' onClick={() => {
+                                                                    setPath(path+'-'+file.name);
+                                                                }}>
+                                                                    <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
+                                                                    <span>{file.name}</span>
+                                                                </div>
+                                                            </Link> :
+                                                                <div className='content-clickable-directory' onClick={() => {
+                                                                    setPath(path+'-'+file.name)
+                                                                    props.setDetails(path+'-'+file.name);
+                                                                }}>
+                                                                    <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
+                                                                    <span>{file.name}</span>
+                                                                </div>
+                                                      }
 
-                                                  {
-                                                      props.isPublic == false ?
-                                                          <img className='logo' src='/assets/options.png' onClick={() => {
-                                                              modalDelete(file.name, 'folder')
-                                                          }}></img>
-                                                          : ''
-                                                  }
-                                              </div>
+                                                      {
+                                                          props.isPublic == false ?
+                                                              <img className='options-files-home' src='/assets/options.png' onClick={() => {
+                                                                  modalDelete(file.name, 'folder')
+                                                              }}></img>
+                                                              : ''
+                                                      }
+                                                  </div>
+                                                </Grid>
                                               )
 
                                           }
@@ -165,6 +183,7 @@ function Home(props) {
                       </>
                       : <div className='container-home'><div className='loading'>CARGANDO</div></div>
               }
+                </Grid>
           </div>
 
           {
