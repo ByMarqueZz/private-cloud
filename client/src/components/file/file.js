@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import FileViewer from 'react-file-viewer';
 import "./file.css";
 
 function File(props) {
@@ -34,7 +33,6 @@ function File(props) {
                         ) : (
                             <>
                                 <img className="parent-directory-button-div-image" src="/assets/expediente.png"></img>
-                                {/*<FileViewer fileType={'pdf'} filePath={props.path+props.file}/>*/}
                             </>
                         )}
                         <span>{props.file.name}</span>
