@@ -15,8 +15,8 @@ function App() {
     const [idProfile, setIdProfile] = useState(null);
 
     // URL de la API
-    const [url, setUrl] = useState('http://localhost:8282');
-    // const [url, setUrl] = useState('https://jointscounter.com:8282');
+    // const [url, setUrl] = useState('http://localhost:8282');
+    const [url, setUrl] = useState('https://jointscounter.com:8282');
 
     useEffect(() => {
         isLogged();
