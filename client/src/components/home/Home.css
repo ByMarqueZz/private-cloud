@@ -21,6 +21,21 @@
     background-color: transparent;
 }
 
+.options-PopOver {
+    padding: 1rem;
+}
+
+.option-popOver {
+    padding: 0.5rem;
+    border-radius: 16px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.option-popOver-p {
+    margin: 0;
+}
+
 .path-home-show {
     text-align: center;
 }

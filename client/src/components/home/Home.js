@@ -1,4 +1,5 @@
 import './Home.css';
+import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import Upload from '../upload/upload';
@@ -6,6 +7,9 @@ import CreateFolder from '../create-folder/create-folder';
 import Delete from '../delete/delete';
 import File from '../file/file';
 import Grid from '@mui/material/Grid';
+import PopoverOption from '../popover/popover';
+import PopoverPublic from '../popoverpublic/popoverpublic';
+import ModalPassword from '../modal-password/modal-password';
 
 function Home(props) {
   const [path, setPath] = useState(props.path);
@@ -16,6 +20,9 @@ function Home(props) {
   const [fileDelete, setFileDelete] = useState(null);
   const [type, setType] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showModalPassword, setShowModalPassword] = useState(false);
+  const [passwords, setPasswords] = useState('');
+  const [newPath, setNewPath] = useState('');
 
     useEffect(() => {
         getPath();
@@ -49,28 +56,57 @@ function Home(props) {
         return filesOrdered;
     }
 
-    function download(path, file) {
-        fetch(props.url+'/api/download/'+path+'/'+file, {
-            method: 'GET',
-            responseType: 'blob'
-        })
-            .then((response) => {return response.blob()})
-        .then((blob) => {
-            const url = window.URL.createObjectURL(new Blob([blob]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', file);
-            document.body.appendChild(link);
-            link.click();
-        }).catch((error) => {
-            console.log(error);
-        });
+    function download(path, file, type='file') {
+        if (type == 'folder') {
+            fetch(props.url+'/api/downloadFolder/'+path+'/'+file, {
+                method: 'GET',
+                responseType: 'blob'
+            })
+                .then((response) => {return response.blob()})
+                .then((blob) => {
+                    const url = window.URL.createObjectURL(new Blob([blob]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', file + '.zip');
+                    document.body.appendChild(link);
+                    link.click();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            fetch(props.url+'/api/download/'+path+'/'+file, {
+                method: 'GET',
+                responseType: 'blob'
+            })
+                .then((response) => {return response.blob()})
+                .then((blob) => {
+                    const url = window.URL.createObjectURL(new Blob([blob]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', file);
+                    document.body.appendChild(link);
+                    link.click();
+                }).catch((error) => {
+                console.log(error);
+            });
+        }
     }
 
     function modalDelete(file, type) {
         setFileDelete(file);
         setType(type)
         setShowDelete(!showDelete);
+    }
+
+    function settingPath(path, password) {
+        if(password != null) {
+            setPasswords(password)
+            setNewPath(path);
+            setShowModalPassword(true);
+        } else {
+            setPath(path);
+        }
     }
 
   return (
@@ -95,7 +131,7 @@ function Home(props) {
               <Grid container spacing={2}>
               {
                   path.includes('-') ?
-                            props.isPublic == false ? <Grid item xs={12} sm={6} md={6} lg={6} xl={6}><Link className='link' to={'/'+path.split('-').slice(0, -1).join('-')} onClick={() => {
+                            props.isPublic == false ? <Grid item xs={12} sm={6} md={6} lg={6} xl={6}><Link className='link' onClick={() => {
                               setPath(path.split('-').slice(0, -1).join('-'))}
                           }>
                               <div className='parent-directory-button-div'>
@@ -149,11 +185,14 @@ function Home(props) {
                                                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={index}>
                                                   <div className='parent-directory-button-div'>
                                                       {
-                                                            props.isPublic == false ? <Link className='link' to={'/'+path+'-'+file.name}>
+                                                            props.isPublic == false ? <Link className='link'>
                                                                 <div className='content-clickable-directory' onClick={() => {
-                                                                    setPath(path+'-'+file.name);
+                                                                    settingPath(path+'-'+file.name, file.password);
                                                                 }}>
-                                                                    <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
+                                                                    {
+                                                                        file.password != null ? <img className='parent-directory-button-div-image' src='/assets/carpeta_candado.png'></img> :
+                                                                            <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
+                                                                    }
                                                                     <span>{file.name}</span>
                                                                 </div>
                                                             </Link> :
@@ -168,10 +207,8 @@ function Home(props) {
 
                                                       {
                                                           props.isPublic == false ?
-                                                              <img className='options-files-home' src='/assets/options.png' onClick={() => {
-                                                                  modalDelete(file.name, 'folder')
-                                                              }}></img>
-                                                              : ''
+                                                                <PopoverOption url={props.url} modalDelete={modalDelete} file={file} type='folder' path={props.path} download={download}/>
+                                                              : <PopoverPublic url={props.url} file={file} type='folder' path={props.path} download={download}/>
                                                       }
                                                   </div>
                                                 </Grid>
@@ -200,6 +237,9 @@ function Home(props) {
 
           {
                 showDelete ? <Delete show={setShowDelete} type={type} file={fileDelete} path={path} url={props.url} reload={getPath}/> : ''
+          }
+          {
+              showModalPassword ? <ModalPassword newPath={newPath} setPath={setPath} show={setShowModalPassword} type={type} pass={passwords} path={path} url={props.url} reload={getPath}/> : ''
           }
     </div>
   );

@@ -4,35 +4,64 @@ import {Link} from 'react-router-dom';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
 
 function CreateFolder(props) {
     const [name, setName] = useState(null);
     const [labelSwitch, setLabelSwitch] = useState('Público');
+    const [labelSwitchPass, setLabelSwitchPass] = useState('Sin contraseña');
     const [permission, setPermission] = useState(true);
+    const [password, setPassword] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
 
     function handleSubmit(event) {
         event.preventDefault();
         props.show(false);
+        let body = JSON.stringify({name, path: props.path, user_id: props.user.id, permissions: permission});
+        if(password && password != '') {
+            body = JSON.stringify({name, path: props.path, user_id: props.user.id, permissions: permission, password: password})
+        }
         fetch(props.url+'/api/createFolder', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({name, path: props.path, user_id: props.user.id, permissions: permission}),
+            body: body,
         })
-        .then((response) => response.json())
-        .then((data) => {
-            props.reload();
-        })
+            .then((response) => response.json())
+            .then((data) => {
+                props.reload();
+            })
     }
+
     function onChangeSwitch(e) {
         if(e.target.checked) {
             setLabelSwitch('Público');
             setPermission(true);
-        } else {
-            setLabelSwitch('Privado');
+            if(showPassword) {
+                document.getElementById('switch-password').click();
+            }
+        }else {
+            setLabelSwitch('Público');
             setPermission(false);
         }
+    }
+
+    function onChangeSwitchPass(e) {
+        if(e.target.checked) {
+            setLabelSwitchPass('Con contraseña');
+            setShowPassword(true);
+            if(permission) {
+                document.getElementById('switch-private-public').click();
+            }
+        } else {
+            setLabelSwitchPass('Sin contraseña');
+            setShowPassword(false);
+        }
+    }
+
+    function onChangePassword(e) {
+        setPassword(e.target.value);
     }
 
     return (
@@ -52,9 +81,15 @@ function CreateFolder(props) {
                     </div>
                 </div>
 
-                <div className='divInputLogin'>
+                <div className='divCheckedPermissionsFolder'>
                     <FormGroup>
-                        <FormControlLabel control={<Switch onChange={(e) => {onChangeSwitch(e)}} defaultChecked />} label={labelSwitch} />
+                        <FormControlLabel control={<Switch onChange={(e) => {onChangeSwitch(e)}} defaultChecked id='switch-private-public'/>} label={labelSwitch} />
+                    </FormGroup>
+                    <FormGroup>
+                        <FormControlLabel control={<Switch onChange={(e) => {onChangeSwitchPass(e)}} id='switch-password'/>} label={labelSwitchPass} />
+                        {
+                            showPassword ? <TextField type='password' id="outlined-basic" label="Contraseña" variant="outlined" onChange={(e) => {onChangePassword(e)}}/> : null
+                        }
                     </FormGroup>
                 </div>
 

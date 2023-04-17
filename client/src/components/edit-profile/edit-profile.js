@@ -11,9 +11,21 @@ function EditProfile(props) {
     const [usersAlreadyRegistered, setUsersAlreadyRegistered] = useState([]);
     const [nameAlreadyRegistered, setNameAlreadyRegistered] = useState(false);
     const [file, setFile] = useState(null);
+    const [imageProfile, setImageProfile] = useState(null);
+
     useEffect(() => {
-        getUsers()
+        getUsers();
+        getProfilePicture();
     }, []);
+
+    function getProfilePicture() {
+        fetch(props.url+'/api/image/'+props.user.profile_picture)
+            .then((res) => res.blob())
+            .then((blob) => {
+                setImageProfile(URL.createObjectURL(blob));
+            })
+            .catch((err) => console.error(err));
+    }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -109,7 +121,7 @@ function EditProfile(props) {
                     <div className="file-upload">
                         <label htmlFor="file-input">
                             <div className="file-preview">
-                                <img src={props.user.profile_picture} className='fotoAddPhotoUpload' alt='profile picture'/>
+                                <img src={imageProfile} className='fotoAddPhotoUpload' alt='profile picture'/>
                             </div>
                         </label>
                         <input id="file-input" type="file" onChange={handleFileChange} required hidden/>
