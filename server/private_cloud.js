@@ -8,6 +8,9 @@ const bcrypt = require('bcrypt')
 const fileUpload = require('express-fileupload')
 const nodemailer = require("nodemailer");
 const https = require('https')
+const archiver = require('archiver');
+const path = require('path');
+const streamBuffers = require('stream-buffers');
 const port = 8282
 
 app.use(cors())
@@ -104,6 +107,25 @@ app.get('/api/getReadme/:path', async (req, res) => {
     })
 })
 
+app.get('/api/getFileToRead/:path/:file', async (req, res) => {
+    let path  = req.params.path;
+    const file  = req.params.file;
+    if(path.includes('-')) {
+        path = path.replace(/-/g, '/')
+    }
+    let files = [];
+    fs.readdir('./'+path, (err, result) => {
+        if(err) {
+            console.error(err)
+            throw Error(err)
+        }
+        files = result
+        if(files.includes(file)) {
+            res.sendFile(path+'/'+file, { root: __dirname })
+        }
+    })
+})
+
 app.get('/api/getifFollow/:user_id/:user_logged_hash', async (req, res) => {
     const { user_id, user_logged_hash } = req.params;
     connection.query('SELECT * FROM follows WHERE following_id = ? AND follower_id = (SELECT id FROM users WHERE hash = ?)', [user_id, user_logged_hash], (err, rows, fields) => {
@@ -185,30 +207,37 @@ app.post('/api/editProfile', async (req, res) => {
      if (req.files && req.files.file) {
         const file = req.files.file;
         let ext = file.name.split('.').pop();
+        //filename sin extension
+         let filename2 = file.name.split('.').slice(0, -1).join('.');
         const path = './uploads';
-        let fileName = file.name + '-' + Date.now() + '.'+ext;
+        let fileName = filename2 + '-' + Date.now() + '.'+ext;
         file.mv(path+'/'+fileName, (err) => {
             if (err) {
                 console.log(err)
             } else {
                 console.log('File uploaded')
                 sql = `UPDATE users SET ${fields.map(f => `${f} = ?`).join(', ')}, profile_picture = ? WHERE hash = ?`;
-                params = [...values, fileName, req.body.hash];
+                params = [...values, path + '/' + fileName, req.body.hash];
             }
+            connection.query(sql, params, (err, rows, fields) => {
+                if (err) throw err
+                res.json({ message: 'Perfil actualizado.' })
+            })
         });
-    }
-
-     connection.query(sql, params, (err, rows, fields) => {
-            if (err) throw err
-            res.json({ message: 'Perfil actualizado.' })
-     })
+    } else {
+         connection.query(sql, params, (err, rows, fields) => {
+             if (err) throw err
+             res.json({ message: 'Perfil actualizado.' })
+         })
+     }
 })
 
 app.get('/api/download/:path/:file', (req, res) => {
+    let path = req.params.path
     if(req.params.path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
-    let path = './'+req.params.path+'/'+req.params.file
+    path = './'+path+'/'+req.params.file
     res.download(path, (err) => {
         if (err) {
             console.log(err)
@@ -216,6 +245,25 @@ app.get('/api/download/:path/:file', (req, res) => {
             console.log(path+'Downloaded')
         }
     })
+})
+
+app.get('/api/downloadFolder/:path/:file', (req, res) => {
+    if(req.params.path.includes('-')) {
+        path = path.replace(/-/g, '/')
+    }
+    let folderPath = './'+req.params.path+'/'+req.params.file
+    console.log(path)
+    const archive = archiver('zip', {
+        zlib: { level: 9 }
+    });
+
+    // Pipe the archive to the response object
+    archive.pipe(res);
+
+    // Add all files in the folder to the archive
+    archive.directory(folderPath, false);
+
+    archive.finalize();
 })
 
 app.get("/api/image/:path/:file", (req, res) => {
@@ -295,6 +343,7 @@ function getUniqueFolderName(path, folderName) {
 app.post('/api/createFolder', async (req, res) => {
     let path = req.body.path
     let folderName = req.body.name
+
     if(path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
@@ -304,7 +353,11 @@ app.post('/api/createFolder', async (req, res) => {
     }
 //    crear carpeta
     fs.mkdirSync('./'+path+'/'+folderName)
-    connection.query('INSERT INTO files (name, path, user_id, type, permissions) VALUES (?, ?, ?, ?, ?)', [folderName, path, req.body.user_id, 'folder', req.body.permissions], (err, rows, fields) => {
+    let password = null
+    if(req.body.password) {
+        password = req.body.password
+    }
+    connection.query('INSERT INTO files (name, path, user_id, type, permissions, password) VALUES (?, ?, ?, ?, ?, ?)', [folderName, path, req.body.user_id, 'folder', req.body.permissions, password], (err, rows, fields) => {
         if (err) throw err
     })
     res.json('Folder created')
@@ -346,7 +399,7 @@ app.get('/api/getIsPublic/:path/:file', (req, res) => {
 
 app.get('/api/solicitudRegistro/:email/:name/:surname/:password/:username', (req, res) => {
     const salt = bcrypt.genSaltSync(13);
-    connection.query('INSERT INTO users (email, name, surname, password, username, hash, profile_picture) VALUES (?, ?, ?, ?, ?, ?, ?)', [req.params.email, req.params.name, req.params.surname, req.params.password, req.params.username, salt, '/assets/perfil.png'], (err, rows, fields) => {
+    connection.query('INSERT INTO users (email, name, surname, password, username, hash, profile_picture) VALUES (?, ?, ?, ?, ?, ?, ?)', [req.params.email, req.params.name, req.params.surname, req.params.password, req.params.username, salt, './assets/perfil.png'], (err, rows, fields) => {
       if (err) throw err
       console.log('The solution is: ', rows)
     })

@@ -1,0 +1,41 @@
+.preview-modal-content {
+    position: relative;
+    height: 100%;
+}
+
+.buttonClosePreview {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5rem 1rem;
+    width: 50px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.buttonClosePreview img {
+    width: 30px;
+    height: 20px;
+}
+
+.preview-image-type-file {
+    width: 100%;
+    display: flex;
+}
+
+
+.preview-image-type-file img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/*media query menos de 600px*/
+@media screen and (max-width: 600px) {
+    .preview-modal-content-preview {
+        inset: 0px !important;
+    }
+}

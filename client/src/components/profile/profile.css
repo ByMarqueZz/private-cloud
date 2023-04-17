@@ -3,6 +3,10 @@
     gap: 1rem;
     width: 100%;
 }
+.nav-bar-routes-profile {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 
 .first-part-profile-div {
     width: 30%;

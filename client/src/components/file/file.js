@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./file.css";
+import PopoverOption from "../popover/popover";
+import PopoverPublic from "../popoverpublic/popoverpublic";
+import PreviewModal from "../preview/preview";
 
 function File(props) {
     const [imageUrl, setImageUrl] = useState(null);
+    const [showPreview, setShowPreview] = useState(false);
 
     useEffect(() => {
         if (props.file.name.match(/\.(png|jpe?g)$/i)) {
@@ -20,12 +24,11 @@ function File(props) {
         <>
             <Link className="link">
                 <div className="parent-directory-button-div">
-                    <div
-                        className="content-clickable-directory"
-                        onClick={() => {
-                            props.download(props.path, props.file.name);
-                        }}
-                    >
+                    <div className="content-clickable-directory" onClick={
+                        () => {
+                            setShowPreview(!showPreview)
+                        }
+                    }>
                         {imageUrl ? (
                             <img className="parent-directory-button-div-image" src={imageUrl}></img>
                         ) : props.file.name.match(/\.(png|jpe?g)$/i) ? (
@@ -39,17 +42,18 @@ function File(props) {
                     </div>
 
                     {
-                        props.isPublic == false ? <img
-                            className="options-files-home"
-                            src="/assets/options.png"
-                            onClick={() => {
-                                props.modalDelete(props.file.name, "file");
-                            }}
-                        ></img> : ''
+                        props.isPublic == false ?
+                            <PopoverOption url={props.url} file={props.file} type={'file'} modalDelete={props.modalDelete} path={props.path} download={props.download}/>
+                            : <PopoverPublic url={props.url} file={props.file} type='folder' path={props.path} download={props.download}/>
                     }
 
                 </div>
             </Link>
+            {
+                showPreview ?
+                    <PreviewModal isOpen={showPreview} type={'file'} closeModal={() => setShowPreview(false)} file={props.file} url={props.url} path={props.path} download={props.download}/>
+                    : null
+            }
         </>
     );
 }

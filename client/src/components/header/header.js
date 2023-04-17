@@ -11,10 +11,21 @@ function Header(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [value, setValue] = useState('');
     const navigate = useNavigate();
+    const [imageProfile, setImageProfile] = useState('');
 
     useEffect(() => {
         getUsers();
+        getProfilePicture();
     }, []);
+
+    function getProfilePicture() {
+        fetch(props.url+'/api/image/'+props.user.profile_picture)
+            .then((res) => res.blob())
+            .then((blob) => {
+                setImageProfile(URL.createObjectURL(blob));
+            })
+            .catch((err) => console.error(err));
+    }
 
     function getUsers() {
         fetch(props.url+'/api/getUsersNames')
@@ -70,6 +81,7 @@ function Header(props) {
                                                       ...params.InputProps,
                                                       type: 'search',
                                                   }}
+                                                  style={{zIndex:0}}
                                               />
                                           )}
                                       />
@@ -81,7 +93,7 @@ function Header(props) {
                       <div className="botones">
                           <ul className="listaBotonesHeader">
                               <li>
-                                  <Link to={"/profile/"+props.user.id} className="nav-link active" aria-current="page" ><img src={props.user.profile_picture} className="logo logo-with-border"/></Link>
+                                  <Link to={"/profile/"+props.user.id} className="nav-link active" aria-current="page" ><img src={imageProfile} className="logo logo-with-border"/></Link>
                               </li>
                               <li>
                                   <button className='btn btn-primary' onClick={props.logout}>Cerrar sesión</button>

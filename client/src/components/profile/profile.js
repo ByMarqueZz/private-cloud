@@ -17,10 +17,20 @@ function Profile(props) {
     const [followers, setFollowers] = useState(null);
     const [following, setFollowing] = useState(null);
     const [pathDetails, setPathDetails] = useState(null);
+    const [imageProfile, setImageProfile] = useState(null);
 
     useEffect(() => {
         getUser();
     }, [props.id_profile]);
+
+    function getProfilePicture(image) {
+        fetch(props.url+'/api/image/'+image)
+            .then((res) => res.blob())
+            .then((blob) => {
+                setImageProfile(URL.createObjectURL(blob));
+            })
+            .catch((err) => console.error(err));
+    }
 
     function getUser() {
         fetch(props.url+'/api/getUser/'+id)
@@ -29,6 +39,7 @@ function Profile(props) {
                 if(data[0]) {
                     getReadme(data[0].username);
                     setUser(data[0]);
+                    getProfilePicture(data[0].profile_picture);
                     setIsLoading(false);
                     getFollowers(data[0].id)
                     setPathDetails(data[0].username+'-');
@@ -102,7 +113,7 @@ function Profile(props) {
         <div className='main-profile'>
             <div className='first-part-profile-div'>
                 <div className='profile-picture-div'>
-                    <img src={user.profile_picture} className='profile-picture'></img>
+                    <img src={imageProfile} className='profile-picture'></img>
                 </div>
                 <div className='profile-data-div'>
                     <h1 className='profile-name'>{user.name+' '+user.surname}</h1>
@@ -135,7 +146,7 @@ function Profile(props) {
                                 <span className="navbar-toggler-icon"></span>
                             </button>
                             <div className="collapse navbar-collapse" id="navbarNav">
-                                <ul className="navbar-nav">
+                                <ul className="navbar-nav nav-bar-routes-profile">
                                     <li className="nav-item li-nav-bar-profile" onClick={() => {
                                         setShowOverview(true);
                                         setShowFiles(false);
@@ -173,7 +184,7 @@ function Profile(props) {
                     {
                         showFiles ? <div>
                             <p>{pathDetails}</p>
-                            <Home setDetails={setPathDetails} isPublic={true} url={props.url} path={user.username} logout={props.logout}></Home>
+                            <Home setDetails={setPathDetails} isPublic={true} url={props.url} path={user.username} logout={props.logout} user={props.user}></Home>
                         </div> : null
                     }
 
