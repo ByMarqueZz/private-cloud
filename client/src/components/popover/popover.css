@@ -1,0 +1,10 @@
+.option-popOver {
+    padding: 1rem;
+    transition: 0.3s;
+    cursor: pointer;
+    border-bottom: 1px solid gray;
+}
+
+.option-popOver-p {
+    margin: 0;
+}

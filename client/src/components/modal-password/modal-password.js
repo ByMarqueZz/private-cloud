@@ -14,8 +14,31 @@ function ModalPassword(props) {
         event.preventDefault();
         if(props.pass == probablyPassword) {
             props.show(false);
-            props.setPath(props.newPath)
-            props.reload();
+            if(props.canBeDownloaded) {
+                fetch(props.url+'/api/downloadFolder/'+props.pathCanDownload+'/'+props.file.name, {
+                    method: 'GET',
+                    responseType: 'blob'
+                })
+                    .then((response) => {return response.blob()})
+                    .then((blob) => {
+                        const url = window.URL.createObjectURL(new Blob([blob]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', props.file.name + '.zip');
+                        document.body.appendChild(link);
+                        link.click();
+                        props.show(false);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else if(props.canBeEdit) {
+                props.show(false);
+                props.showRename(true);
+            } else {
+                props.setPath(props.newPath)
+                props.reload();
+            }
         } else {
             setIsIncorrect(true);
         }

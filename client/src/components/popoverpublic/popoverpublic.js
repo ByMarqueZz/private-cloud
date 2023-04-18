@@ -37,7 +37,7 @@ function PopoverPublic(props) {
                     <div className='option-popOver'>
                         <p className='option-popOver-p' onClick={() => {
                             setAnchorEl(null);
-                            props.download(props.path, props.file.name, props.type);
+                            props.download(props.path, props.file, 'public', props.type);
                         }}>Descargar</p>
                     </div>
                 </div>

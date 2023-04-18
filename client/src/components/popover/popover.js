@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import Popover from '@mui/material/Popover';
+import './popover.css';
 
 function PopoverOption(props) {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -37,14 +38,30 @@ function PopoverOption(props) {
                     <div className='option-popOver'>
                         <p className='option-popOver-p' onClick={() => {
                             setAnchorEl(null);
-                            props.modalDelete(props.file.name, props.type);
-                        }}>Borrar</p>
+                            props.sendModal(props.file, props.type);
+                        }}>Enviar a</p>
                     </div>
                     <div className='option-popOver'>
                         <p className='option-popOver-p' onClick={() => {
                             setAnchorEl(null);
-                            props.download(props.path, props.file.name, props.type);
+                            props.download(props.path, props.file, 'private', props.type);
                         }}>Descargar</p>
+                    </div>
+                    <div className='option-popOver'>
+                        <p className='option-popOver-p' onClick={() => {
+                            if(props.file.password) {
+                                props.showPass3(props.file, props.type);
+                            } else {
+                                props.renameModal(props.file, props.type);
+                            }
+                            setAnchorEl(null);
+                        }}>Editar</p>
+                    </div>
+                    <div className='option-popOver'>
+                        <p className='option-popOver-p' onClick={() => {
+                            setAnchorEl(null);
+                            props.modalDelete(props.file.name, props.type);
+                        }}>Borrar</p>
                     </div>
                 </div>
             </Popover>

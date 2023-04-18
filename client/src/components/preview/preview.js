@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import ReactMarkdown from 'react-markdown';
 import { Document, Page } from 'react-pdf';
 import {marked} from 'marked';
 import './preview.css';
 
-Modal.setAppElement('#root');
+// Modal.setAppElement('#root');
 
 const PreviewModal = ({ isOpen, closeModal, file, url, path, download, type }) => {
     const [numPages, setNumPages] = useState(null);
