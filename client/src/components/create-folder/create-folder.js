@@ -21,6 +21,7 @@ function CreateFolder(props) {
         if(password && password != '') {
             body = JSON.stringify({name, path: props.path, user_id: props.user.id, permissions: permission, password: password})
         }
+        if(name == null || name == '') return;
         fetch(props.url+'/api/createFolder', {
             method: 'POST',
             headers: {
@@ -38,9 +39,6 @@ function CreateFolder(props) {
         if(e.target.checked) {
             setLabelSwitch('Público');
             setPermission(true);
-            if(showPassword) {
-                document.getElementById('switch-password').click();
-            }
         }else {
             setLabelSwitch('Público');
             setPermission(false);
@@ -51,9 +49,6 @@ function CreateFolder(props) {
         if(e.target.checked) {
             setLabelSwitchPass('Con contraseña');
             setShowPassword(true);
-            if(permission) {
-                document.getElementById('switch-private-public').click();
-            }
         } else {
             setLabelSwitchPass('Sin contraseña');
             setShowPassword(false);
@@ -85,12 +80,16 @@ function CreateFolder(props) {
                     <FormGroup>
                         <FormControlLabel control={<Switch onChange={(e) => {onChangeSwitch(e)}} defaultChecked id='switch-private-public'/>} label={labelSwitch} />
                     </FormGroup>
-                    <FormGroup>
-                        <FormControlLabel control={<Switch onChange={(e) => {onChangeSwitchPass(e)}} id='switch-password'/>} label={labelSwitchPass} />
-                        {
-                            showPassword ? <TextField type='password' id="outlined-basic" label="Contraseña" variant="outlined" onChange={(e) => {onChangePassword(e)}}/> : null
-                        }
-                    </FormGroup>
+                    {
+                        !permission ?
+                            <FormGroup>
+                                <FormControlLabel control={<Switch onChange={(e) => {onChangeSwitchPass(e)}} id='switch-password'/>} label={labelSwitchPass} />
+                                {
+                                    showPassword ? <TextField type='password' id="outlined-basic" label="Contraseña" variant="outlined" onChange={(e) => {onChangePassword(e)}}/> : null
+                                }
+                            </FormGroup>
+                            : null
+                    }
                 </div>
 
                 <button type="submit" className='btn btn-primary'>Subir</button>

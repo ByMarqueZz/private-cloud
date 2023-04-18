@@ -10,6 +10,8 @@ import Grid from '@mui/material/Grid';
 import PopoverOption from '../popover/popover';
 import PopoverPublic from '../popoverpublic/popoverpublic';
 import ModalPassword from '../modal-password/modal-password';
+import Rename from '../rename/rename';
+import Send from '../send/send';
 
 function Home(props) {
   const [path, setPath] = useState(props.path);
@@ -21,8 +23,18 @@ function Home(props) {
   const [type, setType] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showModalPassword, setShowModalPassword] = useState(false);
+  const [showModalPassword2, setShowModalPassword2] = useState(false);
+  const [showModalPassword3, setShowModalPassword3] = useState(false);
   const [passwords, setPasswords] = useState('');
   const [newPath, setNewPath] = useState('');
+  const [showRename, setShowRename] = useState(false);
+  const [fileRename, setFileRename] = useState(null);
+  const [typeRename, setTypeRename] = useState(null);
+  const [fileCanDownload, setFileCanDownload] = useState(null);
+  const [pathCanDownload, setPathCanDownload] = useState(null);
+  const [showSendModal, setShowSendModal] = useState(false);
+  const [fileSend, setFileSend] = useState(null);
+  const [typeSend, setTypeSend] = useState(null);
 
     useEffect(() => {
         getPath();
@@ -56,26 +68,33 @@ function Home(props) {
         return filesOrdered;
     }
 
-    function download(path, file, type='file') {
+    function download(path, file, mode, type='file') {
         if (type == 'folder') {
-            fetch(props.url+'/api/downloadFolder/'+path+'/'+file, {
-                method: 'GET',
-                responseType: 'blob'
-            })
-                .then((response) => {return response.blob()})
-                .then((blob) => {
-                    const url = window.URL.createObjectURL(new Blob([blob]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', file + '.zip');
-                    document.body.appendChild(link);
-                    link.click();
+            if(file.password) {
+                setPasswords(file.password);
+                setFileCanDownload(file);
+                setPathCanDownload(path);
+                setShowModalPassword2(true);
+            } else {
+                fetch(props.url+'/api/downloadFolder/'+path+'/'+file.name+'/'+mode, {
+                    method: 'GET',
+                    responseType: 'blob'
                 })
-                .catch((error) => {
-                    console.log(error);
-                });
+                    .then((response) => {return response.blob()})
+                    .then((blob) => {
+                        const url = window.URL.createObjectURL(new Blob([blob]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', file.name + '.zip');
+                        document.body.appendChild(link);
+                        link.click();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
         } else {
-            fetch(props.url+'/api/download/'+path+'/'+file, {
+            fetch(props.url+'/api/download/'+path+'/'+file.name, {
                 method: 'GET',
                 responseType: 'blob'
             })
@@ -84,7 +103,7 @@ function Home(props) {
                     const url = window.URL.createObjectURL(new Blob([blob]));
                     const link = document.createElement('a');
                     link.href = url;
-                    link.setAttribute('download', file);
+                    link.setAttribute('download', file.name);
                     document.body.appendChild(link);
                     link.click();
                 }).catch((error) => {
@@ -109,6 +128,23 @@ function Home(props) {
         }
     }
 
+    function renameModal(file, type) {
+        setFileRename(file);
+        setTypeRename(type);
+        setShowRename(!showRename);
+    }
+
+    function showPass3(file, type) {
+        setPasswords(file.password);
+        setShowModalPassword3(true);
+    }
+
+    function sendToModal(file, type) {
+        setFileSend(file);
+        setTypeSend(type);
+        setShowSendModal(!showSendModal);
+    }
+
   return (
       <div className='container-home'>
           {
@@ -131,7 +167,7 @@ function Home(props) {
               <Grid container spacing={2}>
               {
                   path.includes('-') ?
-                            props.isPublic == false ? <Grid item xs={12} sm={6} md={6} lg={6} xl={6}><Link className='link' onClick={() => {
+                            props.isPublic == false ? <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4}><Link className='link' onClick={() => {
                               setPath(path.split('-').slice(0, -1).join('-'))}
                           }>
                               <div className='parent-directory-button-div'>
@@ -141,7 +177,7 @@ function Home(props) {
                                   </div>
                               </div>
                                 </Link></Grid> :
-                                <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                                <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4}>
                               <div className='parent-directory-button-div' onClick={() => {
 
                                   setPath(path.split('-').slice(0, -1).join('-'));
@@ -162,7 +198,7 @@ function Home(props) {
                   isLoading == false ?
                       <>
                           {
-                              files.length == 0 ? props.isPublic ? <div className='container-home'><div className='loading'>NO HAY ARCHIVOS PÚBLICOS</div></div> : <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                              files.length == 0 ? props.isPublic ? <div className='container-home'><div className='loading'>NO HAY ARCHIVOS PÚBLICOS</div></div> : <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4}>
                                       <div className='parent-directory-button-div'>
                                           <div className='content-clickable-directory'>
                                               <img className='parent-directory-button-div-image' src='/assets/empty.png'></img>
@@ -176,13 +212,13 @@ function Home(props) {
                                       }
                                       if (file.name.includes('.')) {
                                           return (
-                                                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={index}>
-                                                    <File isPublic={props.isPublic} url={props.url} file={file} path={path} modalDelete={modalDelete} download={download}></File>
+                                                <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
+                                                    <File sendModal={sendToModal} renameModal={renameModal} showPass3={showPass3} renameModal={renameModal} isPublic={props.isPublic} url={props.url} file={file} path={path} modalDelete={modalDelete} download={download}></File>
                                                 </Grid>
                                           )
                                       } else {
                                           return(
-                                                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={index}>
+                                                <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
                                                   <div className='parent-directory-button-div'>
                                                       {
                                                             props.isPublic == false ? <Link className='link'>
@@ -207,7 +243,7 @@ function Home(props) {
 
                                                       {
                                                           props.isPublic == false ?
-                                                                <PopoverOption url={props.url} modalDelete={modalDelete} file={file} type='folder' path={props.path} download={download}/>
+                                                                <PopoverOption url={props.url} sendModal={sendToModal} renameModal={renameModal} showPass3={showPass3} modalDelete={modalDelete} file={file} type='folder' path={props.path} download={download}/>
                                                               : <PopoverPublic url={props.url} file={file} type='folder' path={props.path} download={download}/>
                                                       }
                                                   </div>
@@ -230,16 +266,29 @@ function Home(props) {
                     }, 500);
                 }}/> : ''
           }
-
           {
                 showCreateFolder ? <CreateFolder user={props.user} show={setShowCreateFolder} path={path} url={props.url} reload={getPath}/> : ''
           }
-
           {
                 showDelete ? <Delete show={setShowDelete} type={type} file={fileDelete} path={path} url={props.url} reload={getPath}/> : ''
           }
           {
+              // Entrar al archivo
               showModalPassword ? <ModalPassword newPath={newPath} setPath={setPath} show={setShowModalPassword} type={type} pass={passwords} path={path} url={props.url} reload={getPath}/> : ''
+          }
+          {
+              // Descargar el archivo
+              showModalPassword2 ? <ModalPassword canBeDownloaded={true} file={fileCanDownload} newPath={newPath} setPath={setPath} show={setShowModalPassword2} pathCanDownload={pathCanDownload} type={type} pass={passwords} path={path} url={props.url} reload={getPath}/> : ''
+          }
+          {
+              // Renombrar el archivo
+              showModalPassword3 ? <ModalPassword canBeEdit={true} showRename={setShowRename} file={fileRename} newPath={newPath} setPath={setPath} show={setShowModalPassword3} pathCanDownload={pathCanDownload} type={typeRename} pass={passwords} path={path} url={props.url} reload={getPath}/> : ''
+          }
+          {
+              showRename ? <Rename show={setShowRename} type={typeRename} file={fileRename} path={path} url={props.url} reload={getPath}/> : ''
+          }
+          {
+              showSendModal ? <Send show={setShowSendModal} type={typeSend} file={fileSend} path={path} url={props.url} reload={getPath}/> : ''
           }
     </div>
   );

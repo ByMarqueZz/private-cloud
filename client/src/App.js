@@ -8,15 +8,15 @@ import Register from './components/register/register';
 import Profile from './components/profile/profile';
 import EditProfile from './components/edit-profile/edit-profile';
 
+// URL de la API
+// export const url = 'http://localhost:8282';
+export const url = 'https://jointscounter.com:8282';
+
 function App() {
     const [userHash, setUserHash] = useState(null);
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [idProfile, setIdProfile] = useState(null);
-
-    // URL de la API
-    // const [url, setUrl] = useState('http://localhost:8282');
-    const [url, setUrl] = useState('https://jointscounter.com:8282');
 
     useEffect(() => {
         isLogged();

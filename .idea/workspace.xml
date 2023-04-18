@@ -5,34 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32894c48-c79d-4576-8a77-14a1ae9a8670" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client/public/assets/carpeta_candado.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/public/assets/close.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/public/assets/download.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/modal-password/modal-password.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/modal-password/modal-password.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/popover/popover.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/popoverpublic/popoverpublic.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/preview/preview.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/preview/preview.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/uploads/115186741.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/popover/popover.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/rename/rename.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/send/send.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/App.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/edit-profile/edit-profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/edit-profile/edit-profile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/file/file.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/file/file.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/header/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/profile/profile.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/profile.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/modal-password/modal-password.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/modal-password/modal-password.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/popover/popover.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/popover/popover.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/popoverpublic/popoverpublic.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/popoverpublic/popoverpublic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/preview/preview.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/preview/preview.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/Mis fotos/mazda por detras.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/Mis fotos/mazda rx7(1).jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/Mis fotos/mazda rx7.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/Cosas importantes/_pdf-prueba.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server/private_cloud.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/private_cloud.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,6 +33,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -96,6 +86,7 @@
       <workItem from="1681282405168" duration="13959000" />
       <workItem from="1681365777355" duration="13004000" />
       <workItem from="1681711992702" duration="20839000" />
+      <workItem from="1681799158693" duration="20798000" />
     </task>
     <servers />
   </component>

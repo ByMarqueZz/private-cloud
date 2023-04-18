@@ -242,29 +242,47 @@ app.get('/api/download/:path/:file', (req, res) => {
         if (err) {
             console.log(err)
         } else {
-            console.log(path+'Downloaded')
+            console.log(path+' Downloaded')
         }
     })
 })
 
-app.get('/api/downloadFolder/:path/:file', (req, res) => {
+app.get('/api/downloadFolder/:path/:file/:mode', async (req, res) => {
     if(req.params.path.includes('-')) {
-        path = path.replace(/-/g, '/')
+        req.params.path = req.params.path.replace(/-/g, '/');
     }
-    let folderPath = './'+req.params.path+'/'+req.params.file
-    console.log(path)
-    const archive = archiver('zip', {
-        zlib: { level: 9 }
+
+    const folderPath = `./${req.params.path}/${req.params.file}`;
+
+    // Realiza la consulta a la base de datos para obtener los nombres de los archivos
+    const query = 'SELECT name FROM files WHERE path = ? AND password IS NULL';
+    if(req.params.mode != 'private') {
+        const query = 'SELECT name FROM files WHERE path = ? AND permissions = 1';
+    }
+
+    connection.query(query, [req.params.path+'/'+req.params.file], (err, rows, fields) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error al descargar la carpeta');
+            return;
+        }
+
+        const filePaths = rows.map(row => `./${req.params.path}/${req.params.file}/${row.name}`);
+
+        const archive = archiver('zip', {
+            zlib: { level: 9 }
+        });
+
+        archive.pipe(res);
+
+        filePaths.forEach(filePath => {
+            const fileName = path.basename(filePath);
+            archive.file(filePath, { name: fileName });
+        });
+
+        archive.finalize();
     });
-
-    // Pipe the archive to the response object
-    archive.pipe(res);
-
-    // Add all files in the folder to the archive
-    archive.directory(folderPath, false);
-
-    archive.finalize();
-})
+});
 
 app.get("/api/image/:path/:file", (req, res) => {
     if(req.params.path.includes('-')) {
@@ -275,6 +293,33 @@ app.get("/api/image/:path/:file", (req, res) => {
         res.sendFile(path, { root: __dirname });
     }
 });
+
+app.post('/api/sendFile' , async (req, res) => {
+    let body = req.body
+    console.log(body)
+
+    let path = body.file.path
+    if(path.includes('-')) {
+        path = path.replace(/-/g, '/')
+    }
+    let userSelected = body.userSelected[0]
+
+    //mira si existe la carpeta compartido en el usuario seleccionado y si no la crea
+    if (!fs.existsSync('./'+userSelected.username+'/Compartido')) {
+        fs.mkdirSync('./'+userSelected.username+'/Compartido')
+        connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', ['Compartido', userSelected.id, userSelected.username, 0, 'folder', body.file.user_id], (err, rows, fields) => {
+            if (err) throw err
+        })
+    }
+    fs.copyFile('./'+path+'/'+body.file.name, './'+userSelected.username+'/Compartido/'+body.file.name, (err) => {
+        if (err) throw err
+        console.log('File copied')
+        connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [body.file.name, userSelected.id, userSelected.username+'/Compartido', 0, body.file.type, body.file.user_id], (err, rows, fields) => {
+            if (err) throw err
+            res.json({ message: 'Archivo enviado.' })
+        })
+    })
+})
 
 app.post('/api/upload', async (req, res) => {
     if(!req.files) {
@@ -378,7 +423,9 @@ app.post('/api/delete', async (req, res) => {
         fs.rmSync('./'+path+'/'+name, { recursive: true })
     }
 
-    connection.query('DELETE FROM files WHERE name = ? AND path = ?', [name, path], (err, rows, fields) => {
+    console.log(name, path)
+
+    connection.query('DELETE FROM files WHERE name = ? AND path = ? OR path = ?', [name, path, path+'/'+name], (err, rows, fields) => {
         if (err) throw err
     })
 
@@ -395,6 +442,34 @@ app.get('/api/getIsPublic/:path/:file', (req, res) => {
         if (err) throw err
         res.json(rows[0].permissions)
     })
+})
+
+app.post('/api/rename', async (req, res) => {
+    let formData = req.body
+    if(formData.path.includes('-')) {
+        formData.path = formData.path.replace(/-/g, '/')
+    }
+    const fullPath = path.join(formData.path, formData.lastName);
+    fs.rename(fullPath, path.join(formData.path, formData.newName), (err) => {
+        if (err) throw err;
+
+        if(formData.permission == 'true') {
+            formData.permission = true
+        } else if(formData.permission == 'false') {
+            formData.permission = false
+        }
+
+        if(formData.password == '' || formData.password == 'NULL' || formData.password == null || formData.password == undefined || formData.password == 'null') {
+            formData.password = null
+        }
+        console.log(formData)
+
+        // Si se ha renombrado correctamente, podemos realizar la consulta en la base de datos
+        connection.query('UPDATE files SET name = ?, permissions = ?, password = ? WHERE name = ? AND path = ? AND type = ?', [formData.newName, formData.permission, formData.password, formData.lastName, formData.path, formData.type], (err, rows, fields) => {
+            if (err) throw err
+            res.json('Renamed')
+        })
+    });
 })
 
 app.get('/api/solicitudRegistro/:email/:name/:surname/:password/:username', (req, res) => {

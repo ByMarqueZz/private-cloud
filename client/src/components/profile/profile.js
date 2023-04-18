@@ -131,9 +131,9 @@ function Profile(props) {
                 </div>
                 <div className='profile-follows-div'>
                     <img className='profile-follows-image' src='/assets/follows.png'></img>
-                    <h3 className='profile-followers-number'><span>{followers}</span> followers</h3>
+                    <h3 className='profile-followers-number'><span>{followers}</span> seguidores</h3>
                     <img className='profile-follows-image-point' src='/assets/point.png'></img>
-                    <h3 className='profile-following-number'><span>{following}</span> following</h3>
+                    <h3 className='profile-following-number'><span>{following}</span> siguiendo</h3>
                 </div>
             </div>
             <div className='second-part-profile-div'>
@@ -152,14 +152,14 @@ function Profile(props) {
                                         setShowFiles(false);
                                     }}>
                                         <img src='/assets/book.png' className='icon-nav-bar-profile'></img>
-                                        <Link className={showOverview ? 'nav-link active': 'nav-link'} aria-current="page">Overview</Link>
+                                        <Link className={showOverview ? 'nav-link active': 'nav-link'} aria-current="page">Descripción general</Link>
                                     </li>
                                     <li className="nav-item li-nav-bar-profile" onClick={() => {
                                         setShowOverview(false);
                                         setShowFiles(true);
                                     }}>
                                         <img src='/assets/expediente.png' className='icon-nav-bar-profile'></img>
-                                        <Link className={showFiles ? 'nav-link active': 'nav-link'}>Files</Link>
+                                        <Link className={showFiles ? 'nav-link active': 'nav-link'}>Archivos</Link>
                                     </li>
                                 </ul>
                             </div>
