@@ -178,7 +178,7 @@ app.get('/api/getPath/:path?', (req, res) => {
         pathDataBase = pathDataBase.replace(/-/g, '/')
     }
     const files = fs.readdirSync('.'+path)
-    connection.query(`SELECT files.*, IFNULL(users.profile_picture, '') AS shared_profile_picture
+    connection.query(`SELECT files.*, IFNULL(users.profile_picture, '') AS shared_profile_picture, IFNULL(users.username, '') AS shared_username
     FROM files
     LEFT JOIN users ON files.shared_by_id = users.id
     WHERE files.path = ?

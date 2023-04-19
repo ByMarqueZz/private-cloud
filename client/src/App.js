@@ -9,7 +9,7 @@ import Profile from './components/profile/profile';
 import EditProfile from './components/edit-profile/edit-profile';
 
 // URL de la API
-// export const url = 'http://localhost:8282';
+// export const url = 'http://192.168.1.52:8282';
 export const url = 'https://jointscounter.com:8282';
 
 function App() {

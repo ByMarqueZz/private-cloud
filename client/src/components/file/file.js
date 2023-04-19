@@ -65,9 +65,10 @@ function File(props) {
                     : null
             }
             {
-                !isLoading && imageSharedBy ? <div className='imagen-shared-by'>
+                !isLoading && imageSharedBy ? <div className='imagen-shared-by-top'>
                     <span>Compartido por: </span>
                     <img src={imageSharedBy}/>
+                    <span className='span-username'>{props.file.shared_username}</span>
                 </div> : null
             }
         </div>

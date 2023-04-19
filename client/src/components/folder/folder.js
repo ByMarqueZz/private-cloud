@@ -9,6 +9,7 @@ function Folder(props) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+
         if(props.file.shared_by_id) {
             fetch(props.url+'/api/image/'+props.file.shared_profile_picture)
                 .then((res) => res.blob())
@@ -50,10 +51,25 @@ function Folder(props) {
                     }
                 </div>
             {
-                !isLoading && imageSharedBy ? <div className='imagen-shared-by'>
-                    <span>Compartido por: </span>
-                    <img src={imageSharedBy}/>
-                </div> : null
+                !isLoading && imageSharedBy ? <>
+
+                    {
+                        props.file.name != 'Compartido' ? <div className='imagen-shared-by-top'>
+                            <span>Compartido por: </span>
+                            <img src={imageSharedBy}/>
+                            <span className='span-username'>{props.file.shared_username}</span>
+
+                        </div> : <>
+                            <div className='imagen-shared-by'>
+                                <span>Compartido por: </span>
+                                <img src={imageSharedBy}/>
+                                <span className='span-username'>{props.file.shared_username}</span>
+
+                            </div>
+                            <img src='/assets/chincheta.png' className='chincheta-absolute'/>
+                        </>
+                    }
+                </> : null
             }
         </div>
     );
