@@ -93,7 +93,7 @@ function Header(props) {
                       <div className="botones">
                           <ul className="listaBotonesHeader">
                               <li>
-                                  <Link to={"/profile/"+props.user.id} className="nav-link active" aria-current="page" ><img src={imageProfile} className="logo logo-with-border"/></Link>
+                                  <Link to={"/profile/"+props.user.id} onClick={()=>{props.setId(props.user.id)}} className="nav-link active" aria-current="page" ><img src={imageProfile} className="logo logo-with-border"/></Link>
                               </li>
                               <li>
                                   <button className='btn btn-primary' onClick={props.logout}>Cerrar sesión</button>

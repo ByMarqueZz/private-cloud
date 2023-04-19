@@ -3,6 +3,10 @@
     height: 100%;
 }
 
+.preview-modal-content h2 {
+    width: 90%;
+}
+
 .buttonClosePreview {
     position: absolute;
     top: 0;
@@ -37,5 +41,8 @@
 @media screen and (max-width: 600px) {
     .preview-modal-content-preview {
         inset: 0px !important;
+    }
+    .preview-modal-content h2 {
+        width: 70%;
     }
 }

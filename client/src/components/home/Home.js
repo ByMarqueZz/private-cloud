@@ -65,14 +65,19 @@ function Home(props) {
 
     function orderFiles(data) {
         let filesOrdered = [];
+        let sharedFile = null;
         data.forEach((file) => {
-        //    si incluye el punto es un archivo y añadimos al final, primero los archivos y luego las carpetas
-            if (file.name.includes('.')) {
+            if (file.name === 'Compartido') {
+                sharedFile = file; // Si encontramos el archivo "Compartido", lo guardamos para añadirlo al principio del array después
+            } else if (file.name.includes('.')) {
                 filesOrdered.push(file);
             } else {
                 filesOrdered.unshift(file);
             }
-        })
+        });
+        if (sharedFile) {
+            filesOrdered.unshift(sharedFile); // Añadimos el archivo "Compartido" al principio del array
+        }
         return filesOrdered;
     }
 

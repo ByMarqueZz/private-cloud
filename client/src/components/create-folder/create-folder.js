@@ -68,7 +68,7 @@ function CreateFolder(props) {
             </div>
             <form onSubmit={handleSubmit} className='form-input-file'>
                 <div className='divInputLogin'>
-                    <img src='/assets/expediente.png' className='iconLogin'/>
+                    <img src='/assets/carpeta.png' className='iconLogin'/>
                     <div className="form-floating inputLogin">
                         <input type="text" className="form-control" id="floatingInput" onChange={(event) => {
                                 if (event.target.value.length > 20) return;
