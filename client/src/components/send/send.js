@@ -64,6 +64,13 @@ function Send(props) {
                 file: props.file
             }),
         })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.message) {
+                props.success(true);
+                setTimeout(() => {props.success(false)}, 3000);
+            }
+        })
     }
 
     if(isLoading) return (<div>Loading...</div>);

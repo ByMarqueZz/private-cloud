@@ -178,7 +178,11 @@ app.get('/api/getPath/:path?', (req, res) => {
         pathDataBase = pathDataBase.replace(/-/g, '/')
     }
     const files = fs.readdirSync('.'+path)
-    connection.query('SELECT * FROM files WHERE path = ?', [pathDataBase], (err, rows, fields) => {
+    connection.query(`SELECT files.*, IFNULL(users.profile_picture, '') AS shared_profile_picture
+    FROM files
+    LEFT JOIN users ON files.shared_by_id = users.id
+    WHERE files.path = ?
+    `, [pathDataBase], (err, rows, fields) => {
         if (err) throw err
         res.json({ files, rows })
     })
@@ -255,19 +259,28 @@ app.get('/api/downloadFolder/:path/:file/:mode', async (req, res) => {
     const folderPath = `./${req.params.path}/${req.params.file}`;
 
     // Realiza la consulta a la base de datos para obtener los nombres de los archivos
-    const query = 'SELECT name FROM files WHERE path = ? AND password IS NULL';
+    const query = 'SELECT * FROM files WHERE path LIKE ? AND password IS NULL';
     if(req.params.mode != 'private') {
-        const query = 'SELECT name FROM files WHERE path = ? AND permissions = 1';
+        const query = 'SELECT * FROM files WHERE path LIKE ? AND permissions = 1';
     }
 
-    connection.query(query, [req.params.path+'/'+req.params.file], (err, rows, fields) => {
+    connection.query(query, ["%"+req.params.path+"/"+req.params.file+"%"], (err, rows, fields) => {
         if (err) {
             console.error(err);
             res.status(500).send('Error al descargar la carpeta');
             return;
         }
 
-        const filePaths = rows.map(row => `./${req.params.path}/${req.params.file}/${row.name}`);
+        let needReadme = false;
+        const filePaths = rows.map(row => {
+            if(row.path != req.params.path+'/'+req.params.file) {
+                needReadme = true;
+                return `./${row.path}/${row.name}`;
+            } else {
+                return `./${req.params.path}/${req.params.file}/${row.name}`;
+            }
+        });
+
 
         const archive = archiver('zip', {
             zlib: { level: 9 }
@@ -279,6 +292,16 @@ app.get('/api/downloadFolder/:path/:file/:mode', async (req, res) => {
             const fileName = path.basename(filePath);
             archive.file(filePath, { name: fileName });
         });
+
+        if(needReadme) {
+            //crea un archivo txt y lo añade al zip
+            let txt = `Has descargado correctamente la carpeta ${req.params.file}.
+            El problema es que la carpeta deseada tiene carpetas dentro de ella, por lo que no se puede descargar correctamente.
+            Aunque tienes todo el contenido de ${req.params.file} en esta carpeta pero sin estar ordenadas en sus carpetas. Tienes las carpetas vacías y todos los archivos juntos.
+            Estamos trabajando en esta mejora muchas gracias por su comprensión.
+            `;
+            archive.append(txt, { name: 'HELP.txt' });
+        }
 
         archive.finalize();
     });
@@ -311,15 +334,55 @@ app.post('/api/sendFile' , async (req, res) => {
             if (err) throw err
         })
     }
-    fs.copyFile('./'+path+'/'+body.file.name, './'+userSelected.username+'/Compartido/'+body.file.name, (err) => {
-        if (err) throw err
-        console.log('File copied')
-        connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [body.file.name, userSelected.id, userSelected.username+'/Compartido', 0, body.file.type, body.file.user_id], (err, rows, fields) => {
+    // Si ya existe un archivo con ese nombre le agregamos un nombre unico
+    let newUniqueName = body.file.name
+    if(fs.existsSync('./'+userSelected.username+'/Compartido/'+body.file.name)) {
+        newUniqueName = getUniqueFolderName('./'+userSelected.username+'/Compartido/', body.file.name)
+    }
+    if(body.file.type != 'folder') {
+        fs.copyFile('./'+path+'/'+body.file.name, './'+userSelected.username+'/Compartido/'+newUniqueName, (err) => {
             if (err) throw err
-            res.json({ message: 'Archivo enviado.' })
+            console.log('File copied')
+            connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [newUniqueName, userSelected.id, userSelected.username+'/Compartido', 0, body.file.type, body.file.user_id], (err, rows, fields) => {
+                if (err) throw err
+                res.json({ message: 'Archivo enviado.' })
+            })
+        })
+    } else {
+        copyFolderToSend(newUniqueName, userSelected, body.file.user_id, body.file.path+'/'+body.file.name);
+        res.json({ message: 'Archivo enviado.' });
+    }
+})
+
+function copyFolderToSend(newFolder, userSelected, shared_user_id, pathOrigin='', path='') {
+    fs.mkdirSync('./'+userSelected.username+'/Compartido/'+path+newFolder);
+    let newPath = path
+    if(path!='') {
+        newPath = path.slice(0, -1)
+        newPath = '/' + newPath
+    }
+    console.log(userSelected.username+'/Compartido'+newPath, 'newPath')
+    connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [newFolder, userSelected.id, userSelected.username+'/Compartido'+newPath, 0, 'folder', shared_user_id], (err, rows, fields) => {
+        if (err) throw err
+        connection.query('SELECT * FROM files WHERE path = ? AND password is NULL', [pathOrigin], (err, rows, fields) => {
+            if (err) throw err
+            rows.forEach(file => {
+                if(file.type != 'folder') {
+                    fs.copyFile('./'+pathOrigin+'/'+file.name, './'+userSelected.username+'/Compartido/'+path+newFolder+'/'+file.name, (err) => {
+                        if (err) throw err
+                        console.log('File copied')
+                        connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [file.name, userSelected.id, userSelected.username+'/Compartido/'+path+newFolder, 0, file.type, file.user_id], (err, rows, fields) => {
+                            if (err) throw err
+                        })
+                    })
+                } else {
+                    copyFolderToSend(file.name, userSelected, shared_user_id, pathOrigin+'/'+file.name, path+newFolder+'/')
+                }
+
+            })
         })
     })
-})
+}
 
 app.post('/api/upload', async (req, res) => {
     if(!req.files) {

@@ -39,7 +39,7 @@ function PopoverOption(props) {
                         <p className='option-popOver-p' onClick={() => {
                             setAnchorEl(null);
                             props.sendModal(props.file, props.type);
-                        }}>Enviar a</p>
+                        }}>Enviar</p>
                     </div>
                     <div className='option-popOver'>
                         <p className='option-popOver-p' onClick={() => {
