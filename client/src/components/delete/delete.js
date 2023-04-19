@@ -18,6 +18,8 @@ function Delete(props) {
             .then((response) => response.json())
             .then((data) => {
                 props.reload();
+                props.success(true);
+                setTimeout(() => {props.success(false)}, 3000);
             })
     }
 

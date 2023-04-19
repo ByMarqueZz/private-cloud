@@ -93,3 +93,10 @@
 .grid-item-home {
     min-width: 260px;
 }
+
+
+.alert-success {
+    position: absolute;
+    top: 0;
+    right: 0;
+}

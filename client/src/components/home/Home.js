@@ -12,6 +12,8 @@ import PopoverPublic from '../popoverpublic/popoverpublic';
 import ModalPassword from '../modal-password/modal-password';
 import Rename from '../rename/rename';
 import Send from '../send/send';
+import Folder from '../folder/folder';
+import Alert from '@mui/material/Alert';
 
 function Home(props) {
   const [path, setPath] = useState(props.path);
@@ -35,6 +37,12 @@ function Home(props) {
   const [showSendModal, setShowSendModal] = useState(false);
   const [fileSend, setFileSend] = useState(null);
   const [typeSend, setTypeSend] = useState(null);
+  const [sendSuccess, setSendSuccess] = useState(false);
+  const [createFolderSuccess, setCreateFolderSuccess] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [renameSuccess, setRenameSuccess] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [downloadSuccess, setDownloadSuccess] = useState(false);
 
     useEffect(() => {
         getPath();
@@ -88,6 +96,8 @@ function Home(props) {
                         link.setAttribute('download', file.name + '.zip');
                         document.body.appendChild(link);
                         link.click();
+                        setDownloadSuccess(true);
+                        setTimeout(() => {setDownloadSuccess(false)}, 3000);
                     })
                     .catch((error) => {
                         console.log(error);
@@ -106,6 +116,8 @@ function Home(props) {
                     link.setAttribute('download', file.name);
                     document.body.appendChild(link);
                     link.click();
+                    setDownloadSuccess(true);
+                    setTimeout(() => {setDownloadSuccess(false)}, 3000);
                 }).catch((error) => {
                 console.log(error);
             });
@@ -210,7 +222,7 @@ function Home(props) {
                                       if(props.isPublic == true && file.permissions == 0) {
                                             return '';
                                       }
-                                      if (file.name.includes('.')) {
+                                      if (file.type != 'folder') {
                                           return (
                                                 <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
                                                     <File sendModal={sendToModal} renameModal={renameModal} showPass3={showPass3} renameModal={renameModal} isPublic={props.isPublic} url={props.url} file={file} path={path} modalDelete={modalDelete} download={download}></File>
@@ -219,34 +231,7 @@ function Home(props) {
                                       } else {
                                           return(
                                                 <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                                                  <div className='parent-directory-button-div'>
-                                                      {
-                                                            props.isPublic == false ? <Link className='link'>
-                                                                <div className='content-clickable-directory' onClick={() => {
-                                                                    settingPath(path+'-'+file.name, file.password);
-                                                                }}>
-                                                                    {
-                                                                        file.password != null ? <img className='parent-directory-button-div-image' src='/assets/carpeta_candado.png'></img> :
-                                                                            <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
-                                                                    }
-                                                                    <span>{file.name}</span>
-                                                                </div>
-                                                            </Link> :
-                                                                <div className='content-clickable-directory' onClick={() => {
-                                                                    setPath(path+'-'+file.name)
-                                                                    props.setDetails(path+'-'+file.name);
-                                                                }}>
-                                                                    <img className='parent-directory-button-div-image' src='/assets/carpeta.png'></img>
-                                                                    <span>{file.name}</span>
-                                                                </div>
-                                                      }
-
-                                                      {
-                                                          props.isPublic == false ?
-                                                                <PopoverOption url={props.url} sendModal={sendToModal} renameModal={renameModal} showPass3={showPass3} modalDelete={modalDelete} file={file} type='folder' path={props.path} download={download}/>
-                                                              : <PopoverPublic url={props.url} file={file} type='folder' path={props.path} download={download}/>
-                                                      }
-                                                  </div>
+                                                    <Folder download={download} setPath={setPath} sendModal={sendToModal} renameModal={renameModal} showPass3={showPass3} renameModal={renameModal} isPublic={props.isPublic} url={props.url} file={file} path={path} modalDelete={modalDelete} settingPath={settingPath}></Folder>
                                                 </Grid>
                                               )
 
@@ -259,18 +244,19 @@ function Home(props) {
                 </Grid>
           </div>
 
+          {/*MODALS*/}
           {
-                showUpload ? <Upload user={props.user} show={setShowUpload} path={path} url={props.url} reload={() => {
+                showUpload ? <Upload success={setUploadSuccess} user={props.user} show={setShowUpload} path={path} url={props.url} reload={() => {
                     setTimeout(() => {
                         getPath();
                     }, 500);
                 }}/> : ''
           }
           {
-                showCreateFolder ? <CreateFolder user={props.user} show={setShowCreateFolder} path={path} url={props.url} reload={getPath}/> : ''
+                showCreateFolder ? <CreateFolder success={setCreateFolderSuccess} user={props.user} show={setShowCreateFolder} path={path} url={props.url} reload={getPath}/> : ''
           }
           {
-                showDelete ? <Delete show={setShowDelete} type={type} file={fileDelete} path={path} url={props.url} reload={getPath}/> : ''
+                showDelete ? <Delete success={setDeleteSuccess} show={setShowDelete} type={type} file={fileDelete} path={path} url={props.url} reload={getPath}/> : ''
           }
           {
               // Entrar al archivo
@@ -285,10 +271,30 @@ function Home(props) {
               showModalPassword3 ? <ModalPassword canBeEdit={true} showRename={setShowRename} file={fileRename} newPath={newPath} setPath={setPath} show={setShowModalPassword3} pathCanDownload={pathCanDownload} type={typeRename} pass={passwords} path={path} url={props.url} reload={getPath}/> : ''
           }
           {
-              showRename ? <Rename show={setShowRename} type={typeRename} file={fileRename} path={path} url={props.url} reload={getPath}/> : ''
+              showRename ? <Rename success={setRenameSuccess} show={setShowRename} type={typeRename} file={fileRename} path={path} url={props.url} reload={getPath}/> : ''
           }
           {
-              showSendModal ? <Send show={setShowSendModal} type={typeSend} file={fileSend} path={path} url={props.url} reload={getPath}/> : ''
+              showSendModal ? <Send show={setShowSendModal} type={typeSend} success={setSendSuccess} file={fileSend} path={path} url={props.url} reload={getPath}/> : ''
+          }
+
+          {/*ALERTS*/}
+          {
+              sendSuccess ? <div className='alert-success'><Alert severity="success">Enviado correctamente</Alert></div> : ''
+          }
+          {
+              createFolderSuccess ? <div className='alert-success'><Alert severity="success">Enviado correctamente</Alert></div> : ''
+          }
+          {
+              deleteSuccess ? <div className='alert-success'><Alert severity="success">Eliminado correctamente</Alert></div> : ''
+          }
+          {
+              renameSuccess ? <div className='alert-success'><Alert severity="success">Renombrado correctamente</Alert></div> : ''
+          }
+          {
+              uploadSuccess ? <div className='alert-success'><Alert severity="success">Subido correctamente</Alert></div> : ''
+          }
+          {
+              downloadSuccess ? <div className='alert-success'><Alert severity="success">Descargado correctamente</Alert></div> : ''
           }
     </div>
   );

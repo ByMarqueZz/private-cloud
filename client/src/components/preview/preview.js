@@ -137,6 +137,7 @@ const PreviewModal = ({ isOpen, closeModal, file, url, path, download, type }) =
             isOpen={isOpen}
             onRequestClose={closeModal}
             contentLabel="Preview Modal"
+            ariaHideApp={false}
             style={{
                 content: {
                     inset: isInset ? '0px' : '40px',

@@ -8,8 +8,18 @@ import PreviewModal from "../preview/preview";
 function File(props) {
     const [imageUrl, setImageUrl] = useState(null);
     const [showPreview, setShowPreview] = useState(false);
+    const [imageSharedBy, setImageSharedBy] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        if(props.file.shared_by_id) {
+            fetch(props.url+'/api/image/'+props.file.shared_profile_picture)
+                .then((res) => res.blob())
+                .then((blob) => {
+                    setImageSharedBy(URL.createObjectURL(blob));
+                    setIsLoading(false);
+                })
+        }
         if (props.file.name.match(/\.(png|jpe?g)$/i)) {
             fetch(`${props.url}/api/image/${props.path}/${props.file.name}`)
                 .then((res) => res.blob())
@@ -21,7 +31,7 @@ function File(props) {
     }, [props.file.name, props.path]);
 
     return (
-        <>
+        <div className='div-component-file'>
             <Link className="link">
                 <div className="parent-directory-button-div">
                     <div className="content-clickable-directory" onClick={
@@ -54,7 +64,13 @@ function File(props) {
                     <PreviewModal isOpen={showPreview} type={'file'} closeModal={() => setShowPreview(false)} file={props.file} url={props.url} path={props.path} download={props.download}/>
                     : null
             }
-        </>
+            {
+                !isLoading && imageSharedBy ? <div className='imagen-shared-by'>
+                    <span>Compartido por: </span>
+                    <img src={imageSharedBy}/>
+                </div> : null
+            }
+        </div>
     );
 }
 
