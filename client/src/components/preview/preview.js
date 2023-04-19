@@ -142,7 +142,7 @@ const PreviewModal = ({ isOpen, closeModal, file, url, path, download, type }) =
                 content: {
                     inset: isInset ? '0px' : '40px',
                     zIndex:'9999',
-                    height: 'min-content',
+                    height: 'fit-content',
                 }
             }}
         >
