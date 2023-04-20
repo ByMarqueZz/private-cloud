@@ -5,18 +5,77 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32894c48-c79d-4576-8a77-14a1ae9a8670" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client/public/assets/chincheta.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/avi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/bat.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/c.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/cpp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/create-file.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/cs.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/css.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/docx.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/edit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/exe.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/firebase.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/gitignore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/go.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/html.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/ico.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/java.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/js.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/json.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/logout.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/markdown.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/mkv.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/mp3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/mp4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/nota.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/pdf.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/php.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/png.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/pptx.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/py.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/rar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/rb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/sass.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/save.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/sql.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/svg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/swift.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/xlsx.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/xml.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/yml.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/public/assets/zip.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/create-file/create-file.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/edit-file/edit-file.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/edit-file/edit-file.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/public/assets/add-folder.png" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/assets/add-folder.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/public/assets/carpeta_candado.png" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/assets/carpeta_candado.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/public/assets/cloud-logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/assets/cloud-logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/public/assets/upload.png" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/assets/upload.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/file/file.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/file/file.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/file/file.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/file/file.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/folder/folder.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/folder/folder.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/header/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/header/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/login/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/login/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/modal-password/modal-password.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/modal-password/modal-password.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/modal-password/modal-password.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/modal-password/modal-password.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/popover/popover.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/popover/popover.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/preview/preview.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/preview/preview.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/preview/preview.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/preview/preview.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/rename/rename.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/rename/rename.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/send/send.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/send/send.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/upload/upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/upload/upload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/ByMarqueZz/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/server/ByMarqueZz/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/private_cloud.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/private_cloud.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/sql/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/sql/script.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,8 +85,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="CSS File" />
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -62,10 +121,12 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/client/public/assets" />
+      <recent name="$PROJECT_DIR$/client/public" />
       <recent name="$PROJECT_DIR$/server/uploads" />
       <recent name="$PROJECT_DIR$/client/src/components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/client/public/assets" />
       <recent name="$PROJECT_DIR$/server/sql" />
     </key>
   </component>
@@ -82,6 +143,7 @@
       <workItem from="1681711992702" duration="20839000" />
       <workItem from="1681799158693" duration="20798000" />
       <workItem from="1681884802609" duration="14222000" />
+      <workItem from="1681971232020" duration="19127000" />
     </task>
     <servers />
   </component>

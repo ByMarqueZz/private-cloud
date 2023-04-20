@@ -96,7 +96,7 @@ function Header(props) {
                                   <Link to={"/profile/"+props.user.id} onClick={()=>{props.setId(props.user.id)}} className="nav-link active" aria-current="page" ><img src={imageProfile} className="logo logo-with-border"/></Link>
                               </li>
                               <li>
-                                  <button className='btn btn-primary' onClick={props.logout}>Cerrar sesión</button>
+                                  <img src='/assets/logout.png' className='img-logout-header' onClick={props.logout} />
                               </li>
                           </ul>
                       </div>

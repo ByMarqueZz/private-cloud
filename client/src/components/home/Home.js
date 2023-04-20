@@ -14,12 +14,14 @@ import Rename from '../rename/rename';
 import Send from '../send/send';
 import Folder from '../folder/folder';
 import Alert from '@mui/material/Alert';
+import CreateFile from '../create-file/create-file';
 
 function Home(props) {
   const [path, setPath] = useState(props.path);
   const [files, setFiles] = useState([]);
   const [showUpload, setShowUpload] = useState(false);
   const [showCreateFolder, setShowCreateFolder] = useState(false);
+  const [showCreateFile, setShowCreateFile] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [fileDelete, setFileDelete] = useState(null);
   const [type, setType] = useState(null);
@@ -43,6 +45,7 @@ function Home(props) {
   const [renameSuccess, setRenameSuccess] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
+  const [createFileSuccess, setCreateFileSuccess] = useState(false);
 
     useEffect(() => {
         getPath();
@@ -177,6 +180,9 @@ function Home(props) {
                           <button className='btn btn-upload' onClick={() => {
                               setShowCreateFolder(!showCreateFolder)
                           }}><img src='/assets/add-folder.png' className="logo-upload-button"/></button>
+                          <button className='btn btn-upload' onClick={() => {
+                              setShowCreateFile(!showCreateFile)
+                          }}><img className='logo-upload-button' src='/assets/create-file.png'/></button>
                       </> : ''
               }
           </div>
@@ -196,7 +202,6 @@ function Home(props) {
                                 </Link></Grid> :
                                 <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4}>
                               <div className='parent-directory-button-div' onClick={() => {
-
                                   setPath(path.split('-').slice(0, -1).join('-'));
                                   //quita el ultimo directorio del path
                                     let pathArray = path.split('-');
@@ -261,6 +266,9 @@ function Home(props) {
                 showCreateFolder ? <CreateFolder success={setCreateFolderSuccess} user={props.user} show={setShowCreateFolder} path={path} url={props.url} reload={getPath}/> : ''
           }
           {
+                showCreateFile ? <CreateFile success={setCreateFileSuccess} user={props.user} show={setShowCreateFile} path={path} url={props.url} reload={getPath}/> : ''
+          }
+          {
                 showDelete ? <Delete success={setDeleteSuccess} show={setShowDelete} type={type} file={fileDelete} path={path} url={props.url} reload={getPath}/> : ''
           }
           {
@@ -300,6 +308,9 @@ function Home(props) {
           }
           {
               downloadSuccess ? <div className='alert-success'><Alert severity="success">Descargado correctamente</Alert></div> : ''
+          }
+          {
+              createFileSuccess ? <div className='alert-success'><Alert severity="success">Creado correctamente</Alert></div> : ''
           }
     </div>
   );

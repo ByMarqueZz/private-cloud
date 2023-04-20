@@ -4,14 +4,18 @@ import "./file.css";
 import PopoverOption from "../popover/popover";
 import PopoverPublic from "../popoverpublic/popoverpublic";
 import PreviewModal from "../preview/preview";
+import EditFile from "../edit-file/edit-file";
 
 function File(props) {
     const [imageUrl, setImageUrl] = useState(null);
     const [showPreview, setShowPreview] = useState(false);
     const [imageSharedBy, setImageSharedBy] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [showEditFile, setShowEditFile] = useState(false);
+    const [imageDefault, setImageDefault] = useState(null);
 
     useEffect(() => {
+        setIcons();
         if(props.file.shared_by_id) {
             fetch(props.url+'/api/image/'+props.file.shared_profile_picture)
                 .then((res) => res.blob())
@@ -30,6 +34,14 @@ function File(props) {
         }
     }, [props.file.name, props.path]);
 
+    function setIcons() {
+        fetch(props.url+'/api/icons/'+props.file.type)
+            .then((res) => res.json())
+            .then((data) => {
+                setImageDefault(data[0].path);
+            })
+    }
+
     return (
         <div className='div-component-file'>
             <Link className="link">
@@ -45,7 +57,7 @@ function File(props) {
                             <div className="parent-directory-button-div-image-loading">Loading...</div>
                         ) : (
                             <>
-                                <img className="parent-directory-button-div-image" src="/assets/expediente.png"></img>
+                                <img className="parent-directory-button-div-image" src={imageDefault}></img>
                             </>
                         )}
                         <span>{props.file.name}</span>
@@ -61,15 +73,22 @@ function File(props) {
             </Link>
             {
                 showPreview ?
-                    <PreviewModal isOpen={showPreview} type={'file'} closeModal={() => setShowPreview(false)} file={props.file} url={props.url} path={props.path} download={props.download}/>
+                    <PreviewModal isOpen={showPreview} type={'file'} closeModal={() => setShowPreview(false)} file={props.file} url={props.url} path={props.path} download={props.download} showEdit={setShowEditFile}/>
                     : null
             }
             {
-                !isLoading && imageSharedBy ? <div className='imagen-shared-by-top'>
-                    <span>Compartido por: </span>
-                    <img src={imageSharedBy}/>
-                    <span className='span-username'>{props.file.shared_username}</span>
-                </div> : null
+                showEditFile ?
+                      <EditFile isOpen={showEditFile} closeModal={() => setShowEditFile(false)} file={props.file} url={props.url} path={props.path}/>
+                    : null
+            }
+            {
+                !isLoading && imageSharedBy ? <Link className='link-shared-by' to={'/profile/'+props.file.shared_by_id}>
+                    <div className='imagen-shared-by' >
+                        <span>Compartido por: </span>
+                        <img src={imageSharedBy}/>
+                        <span className='span-username'>{props.file.shared_username}</span>
+                    </div>
+                </Link> : null
             }
         </div>
     );

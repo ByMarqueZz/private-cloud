@@ -52,7 +52,7 @@ function Login(props) {
                   <div className='divInputLogin'>
                       <img src='/assets/userPasswordIcon.png' className='iconLogin'/>
                       <div className="form-floating inputLogin">
-                          <input type="password" className="form-control" id="floatingPassword" placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)}/>
+                          <input type="password" className="form-control" id="floatingPassword" autoComplete='on' placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)}/>
                           <label htmlFor="floatingPassword">Contraseña</label>
                       </div>
                   </div>

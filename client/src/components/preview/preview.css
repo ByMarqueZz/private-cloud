@@ -8,9 +8,8 @@
 
 .buttonClosePreview {
     position: absolute;
-    top: 0;
-    right: 0;
-    padding: 0.5rem 1rem;
+    top: 1%;
+    right: 5%;
     width: 50px;
     cursor: pointer;
     display: flex;

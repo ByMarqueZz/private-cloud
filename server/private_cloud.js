@@ -92,6 +92,30 @@ app.get('/api/getUser/:id', async (req, res) => {
     })
 })
 
+app.post('/api/createFile', async (req, res) => {
+    const body = req.body;
+    let path = body.path;
+    if(path.includes('-')) {
+        path = path.replace(/-/g, '/')
+    }
+
+    let files_in_path = fs.readdirSync('./'+path);
+    let fileName = body.name;
+    let fileExtension = fileName.split('.').pop();
+    if(files_in_path.includes(fileName)) {
+        fileName = getUniqueFileName(path, fileName)
+    }
+
+    fs.writeFile('./'+path+'/'+fileName, '', (err) => {
+        if (err) throw err;
+        console.log('The file has been saved!');
+        connection.query('INSERT INTO files (name, path, user_id, type, permissions) VALUES (?, ?, ?, ?, ?)', [fileName, path, body.user_id, fileExtension, body.permission], (err, rows, fields) => {
+            if (err) throw err
+            res.json(rows)
+        })
+    });
+})
+
 app.get('/api/getReadme/:path', async (req, res) => {
     const { path } = req.params;
     let files = [];
@@ -317,6 +341,23 @@ app.get("/api/image/:path/:file", (req, res) => {
     }
 });
 
+app.post('/api/saveFile', async (req, res) => {
+    let path = req.body.path
+    if(req.body.path.includes('-')) {
+        path = path.replace(/-/g, '/')
+    }
+    if(path.includes('%20')) {
+        path = path.replace(/%20/g, ' ')
+    }
+    let fileName = req.body.name
+    let data = req.body.content
+    console.log({path, fileName, data})
+
+//    Ahora hay que editar el archivo del path y cambiarle el contenido por el que se ha pasado por el body
+    fs.writeFileSync('./'+path+'/'+fileName, data)
+    res.json({ message: 'Archivo guardado.' })
+})
+
 app.post('/api/sendFile' , async (req, res) => {
     let body = req.body
     console.log(body)
@@ -492,6 +533,10 @@ app.post('/api/delete', async (req, res) => {
         if (err) throw err
     })
 
+    connection.query('DELETE FROM files WHERE path LIKE ?', ['%'+path+'/'+name+'/%'], (err, rows, fields) => {
+        if (err) throw err
+    })
+
     res.json('Deleted')
 })
 
@@ -525,12 +570,30 @@ app.post('/api/rename', async (req, res) => {
         if(formData.password == '' || formData.password == 'NULL' || formData.password == null || formData.password == undefined || formData.password == 'null') {
             formData.password = null
         }
-        console.log(formData)
 
         // Si se ha renombrado correctamente, podemos realizar la consulta en la base de datos
         connection.query('UPDATE files SET name = ?, permissions = ?, password = ? WHERE name = ? AND path = ? AND type = ?', [formData.newName, formData.permission, formData.password, formData.lastName, formData.path, formData.type], (err, rows, fields) => {
             if (err) throw err
-            res.json('Renamed')
+            // Sus subcarpetas y archivos
+            connection.query('UPDATE files SET path = ? WHERE path = ?', [formData.path+'/'+formData.newName, formData.path+'/'+formData.lastName], (err, rows, fields) => {
+                if (err) throw err
+                // Vemos si hay subcarpetas en subcarpetas y pillamos todos los archivos
+                connection.query('SELECT * FROM files WHERE path LIKE ?', ['%'+formData.path+'/'+formData.lastName+'/%'], (err, rows, fields) => {
+                    if(err) throw err
+                    if(rows.length > 0) {
+                        rows.forEach(file => {
+                            let oldPath = file.path
+                            let newPath = oldPath.replace(formData.lastName, formData.newName)
+                            connection.query('UPDATE files SET path = ? WHERE id = ?', [newPath, file.id], (err, rows, fields) => {
+                                if(err) throw err
+                                res.json('Renamed')
+                            })
+                        })
+                    } else {
+                        res.json('Renamed')
+                    }
+                })
+            })
         })
     });
 })
@@ -551,6 +614,21 @@ app.get('/api/getUsersNames', (req, res) => {
         res.json(rows)
     })
 });
+
+app.get('/api/icons/:type', (req, res) => {
+    const { type } = req.params;
+    connection.query('SELECT path FROM icons WHERE type = ?', [type], (err, rows, fields) => {
+        if (err) throw err
+        res.json(rows)
+    })
+})
+
+app.get('/api/getAllIcons', (req, res) => {
+    connection.query('SELECT * FROM icons', (err, rows, fields) => {
+        if (err) throw err
+        res.json(rows)
+    })
+})
 
 app.get('/api/sendMailVerification/:email', (req, res) => {
     const { email } = req.params;

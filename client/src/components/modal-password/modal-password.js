@@ -50,10 +50,11 @@ function ModalPassword(props) {
                 <button type="button" className="btn-close" aria-label="Close" onClick={() => {props.show(false)}}></button>
             </div>
             <form onSubmit={handleSubmit} className='form-input-file'>
+                <h3 className='tittle-modal'>Carpeta protegida</h3>
                 <div className='divInputLogin'>
                     <img src='/assets/carpeta_candado.png' className='iconLogin'/>
                     <div className="form-floating inputLogin">
-                        <input type="password" className="form-control" id="floatingInput" onChange={(event) => {
+                        <input type="password" autoComplete='on' className="form-control" id="floatingInput" onChange={(event) => {
                             setProbablyPassword(event.target.value)
                             }}/>
                         <label htmlFor="floatingInput">Contraseña</label>

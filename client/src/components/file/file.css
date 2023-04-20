@@ -47,3 +47,8 @@
     top: 0;
     left: 0;
 }
+
+.link-shared-by {
+    color: gray;
+    text-decoration: none;
+}

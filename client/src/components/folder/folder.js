@@ -54,18 +54,20 @@ function Folder(props) {
                 !isLoading && imageSharedBy ? <>
 
                     {
-                        props.file.name != 'Compartido' ? <div className='imagen-shared-by-top'>
-                            <span>Compartido por: </span>
-                            <img src={imageSharedBy}/>
-                            <span className='span-username'>{props.file.shared_username}</span>
-
-                        </div> : <>
-                            <div className='imagen-shared-by'>
+                        props.file.name != 'Compartido' ? <Link className='link-shared-by' to={'/profile/'+props.file.shared_by_id}>
+                            <div className='imagen-shared-by' >
                                 <span>Compartido por: </span>
                                 <img src={imageSharedBy}/>
                                 <span className='span-username'>{props.file.shared_username}</span>
-
                             </div>
+                        </Link> : <>
+                            <Link to={'/profile/'+props.file.shared_by_id} className='link-shared-by'>
+                                <div className='imagen-shared-by' >
+                                    <span>Compartido por: </span>
+                                    <img src={imageSharedBy}/>
+                                    <span className='span-username'>{props.file.shared_username}</span>
+                                </div>
+                            </Link>
                             <img src='/assets/chincheta.png' className='chincheta-absolute'/>
                         </>
                     }

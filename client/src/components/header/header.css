@@ -56,6 +56,11 @@
     /*width: 100%;*/
 }
 
+.img-logout-header {
+    width: 50px;
+    height: 50px;
+}
+
 @media screen and (max-width: 450px) {
     .titulo span {
         font-size: 1em;
