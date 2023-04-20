@@ -80,8 +80,10 @@ function Profile(props) {
             .then((data) => {
                 if(data) {
                     setIsFollowing(true);
+                    setFollowers(followers+1);
                 } else {
                     setIsFollowing(false);
+                    setFollowers(followers-1);
                 }
             })
     }
@@ -92,8 +94,10 @@ function Profile(props) {
             .then((data) => {
                 if(data) {
                     setIsFollowing(false);
+                    setFollowers(followers-1);
                 } else {
                     setIsFollowing(true);
+                    setFollowers(followers+1);
                 }
             })
     }

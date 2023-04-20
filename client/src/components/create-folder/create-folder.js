@@ -67,6 +67,7 @@ function CreateFolder(props) {
                 <button type="button" className="btn-close" aria-label="Close" onClick={() => props.show(false)}></button>
             </div>
             <form onSubmit={handleSubmit} className='form-input-file'>
+                <h3 className='tittle-modal'>Crear carpeta</h3>
                 <div className='divInputLogin'>
                     <img src='/assets/carpeta.png' className='iconLogin'/>
                     <div className="form-floating inputLogin">

@@ -72,6 +72,7 @@ function Upload(props) {
                 <button type="button" className="btn-close" aria-label="Close" onClick={() => props.show(false)}></button>
             </div>
             <form onSubmit={handleSubmit} className='form-input-file'>
+                <h3 className='tittle-modal'>Subir archivo</h3>
                 <div className='divInputLogin'>
                     <img src='/assets/expediente.png' className='iconLogin'/>
                     <div className="file-input">

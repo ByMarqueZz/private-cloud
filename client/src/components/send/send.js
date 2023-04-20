@@ -81,6 +81,7 @@ function Send(props) {
                 <button type="button" className="btn-close" aria-label="Close" onClick={() => props.show(false)}></button>
             </div>
             <form onSubmit={handleSubmit} className='form-input-file'>
+                <h3 className='tittle-modal'>Compartir</h3>
                 <div className='divInputLogin'>
                     <FormControl fullWidth>
                         <Stack spacing={10} className='search-usernames-header' style={{alignSelf: 'center'}}>

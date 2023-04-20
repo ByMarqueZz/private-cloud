@@ -6,13 +6,14 @@ import './preview.css';
 
 // Modal.setAppElement('#root');
 
-const PreviewModal = ({ isOpen, closeModal, file, url, path, download, type }) => {
+const PreviewModal = ({ isOpen, closeModal, file, url, path, download, type, showEdit }) => {
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
     const [fileContent, setFileContent] = useState(null);
     const [readme, setReadme] = useState(null);
     const [i, setI] = useState(0);
     const [isInset, setIsInset] = useState(false);
+    const [canEditArray, setCanEditArray] = useState(['text/markdown', 'md', 'txt', 'html', 'css', 'js', 'json', 'py', 'java', 'c', 'cpp', 'cs', 'go', 'php', 'rb', 'sh', 'swift', 'ts', 'xml', 'yaml', 'yml', 'md', 'markdown', 'rtf']);
 
     const handleLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
@@ -148,8 +149,18 @@ const PreviewModal = ({ isOpen, closeModal, file, url, path, download, type }) =
         >
             <div className="preview-modal-content">
                 <h2>{file.name}</h2>
-                {fileContent}
+                {
+                    (fileContent == '' || fileContent == null) ? <p>El archivo está vacío</p> : fileContent
+                }
                 <div className='buttonClosePreview'>
+                    {
+                        canEditArray.includes(file.type) ?
+                            <img src='/assets/edit.png' alt='Editar' onClick={() => {
+                                closeModal();
+                                showEdit(true);
+                            }}/>
+                            : null
+                    }
                     <img src='/assets/download.png' alt='Boton descargar' onClick={() => {
                         download(path, file.name, type)
                     }}/>

@@ -12,6 +12,9 @@ function Rename(props) {
     const [permission, setPermission] = useState(true);
     const [password, setPassword] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
+    const [imageDefault, setImageDefault] = useState('/assets/expediente.png');
+    const [icons, setIcons] = useState([]);
+    const [superDefault, setSuperDefault] = useState('');
 
     function setValues() {
         setName(props.file.name);
@@ -24,8 +27,25 @@ function Rename(props) {
     }
 
     useEffect(() => {
-        setValues()
+        setValues();
+        getIcons();
     }, [props.file]);
+
+    function onChangeName(event) {
+        if (event.target.value.length > 20) return;
+        setName(event.target.value)
+        let extension = event.target.value.split('.').pop();
+        let i = 0;
+        icons.forEach((icon) => {
+            if(icon.type == extension) {
+                setImageDefault(icon.path);
+                i++;
+            }
+        });
+        if(i == 0) {
+            setImageDefault(superDefault);
+        }
+    }
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -56,7 +76,21 @@ function Rename(props) {
             .catch((error) => {
                 console.error('Error:', error);
             });
+    }
 
+    function getIcons() {
+        fetch(props.url+'/api/getAllIcons')
+            .then((response) => response.json())
+            .then((data) => {
+                setIcons(data);
+                let extension = props.file.name.split('.').pop();
+                data.forEach((icon) => {
+                    if(icon.type == extension) {
+                        setSuperDefault(icon.path);
+                        setImageDefault(icon.path);
+                    }
+                });
+            })
     }
 
     function onChangeSwitch(e) {
@@ -90,12 +124,15 @@ function Rename(props) {
                 <button type="button" className="btn-close" aria-label="Close" onClick={() => props.show(false)}></button>
             </div>
             <form onSubmit={handleSubmit} className='form-input-file'>
+                <h3 className='tittle-modal'>Editar fichero</h3>
                 <div className='divInputLogin'>
-                    <img src='/assets/expediente.png' className='iconLogin'/>
+                    {
+                        props.file.type == 'folder' ? <img src='/assets/carpeta.png' className='iconLogin'/> : <img src={imageDefault} className='iconLogin'/>
+                    }
+
                     <div className="form-floating inputLogin">
                         <input type="text" className="form-control" id="floatingInput" onChange={(event) => {
-                            if (event.target.value.length > 20) return;
-                            setName(event.target.value)
+                            onChangeName(event)
                         }}/>
                         <label htmlFor="floatingInput">{props.file.name}</label>
                     </div>

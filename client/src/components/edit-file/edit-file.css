@@ -1,0 +1,13 @@
+.textarea-edit-file {
+    height: 90%;
+    width: 100%;
+}
+
+.preview-modal-content-file {
+    height: 100%;
+}
+
+.edit-file-modal img:first-child {
+    width: 30px;
+    height: 30px;
+}
