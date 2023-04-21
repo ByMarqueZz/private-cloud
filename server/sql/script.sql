@@ -35,3 +35,9 @@ CREATE TABLE icons (
 );
 
 INSERT INTO icons (type, path) VALUES ('folder', 'folder.png'), ('txt', '/assets/nota.png'), ('md', '/assets/markdown.png'), ('pdf', '/assets/pdf.png'), ('docx', '/assets/docx.png'), ('doc', '/assets/docx.png'), ('pptx', '/assets/pptx.png'), ('ppt', '/assets/pptx.png'), ('xlsx', '/assets/xlsx.png'), ('xls', '/assets/xlsx.png'), ('html', '/assets/html.png'), ('htm', '/assets/html.png'), ('css', '/assets/css.png'), ('js', '/assets/js.png'), ('java', '/assets/java.png'), ('php', '/assets/php.png'), ('sass', '/assets/sass.png'), ('scss', '/assets/sass.png'), ('json', '/assets/json.png'), ('ico', '/assets/ico.png'), ('svg', '/assets/svg.png'), ('gitignore', '/assets/gitignore.png'), ('firebase', '/assets/firebase.png'), ('firebaserc', '/assets/firebase.png'), ('sql', '/assets/sql.png'), ('png', '/assets/png.png'), ('jpg', '/assets/png.png'), ('jpeg', '/assets/png.png'), ('zip', '/assets/zip.png'), ('rar', '/assets/rar.png'), ('7z', '/assets/rar.png'), ('mp3', '/assets/mp3.png'), ('mp4', '/assets/mp4.png'), ('avi', '/assets/avi.png'), ('mkv', '/assets/mkv.png'), ('exe', '/assets/exe.png'), ('bat', '/assets/bat.png'), ('py', '/assets/py.png'), ('c', '/assets/c.png'), ('cpp', '/assets/cpp.png'), ('cs', '/assets/cs.png'), ('go', '/assets/go.png'), ('rb', '/assets/rb.png'), ('swift', '/assets/swift.png'), ('xml', '/assets/xml.png'), ('yml', '/assets/yml.png'), ('yaml', '/assets/yml.png');
+
+CREATE TABLE frames (
+    id int PRIMARY KEY AUTO_INCREMENT,
+    level VARCHAR(255) NOT NULL,
+    style VARCHAR(255) NOT NULL
+);

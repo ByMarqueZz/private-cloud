@@ -101,3 +101,13 @@
     right: 0;
     z-index: 99999;
 }
+
+.not-directory {
+    text-align: center;
+
+}
+
+.not-directory img {
+    max-width: 100%;
+    max-height: 100%;
+}
