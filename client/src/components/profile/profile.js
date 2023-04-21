@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {marked} from 'marked';
 import './profile.css'
 import Home from '../home/Home';
+import Mission from '../mission/mission';
 
 function Profile(props) {
     const [user, setUser] = useState(null);
@@ -20,6 +21,8 @@ function Profile(props) {
     const [imageProfile, setImageProfile] = useState(null);
     const [styleSpan, setStyleSpan] = useState('');
     const [namePng, setNamePng] = useState('');
+    const [missions, setMissions] = useState(null);
+    const [showMissions, setShowMissions] = useState(false);
 
     useEffect(() => {
         getUser();
@@ -43,6 +46,7 @@ function Profile(props) {
                     setUser(data[0]);
                     getProfilePicture(data[0].profile_picture);
                     getFrame(data[0].level);
+                    getMissions(data[0].id, data[0].level);
                     setIsLoading(false);
                     getFollowers(data[0].id)
                     setPathDetails(data[0].username+'-');
@@ -52,6 +56,16 @@ function Profile(props) {
                         getFollow(data[0].id);
                     }
                 }
+            })
+    }
+
+    function getMissions(id, level) {
+        fetch(props.url+'/api/getMissions/'+id+'/'+level)
+            .then((response) => response.json())
+            .then((data) => {
+                setMissions(data);
+                setShowMissions(true);
+                console.log(data);
             })
     }
 
@@ -157,7 +171,17 @@ function Profile(props) {
                     <img className='profile-follows-image-point' src='/assets/point.png'></img>
                     <h3 className='profile-following-number'><span>{following}</span> siguiendo</h3>
                 </div>
+                <div className='div-missions'>
+                    {
+                        showMissions && isOwner ? 
+                        missions.map((mission, index) => {
+                            return <Mission key={index} mission={mission}/>
+                        })
+                        : null
+                    }
+                </div>
             </div>
+
             <div className='second-part-profile-div'>
                 <div className='profile-menu-div'>
                     <nav className="navbar navbar-expand-lg bg-body-tertiary">

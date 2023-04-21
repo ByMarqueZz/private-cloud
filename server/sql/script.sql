@@ -41,3 +41,24 @@ CREATE TABLE frames (
     level VARCHAR(255) NOT NULL,
     style VARCHAR(255) NOT NULL
 );
+
+INSERT INTO frames(level, style) VALUES('/assets/profile/1-5.png', 'estilo-marco-1'), ('/assets/profile/5-10.png', 'estilo-marco-2'), ('/assets/profile/10-15.png', 'estilo-marco-3'), ('/assets/profile/15-20.png', 'estilo-marco-2'), ('/assets/profile/20-25.png', 'estilo-marco-2'), ('/assets/profile/25-30.png', 'estilo-marco-2'), ('/assets/profile/30-35.png', 'estilo-marco-4'), ('/assets/profile/35-40.png', 'estilo-marco-5');
+
+CREATE TABLE missions(
+    id int PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    frame_id int NOT NULL,
+    points int NOT NULL,
+    FOREIGN KEY (frame_id) REFERENCES frames(id)
+);
+
+INSERT INTO missions (name, description, frame_id, points) VALUES ('Sube', 'Sube tu primer archivo', 1, 200),('Crea', 'Crea una carpeta', 1, 200),('Comparte', 'Comparte un archivo o carpeta con otro usuario', 1, 200), ('Busca', 'Haz una búsqueda y filtra por tipo de archivo', 2, 1000), ('Edita', 'Cambia la configuración de privacidad de un archivo o carpeta', 1, 200), ('Edita', 'Cambia tu imagen de perfil', 1, 200);
+
+CREATE TABLE users_passed_missions (
+    id int PRIMARY KEY AUTO_INCREMENT,
+    user_id int NOT NULL,
+    mission_id int NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (mission_id) REFERENCES missions(id)
+);

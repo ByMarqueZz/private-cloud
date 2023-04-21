@@ -1,0 +1,39 @@
+Niveles 1-5 (Fácil):
+Sube tu primer archivo
+Crea una carpeta
+Comparte un archivo o carpeta con otro usuario
+Cambia la configuración de privacidad de un archivo o carpeta
+Cambia tu imagen de perfil
+
+Niveles 6-10 (Intermedio):
+Sube 10 archivos
+Crea 5 carpetas
+Comparte 5 archivos o carpetas con otros usuarios
+Utiliza la búsqueda avanzada para encontrar un archivo específico
+Cambia la configuración de privacidad de 5 archivos o carpetas
+Cambia el fondo de tu perfil
+Haz una búsqueda y filtra por tipo de archivo
+
+Niveles 11-20 (Difícil):
+Sube 50 archivos
+Crea 10 carpetas con contraseñas
+Comparte 10 archivos o carpetas con otros usuarios y da permiso para editarlos
+Utiliza la búsqueda avanzada para encontrar varios archivos específicos
+Cambia la configuración de privacidad de 10 archivos o carpetas
+Consigue 5 likes en tus archivos
+
+Niveles 21-30 (Muy difícil):
+Sube 100 archivos
+Crea 20 carpetas con contraseñas
+Comparte 20 archivos o carpetas con otros usuarios y da permiso para editarlos
+Utiliza la búsqueda avanzada para encontrar varios archivos específicos con diferentes criterios
+Cambia la configuración de privacidad de 20 archivos o carpetas
+Consigue 10 likes en tus archivos
+
+Niveles 31-40 (Extremadamente difícil):
+Sube 200 archivos
+Crea 30 carpetas con contraseñas
+Comparte 30 archivos o carpetas con otros usuarios y da permiso para editarlos
+Utiliza la búsqueda avanzada para encontrar varios archivos específicos con diferentes criterios y combínalos en una carpeta
+Cambia la configuración de privacidad de 30 archivos o carpetas
+Consigue 20 likes en tus archivos
