@@ -114,6 +114,44 @@ app.get('/api/profileFrame/:id/:level', async (req, res) => {
     })
 })
 
+app.get('/api/getMissions/:id/:level', async (req, res) => {
+    const { id, level } = req.params;
+    let idLevel = 1
+    let j = 0;
+    for(let i=1; i<=8; i++) {
+        if(level == 0) {
+            idLevel = 1
+        }
+        if (level >= j) {
+            idLevel = i;
+            j += 5;
+        } else {
+            j += 5;
+        }
+    }
+    connection.query(`
+    SELECT 
+    missions.id AS id, 
+    missions.name AS name, 
+    missions.description AS description,
+    missions.frame_id AS frame_id,
+    missions.points AS points,
+    users.id AS user_id, 
+    users.name AS user_name, 
+    CASE 
+      WHEN users_passed_missions.user_id = ? AND users_passed_missions.mission_id = missions.id THEN true 
+      ELSE false 
+    END AS passed
+  FROM missions 
+  LEFT JOIN users_passed_missions ON missions.id = users_passed_missions.mission_id 
+  LEFT JOIN users ON users.id = users_passed_missions.user_id
+  WHERE frame_id = ?
+        `, [id, idLevel], (err, rows, fields) => {
+            if (err) throw err
+            res.json(rows)
+        })
+})
+
 app.post('/api/createFile', async (req, res) => {
     const body = req.body;
     let path = body.path;
