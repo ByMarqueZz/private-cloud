@@ -22,24 +22,24 @@ app.use(fileUpload());
 /**
  * ANTES DE SUBIR A PRODUCCIÓN HAY QUE DESCOMENTAR lAS LINEAS DEL FINAL
  */
-const options = {
-    cert: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/fullchain.pem'),
-    key: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/privkey.pem')
-};
-var db_config = {
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'tY3rbpYG8&@W1l^t.a',
-    database: 'private_cloud'
-}
+// const options = {
+//     cert: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/fullchain.pem'),
+//     key: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/privkey.pem')
+// };
+// var db_config = {
+//     host: '127.0.0.1',
+//     user: 'root',
+//     password: 'tY3rbpYG8&@W1l^t.a',
+//     database: 'private_cloud'
+// }
 
 //SERVIDOR LOCAL
-// const db_config = {
-//   host: '127.0.0.1',
-//   user: 'root',
-//   password: 'root',
-//   database: 'private_cloud'
-// }
+const db_config = {
+  host: '127.0.0.1',
+  user: 'root',
+  password: '',
+  database: 'private_cloud'
+}
 
 let connection
 function handleDisconnect() {
@@ -89,6 +89,28 @@ app.get('/api/getUser/:id', async (req, res) => {
     connection.query('SELECT * FROM users WHERE id = ?', [id], (err, rows, fields) => {
         if (err) throw err
         res.json(rows)
+    })
+})
+
+app.get('/api/profileFrame/:id/:level', async (req, res) => {
+    const { id, level } = req.params;
+    let idLevel = 1
+    let j = 0;
+    for(let i=1; i<=8; i++) {
+        if(level == 0) {
+            idLevel = 1
+        }
+        if (level >= j) {
+            idLevel = i;
+            j += 5;
+        } else {
+            j += 5;
+        }
+        // console.log({i, j, level, idLevel})
+    }
+    connection.query('SELECT * FROM frames WHERE id = ?', [idLevel], (err, rows, fields) => {
+        if (err) throw err
+        res.json(rows[0])
     })
 })
 
@@ -201,7 +223,17 @@ app.get('/api/getPath/:path?', (req, res) => {
     if(pathDataBase.includes('-')) {
         pathDataBase = pathDataBase.replace(/-/g, '/')
     }
-    const files = fs.readdirSync('.'+path)
+    let files = []
+    try {
+        files = fs.readdirSync('.' + path);
+      } catch (err) {
+        if (err.code === 'ENOENT') {
+          res.json({ messageError: 'No se encontró ninguna ruta con ese nombre.' });
+          return;
+        }
+        throw err;
+      }
+    
     connection.query(`SELECT files.*, IFNULL(users.profile_picture, '') AS shared_profile_picture, IFNULL(users.username, '') AS shared_username
     FROM files
     LEFT JOIN users ON files.shared_by_id = users.id
@@ -368,31 +400,39 @@ app.post('/api/sendFile' , async (req, res) => {
     }
     let userSelected = body.userSelected[0]
 
-    //mira si existe la carpeta compartido en el usuario seleccionado y si no la crea
-    if (!fs.existsSync('./'+userSelected.username+'/Compartido')) {
-        fs.mkdirSync('./'+userSelected.username+'/Compartido')
-        connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', ['Compartido', userSelected.id, userSelected.username, 0, 'folder', body.file.user_id], (err, rows, fields) => {
-            if (err) throw err
-        })
-    }
-    // Si ya existe un archivo con ese nombre le agregamos un nombre unico
-    let newUniqueName = body.file.name
-    if(fs.existsSync('./'+userSelected.username+'/Compartido/'+body.file.name)) {
-        newUniqueName = getUniqueFolderName('./'+userSelected.username+'/Compartido/', body.file.name)
-    }
-    if(body.file.type != 'folder') {
-        fs.copyFile('./'+path+'/'+body.file.name, './'+userSelected.username+'/Compartido/'+newUniqueName, (err) => {
-            if (err) throw err
-            console.log('File copied')
-            connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [newUniqueName, userSelected.id, userSelected.username+'/Compartido', 0, body.file.type, body.file.user_id], (err, rows, fields) => {
+    try {
+        //mira si existe la carpeta compartido en el usuario seleccionado y si no la crea
+        if (!fs.existsSync('./'+userSelected.username+'/Compartido')) {
+            fs.mkdirSync('./'+userSelected.username+'/Compartido')
+            connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', ['Compartido', userSelected.id, userSelected.username, 0, 'folder', body.file.user_id], (err, rows, fields) => {
                 if (err) throw err
-                res.json({ message: 'Archivo enviado.' })
             })
-        })
-    } else {
-        copyFolderToSend(newUniqueName, userSelected, body.file.user_id, body.file.path+'/'+body.file.name);
-        res.json({ message: 'Archivo enviado.' });
+        }
+        // Si ya existe un archivo con ese nombre le agregamos un nombre unico
+        let newUniqueName = body.file.name
+        if(fs.existsSync('./'+userSelected.username+'/Compartido/'+body.file.name)) {
+            newUniqueName = getUniqueFolderName('./'+userSelected.username+'/Compartido/', body.file.name)
+        }
+        if(body.file.type != 'folder') {
+            fs.copyFile('./'+path+'/'+body.file.name, './'+userSelected.username+'/Compartido/'+newUniqueName, (err) => {
+                if (err) throw err
+                console.log('File copied')
+                connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [newUniqueName, userSelected.id, userSelected.username+'/Compartido', 0, body.file.type, body.file.user_id], (err, rows, fields) => {
+                    if (err) throw err
+                    res.json({ message: 'Archivo enviado.' })
+                })
+            })
+        } else {
+            copyFolderToSend(newUniqueName, userSelected, body.file.user_id, body.file.path+'/'+body.file.name);
+            res.json({ message: 'Archivo enviado.' });
+        }
+    } catch (err) {
+        if (err.code == 'ENOENT') {
+            console.log('File not found')
+        }
     }
+
+    
 })
 
 function copyFolderToSend(newFolder, userSelected, shared_user_id, pathOrigin='', path='') {
@@ -521,11 +561,18 @@ app.post('/api/delete', async (req, res) => {
         path = path.replace(/-/g, '/')
     }
 
-    if(type === 'file') {
-        fs.rmSync('./'+path+'/'+name)
-    } else {
-        fs.rmSync('./'+path+'/'+name, { recursive: true })
+    try {
+        if(type === 'file') {
+            fs.rmSync('./'+path+'/'+name)
+        } else {
+            fs.rmSync('./'+path+'/'+name, { recursive: true })
+        }
+    } catch (err) {
+        if (err.code == 'ENOENT') {
+            console.log('File does not exist in path')
+        }
     }
+    
 
     console.log(name, path)
 
@@ -558,44 +605,51 @@ app.post('/api/rename', async (req, res) => {
         formData.path = formData.path.replace(/-/g, '/')
     }
     const fullPath = path.join(formData.path, formData.lastName);
-    fs.rename(fullPath, path.join(formData.path, formData.newName), (err) => {
-        if (err) throw err;
-
-        if(formData.permission == 'true') {
-            formData.permission = true
-        } else if(formData.permission == 'false') {
-            formData.permission = false
-        }
-
-        if(formData.password == '' || formData.password == 'NULL' || formData.password == null || formData.password == undefined || formData.password == 'null') {
-            formData.password = null
-        }
-
-        // Si se ha renombrado correctamente, podemos realizar la consulta en la base de datos
-        connection.query('UPDATE files SET name = ?, permissions = ?, password = ? WHERE name = ? AND path = ? AND type = ?', [formData.newName, formData.permission, formData.password, formData.lastName, formData.path, formData.type], (err, rows, fields) => {
-            if (err) throw err
-            // Sus subcarpetas y archivos
-            connection.query('UPDATE files SET path = ? WHERE path = ?', [formData.path+'/'+formData.newName, formData.path+'/'+formData.lastName], (err, rows, fields) => {
+    try {
+        fs.rename(fullPath, path.join(formData.path, formData.newName), (err) => {
+            if (err) throw err;
+    
+            if(formData.permission == 'true') {
+                formData.permission = true
+            } else if(formData.permission == 'false') {
+                formData.permission = false
+            }
+    
+            if(formData.password == '' || formData.password == 'NULL' || formData.password == null || formData.password == undefined || formData.password == 'null') {
+                formData.password = null
+            }
+    
+            // Si se ha renombrado correctamente, podemos realizar la consulta en la base de datos
+            connection.query('UPDATE files SET name = ?, permissions = ?, password = ? WHERE name = ? AND path = ? AND type = ?', [formData.newName, formData.permission, formData.password, formData.lastName, formData.path, formData.type], (err, rows, fields) => {
                 if (err) throw err
-                // Vemos si hay subcarpetas en subcarpetas y pillamos todos los archivos
-                connection.query('SELECT * FROM files WHERE path LIKE ?', ['%'+formData.path+'/'+formData.lastName+'/%'], (err, rows, fields) => {
-                    if(err) throw err
-                    if(rows.length > 0) {
-                        rows.forEach(file => {
-                            let oldPath = file.path
-                            let newPath = oldPath.replace(formData.lastName, formData.newName)
-                            connection.query('UPDATE files SET path = ? WHERE id = ?', [newPath, file.id], (err, rows, fields) => {
-                                if(err) throw err
-                                res.json('Renamed')
+                // Sus subcarpetas y archivos
+                connection.query('UPDATE files SET path = ? WHERE path = ?', [formData.path+'/'+formData.newName, formData.path+'/'+formData.lastName], (err, rows, fields) => {
+                    if (err) throw err
+                    // Vemos si hay subcarpetas en subcarpetas y pillamos todos los archivos
+                    connection.query('SELECT * FROM files WHERE path LIKE ?', ['%'+formData.path+'/'+formData.lastName+'/%'], (err, rows, fields) => {
+                        if(err) throw err
+                        if(rows.length > 0) {
+                            rows.forEach(file => {
+                                let oldPath = file.path
+                                let newPath = oldPath.replace(formData.lastName, formData.newName)
+                                connection.query('UPDATE files SET path = ? WHERE id = ?', [newPath, file.id], (err, rows, fields) => {
+                                    if(err) throw err
+                                    res.json('Renamed')
+                                })
                             })
-                        })
-                    } else {
-                        res.json('Renamed')
-                    }
+                        } else {
+                            res.json('Renamed')
+                        }
+                    })
                 })
             })
-        })
-    });
+        });
+    } catch (err) {
+        if (err.code == 'ENOENT') {
+            console.log('File does not exist in path')
+        }
+    }
+    
 })
 
 app.get('/api/solicitudRegistro/:email/:name/:surname/:password/:username', (req, res) => {
@@ -675,12 +729,12 @@ app.get('/api/sendMailVerification/:email', (req, res) => {
     });
 });
 
-// app.listen(port, () => {
-//     console.log(`Servidor HTTP listening on port ${port}`)
-// })
+app.listen(port, () => {
+    console.log(`Servidor HTTP listening on port ${port}`)
+})
 
-const server = https.createServer(options, app);
+// const server = https.createServer(options, app);
 
-server.listen(port, () => {
-    console.log('Servidor HTTPS escuchando en el puerto ' + port);
-});
+// server.listen(port, () => {
+//     console.log('Servidor HTTPS escuchando en el puerto ' + port);
+// });

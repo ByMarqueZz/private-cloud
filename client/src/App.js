@@ -9,14 +9,15 @@ import Profile from './components/profile/profile';
 import EditProfile from './components/edit-profile/edit-profile';
 
 // URL de la API
-// export const url = 'http://192.168.1.52:8282';
-export const url = 'https://jointscounter.com:8282';
+export const url = 'http://192.168.1.136:8282';
+// export const url = 'https://jointscounter.com:8282';
 
 function App() {
     const [userHash, setUserHash] = useState(null);
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [idProfile, setIdProfile] = useState(null);
+    const [path, setPath] = useState(null);
 
     useEffect(() => {
         isLogged();
@@ -38,6 +39,7 @@ function App() {
                     if(data[0]) {
                         setUserHash(hashPasado);
                         setUser(data[0]);
+                        setPath(data[0].username)
                         setIsLoading(false);
                         return <Navigate to={'/'+data[0].username}/>
                     }
@@ -57,6 +59,7 @@ function App() {
                     if(data[0]) {
                         setUserHash(cookie.split('=')[1]);
                         setUser(data[0]);
+                        setPath(data[0].username)
                         setIsLoading(false);
                         return <Navigate to={'/'+data[0].username}/>
                     } else {
@@ -100,13 +103,13 @@ function App() {
       return (
         <>
           <BrowserRouter>
-              <Header setId={setIdProfile} url={url} user={user} logout={logout}/>
+              <Header setId={setIdProfile} url={url} user={user} logout={logout} setPath={setPath}/>
               <div className='main'>
                 <Routes>
-                      <Route path="/:path?" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} user={user} isPublic={false} logout={logout}/></RequireAuth>}/>
+                      <Route path="/:path?" element={<RequireAuth hash={userHash}><Home url={url} path={path} setPath={setPath} user={user} isPublic={false} logout={logout}/></RequireAuth>}/>
                       <Route path="/profile/:id" element={<RequireAuth hash={userHash}><Profile id_profile={idProfile} user={user} url={url} userHash={userHash} logout={logout}></Profile></RequireAuth>}></Route>
                       <Route path="/editProfile" element={<RequireAuth hash={userHash}><EditProfile url={url} hash={userHash} user={user}></EditProfile></RequireAuth>}></Route>
-                      **<Route path="*" element={<RequireAuth hash={userHash}><Home url={url} path={user.username} user={user} isPublic={false} logout={logout}/></RequireAuth>}></Route>**
+                      **<Route path="*" element={<RequireAuth hash={userHash}><Home url={url} path={path} setPath={setPath} user={user} isPublic={false} logout={logout}/></RequireAuth>}></Route>**
                 </Routes>
               </div>
           </BrowserRouter>

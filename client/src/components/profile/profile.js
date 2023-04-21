@@ -18,6 +18,8 @@ function Profile(props) {
     const [following, setFollowing] = useState(null);
     const [pathDetails, setPathDetails] = useState(null);
     const [imageProfile, setImageProfile] = useState(null);
+    const [styleSpan, setStyleSpan] = useState('');
+    const [namePng, setNamePng] = useState('');
 
     useEffect(() => {
         getUser();
@@ -40,6 +42,7 @@ function Profile(props) {
                     getReadme(data[0].username);
                     setUser(data[0]);
                     getProfilePicture(data[0].profile_picture);
+                    getFrame(data[0].level);
                     setIsLoading(false);
                     getFollowers(data[0].id)
                     setPathDetails(data[0].username+'-');
@@ -49,6 +52,15 @@ function Profile(props) {
                         getFollow(data[0].id);
                     }
                 }
+            })
+    }
+
+    function getFrame(level) {
+        fetch(props.url+'/api/profileFrame/'+props.user.id+'/'+level)
+            .then((response) => response.json())
+            .then((data) => {
+                setStyleSpan(data.style);
+                setNamePng(data.level);
             })
     }
 
@@ -116,8 +128,14 @@ function Profile(props) {
     return (
         <div className='main-profile'>
             <div className='first-part-profile-div'>
-                <div className='profile-picture-div'>
-                    <img src={imageProfile} className='profile-picture'></img>
+                <div className='div-marco'>
+                    <div className='profile-name-div'>
+                        <img src={imageProfile} className='profile-picture'></img>
+                    </div>
+                    <div className='div-child-marco'>
+                        <img src={namePng} className='foto-marco'></img>
+                    </div>
+                    <span className={'level-number '+styleSpan}>{user.level}</span>
                 </div>
                 <div className='profile-data-div'>
                     <h1 className='profile-name'>{user.name+' '+user.surname}</h1>

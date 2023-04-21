@@ -12,10 +12,13 @@ function Header(props) {
     const [value, setValue] = useState('');
     const navigate = useNavigate();
     const [imageProfile, setImageProfile] = useState('');
+    const [styleSpan, setStyleSpan] = useState('');
+    const [namePng, setNamePng] = useState('');
 
     useEffect(() => {
         getUsers();
         getProfilePicture();
+        getFrame(props.user.level);
     }, []);
 
     function getProfilePicture() {
@@ -34,6 +37,15 @@ function Header(props) {
             setUsers(data);
             setIsLoading(false);
         })
+    }
+
+    function getFrame(level) {
+        fetch(props.url+'/api/profileFrame/'+props.user.id+'/'+level)
+            .then((response) => response.json())
+            .then((data) => {
+                setStyleSpan(data.style);
+                setNamePng(data.level);
+            })
     }
 
     const handleInputChange = (event, newValue) => {
@@ -55,7 +67,7 @@ function Header(props) {
       <>
           <nav className="header navbar navbar-expand-lg bg-body-tertiary">
               <div className="container-fluid">
-                  <Link to='/' className="navbar-brand"><span className="titulo"><img src='/assets/cloud-logo.png' className='logo-header'/></span></Link>
+                  <Link to='/' className="navbar-brand" onClick={() => {props.setPath(props.user.username)}}><span className="titulo"><img src='/assets/cloud-logo.png' className='logo-header'/></span></Link>
                   <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                           data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                           aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +105,16 @@ function Header(props) {
                       <div className="botones">
                           <ul className="listaBotonesHeader">
                               <li>
-                                  <Link to={"/profile/"+props.user.id} onClick={()=>{props.setId(props.user.id)}} className="nav-link active" aria-current="page" ><img src={imageProfile} className="logo logo-with-border"/></Link>
+                                    <Link to={"/profile/"+props.user.id} onClick={()=>{props.setId(props.user.id)}} className="nav-link active" aria-current="page" >
+                                        <div className='div-marco-header'>
+                                            <div className='profile-name-div-header'>
+                                                <img src={imageProfile} className='profile-picture'></img>
+                                            </div>
+                                            <div className='div-child-marco'>
+                                                <img src={namePng} className='foto-marco'></img>
+                                            </div>
+                                        </div>
+                                    </Link>
                               </li>
                               <li>
                                   <img src='/assets/logout.png' className='img-logout-header' onClick={props.logout} />
