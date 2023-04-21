@@ -50,10 +50,12 @@ CREATE TABLE missions(
     description VARCHAR(255) NOT NULL,
     frame_id int NOT NULL,
     points int NOT NULL,
+    max_value int NOT NULL,
+    callback VARCHAR(255) NOT NULL,
     FOREIGN KEY (frame_id) REFERENCES frames(id)
 );
 
-INSERT INTO missions (name, description, frame_id, points) VALUES ('Sube', 'Sube tu primer archivo', 1, 200),('Crea', 'Crea una carpeta', 1, 200),('Comparte', 'Comparte un archivo o carpeta con otro usuario', 1, 200), ('Busca', 'Haz una búsqueda y filtra por tipo de archivo', 2, 1000), ('Edita', 'Cambia la configuración de privacidad de un archivo o carpeta', 1, 200), ('Edita', 'Cambia tu imagen de perfil', 1, 200);
+INSERT INTO missions (name, description, frame_id, points, max_value, callback) VALUES ('Sube', 'Sube tu primer archivo', 1, 200, 1, 'upload'),('Crea', 'Crea una carpeta', 1, 200, 1, 'Carpeta creada'),('Comparte', 'Comparte un archivo o carpeta con otro usuario', 1, 200, 1, 'Compartido'), ('Busca', 'Haz una búsqueda y filtra por tipo de archivo', 2, 200, 1, 'Busqueda2'), ('Edita', 'Cambia la configuración de privacidad de un archivo o carpeta', 1, 200, 1, 'Carpeta Editada'), ('Edita', 'Cambia tu imagen de perfil', 1, 200, 1, 'Foto de perfil actualizada'), ('Sube', 'Sube 10 archivos', 2, 200, 10, 'upload2'), ('Crea', 'Crea 5 carpetas', 2, 200, 5, 'Carpeta creada2'), ('Comparte', 'Comparte 5 archivos o carpetas con otros usuarios', 2, 200, 5, 'Compartido2'), ('Edita', 'Cambia la configuración de privacidad de 5 archivos o carpetas', 2, 200, 5, 'Carpeta Editada2');
 
 CREATE TABLE users_passed_missions (
     id int PRIMARY KEY AUTO_INCREMENT,
@@ -61,4 +63,11 @@ CREATE TABLE users_passed_missions (
     mission_id int NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (mission_id) REFERENCES missions(id)
+);
+
+CREATE TABLE progress (
+    id int PRIMARY KEY AUTO_INCREMENT,
+    user_id int NOT NULL,
+    do VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

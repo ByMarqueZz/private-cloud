@@ -45,7 +45,7 @@ function Send(props) {
             .catch((err) => console.error(err));
     }
 
-    const handleChange = (event: SelectChangeEvent, newValue) => {
+    const handleChange = (event, newValue) => {
         setUserSelected(newValue);
     };
 
