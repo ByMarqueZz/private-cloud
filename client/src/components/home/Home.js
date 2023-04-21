@@ -311,7 +311,7 @@ function Home(props) {
               showModalPassword3 ? <ModalPassword canBeEdit={true} showRename={setShowRename} file={fileRename} newPath={newPath} setPath={props.setPath} show={setShowModalPassword3} pathCanDownload={pathCanDownload} type={typeRename} pass={passwords} path={props.path} url={props.url} reload={getPath}/> : ''
           }
           {
-              showRename ? <Rename success={setRenameSuccess} show={setShowRename} type={typeRename} file={fileRename} path={props.path} url={props.url} reload={getPath}/> : ''
+              showRename ? <Rename success={setRenameSuccess} show={setShowRename} type={typeRename} file={fileRename} path={props.path} url={props.url} reload={getPath} user={props.user}/> : ''
           }
           {
               showSendModal ? <Send show={setShowSendModal} type={typeSend} success={setSendSuccess} file={fileSend} path={props.path} url={props.url} reload={getPath}/> : ''

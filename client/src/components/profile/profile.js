@@ -65,7 +65,6 @@ function Profile(props) {
             .then((data) => {
                 setMissions(data);
                 setShowMissions(true);
-                console.log(data);
             })
     }
 
@@ -175,7 +174,7 @@ function Profile(props) {
                     {
                         showMissions && isOwner ? 
                         missions.map((mission, index) => {
-                            return <Mission key={index} mission={mission}/>
+                            return <Mission key={index} mission={mission} user={props.user} url={props.url}/>
                         })
                         : null
                     }

@@ -114,8 +114,7 @@ app.get('/api/profileFrame/:id/:level', async (req, res) => {
     })
 })
 
-app.get('/api/getMissions/:id/:level', async (req, res) => {
-    const { id, level } = req.params;
+function getFrameIdLevel(level) {
     let idLevel = 1
     let j = 0;
     for(let i=1; i<=8; i++) {
@@ -129,6 +128,12 @@ app.get('/api/getMissions/:id/:level', async (req, res) => {
             j += 5;
         }
     }
+    return idLevel;
+}
+
+app.get('/api/getMissions/:id/:level', async (req, res) => {
+    const { id, level } = req.params;
+    let idLevel = getFrameIdLevel(level)
     connection.query(`
     SELECT 
     missions.id AS id, 
@@ -136,6 +141,8 @@ app.get('/api/getMissions/:id/:level', async (req, res) => {
     missions.description AS description,
     missions.frame_id AS frame_id,
     missions.points AS points,
+    missions.max_value AS max_value,
+    missions.callback AS callback,
     users.id AS user_id, 
     users.name AS user_name, 
     CASE 
@@ -296,17 +303,17 @@ app.post('/api/editProfile', async (req, res) => {
         })
     }
 
-     const fields = Object.keys(req.body);
-     const values = Object.values(req.body);
-     const placeholders = fields.map(() => '?').join(', ');
-     let sql = `UPDATE users SET ${fields.map(f => `${f} = ?`).join(', ')} WHERE hash = ?`;
-     let params = [...values, req.body.hash];
+    const fields = Object.keys(req.body);
+    const values = Object.values(req.body);
+    const placeholders = fields.map(() => '?').join(', ');
+    let sql = `UPDATE users SET ${fields.map(f => `${f} = ?`).join(', ')} WHERE hash = ?`;
+    let params = [...values, req.body.hash];
 
-     if (req.files && req.files.file) {
+    if (req.files && req.files.file) {
         const file = req.files.file;
         let ext = file.name.split('.').pop();
         //filename sin extension
-         let filename2 = file.name.split('.').slice(0, -1).join('.');
+        let filename2 = file.name.split('.').slice(0, -1).join('.');
         const path = './uploads';
         let fileName = filename2 + '-' + Date.now() + '.'+ext;
         file.mv(path+'/'+fileName, (err) => {
@@ -319,9 +326,17 @@ app.post('/api/editProfile', async (req, res) => {
             }
             connection.query(sql, params, (err, rows, fields) => {
                 if (err) throw err
-                res.json({ message: 'Perfil actualizado.' })
+                connection.query('SELECT * FROM users WHERE hash = ?', [req.body.hash], (err, rows, fields) => {
+                    if (err) throw err
+                    connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
+                        if (err) throw err
+                        let idLevel = getFrameIdLevel(rows[0].level)
+                        addProgress(req.body.user_id, 'Foto de perfil actualizada', idLevel)
+                        res.json({ message: 'Perfil actualizado.' })
+                    })
+                })
             })
-        });
+    });
     } else {
          connection.query(sql, params, (err, rows, fields) => {
              if (err) throw err
@@ -457,7 +472,12 @@ app.post('/api/sendFile' , async (req, res) => {
                 console.log('File copied')
                 connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [newUniqueName, userSelected.id, userSelected.username+'/Compartido', 0, body.file.type, body.file.user_id], (err, rows, fields) => {
                     if (err) throw err
-                    res.json({ message: 'Archivo enviado.' })
+                    connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
+                        if (err) throw err
+                        let idLevel = getFrameIdLevel(rows[0].level)
+                        addProgress(req.body.user_id, 'Compartido', idLevel)
+                        res.json({ message: 'Archivo enviado.' })
+                    })
                 })
             })
         } else {
@@ -537,6 +557,11 @@ app.post('/api/upload', async (req, res) => {
                 console.log('File uploaded')
                 connection.query('INSERT INTO files (name, path, user_id, type, permissions) VALUES (?, ?, ?, ?, ?)', [fileName, path, req.body.user_id, fileExtension, permissions], (err, rows, fields) => {
                     if (err) throw err
+                    connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
+                        if (err) throw err
+                        let idLevel = getFrameIdLevel(rows[0].level)
+                        addProgress(req.body.user_id, 'upload', idLevel)
+                    })
                 })
             }
         })
@@ -586,8 +611,63 @@ app.post('/api/createFolder', async (req, res) => {
     }
     connection.query('INSERT INTO files (name, path, user_id, type, permissions, password) VALUES (?, ?, ?, ?, ?, ?)', [folderName, path, req.body.user_id, 'folder', req.body.permissions, password], (err, rows, fields) => {
         if (err) throw err
+        connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
+            if (err) throw err
+            let idLevel = getFrameIdLevel(rows[0].level)
+            addProgress(req.body.user_id, 'Carpeta creada', idLevel)
+            res.json('Folder created')
+        })
     })
-    res.json('Folder created')
+})
+
+function addProgress(user_id, hecho, idLevel) {
+    if(idLevel != 1) {
+        hecho = hecho + idLevel
+    }
+    connection.query('INSERT INTO progress(user_id, do) VALUES (?, ?)', [user_id, hecho], (err, rows, fields) => {
+        if (err) throw err
+        connection.query('SELECT * FROM missions WHERE callback = ?', [hecho], (err, rows, fields) => {
+            if (err) throw err
+            let mission = rows[0]
+            connection.query('SELECT count(*) as count FROM progress WHERE user_id = ? AND do = ?', [user_id, hecho], (err, rows, fields) => {
+                if (err) throw err
+                let count = rows[0].count
+                // Te has pasado la mision
+                if (count >= mission.max_value) {
+                    connection.query('SELECT * FROM users_passed_missions WHERE user_id = ? AND mission_id = (SELECT id FROM missions WHERE callback = ?)', [user_id, hecho], (err, rows, fields) => {
+                        if (err) throw err
+                        if(rows.length === 0) {
+                            connection.query('INSERT INTO users_passed_missions(user_id, mission_id) VALUES (?, (SELECT id FROM missions WHERE callback = ?))', [user_id, hecho], (err, rows, fields) => {
+                                if (err) throw err
+                            })
+                            connection.query('SELECT points FROM users WHERE id = ?', [user_id], (err, rows, fields) => {
+                                if (err) throw err
+                                let points = rows[0].points + mission.points
+                                let level = (40*points) / 8000
+                                level = Math.trunc(level)
+                                level = level + 1
+                                console.log({level, points})
+                                connection.query('UPDATE users SET points = ?, level = ? WHERE id = ?', [points, level, user_id], (err, rows, fields) => {
+                                    if (err) throw err
+                                })
+        
+                            })
+                        }
+                    })
+                }
+            })
+        })
+        
+    })
+}
+
+app.get('/api/getProgress/:id/:hecho', async (req, res) => {
+    let user_id = req.params.id
+    let hecho = req.params.hecho
+    connection.query('SELECT count(*) as count FROM progress WHERE user_id = ? AND do = ?', [user_id, hecho], (err, rows, fields) => {
+        if (err) throw err
+        res.json(rows[0])
+    })
 })
 
 app.post('/api/delete', async (req, res) => {
@@ -672,11 +752,21 @@ app.post('/api/rename', async (req, res) => {
                                 let newPath = oldPath.replace(formData.lastName, formData.newName)
                                 connection.query('UPDATE files SET path = ? WHERE id = ?', [newPath, file.id], (err, rows, fields) => {
                                     if(err) throw err
-                                    res.json('Renamed')
+                                    connection.query('SELECT level FROM users WHERE id = ?', [formData.user], (err, rows, fields) => {
+                                        if (err) throw err
+                                        let idLevel = getFrameIdLevel(rows[0].level)
+                                        addProgress(formData.user, 'Carpeta Editada', idLevel)
+                                        res.json('Renamed')
+                                    })
                                 })
                             })
                         } else {
-                            res.json('Renamed')
+                            connection.query('SELECT level FROM users WHERE id = ?', [formData.user], (err, rows, fields) => {
+                                if (err) throw err
+                                let idLevel = getFrameIdLevel(rows[0].level)
+                                addProgress(formData.user, 'Carpeta Editada', idLevel)
+                                res.json('Renamed')
+                            })
                         }
                     })
                 })
@@ -692,7 +782,7 @@ app.post('/api/rename', async (req, res) => {
 
 app.get('/api/solicitudRegistro/:email/:name/:surname/:password/:username', (req, res) => {
     const salt = bcrypt.genSaltSync(13);
-    connection.query('INSERT INTO users (email, name, surname, password, username, hash, profile_picture) VALUES (?, ?, ?, ?, ?, ?, ?)', [req.params.email, req.params.name, req.params.surname, req.params.password, req.params.username, salt, './assets/perfil.png'], (err, rows, fields) => {
+    connection.query('INSERT INTO users (email, name, surname, password, username, hash, profile_picture, level) VALUES (?, ?, ?, ?, ?, ?, ?, 1)', [req.params.email, req.params.name, req.params.surname, req.params.password, req.params.username, salt, './assets/perfil.png'], (err, rows, fields) => {
       if (err) throw err
       console.log('The solution is: ', rows)
     })

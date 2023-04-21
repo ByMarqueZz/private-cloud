@@ -56,9 +56,9 @@ function Rename(props) {
         formData.append('type', props.file.type);
         formData.append('newName', name);
         formData.append('permission', permission);
+        formData.append('user', props.user.id);
         if(permission) {
             formData.append('password', null);
-            console.log(password)
         } else {
             formData.append('password', password);
         }
