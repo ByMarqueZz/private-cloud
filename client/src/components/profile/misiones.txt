@@ -9,10 +9,8 @@ Niveles 6-10 (Intermedio):
 Sube 10 archivos
 Crea 5 carpetas
 Comparte 5 archivos o carpetas con otros usuarios
-Utiliza la búsqueda avanzada para encontrar un archivo específico
 Cambia la configuración de privacidad de 5 archivos o carpetas
-Cambia el fondo de tu perfil
-Haz una búsqueda y filtra por tipo de archivo
+Crea 5 archivos desde 0
 
 Niveles 11-20 (Difícil):
 Sube 50 archivos
