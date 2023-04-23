@@ -94,20 +94,7 @@ app.get('/api/getUser/:id', async (req, res) => {
 
 app.get('/api/profileFrame/:id/:level', async (req, res) => {
     const { id, level } = req.params;
-    let idLevel = 1
-    let j = 0;
-    for(let i=1; i<=8; i++) {
-        if(level == 0) {
-            idLevel = 1
-        }
-        if (level >= j) {
-            idLevel = i;
-            j += 5;
-        } else {
-            j += 5;
-        }
-        // console.log({i, j, level, idLevel})
-    }
+    let idLevel = getFrameIdLevel(level)
     connection.query('SELECT * FROM frames WHERE id = ?', [idLevel], (err, rows, fields) => {
         if (err) throw err
         res.json(rows[0])
@@ -178,7 +165,12 @@ app.post('/api/createFile', async (req, res) => {
         console.log('The file has been saved!');
         connection.query('INSERT INTO files (name, path, user_id, type, permissions) VALUES (?, ?, ?, ?, ?)', [fileName, path, body.user_id, fileExtension, body.permission], (err, rows, fields) => {
             if (err) throw err
-            res.json(rows)
+            connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
+                if (err) throw err
+                let idLevel = getFrameIdLevel(rows[0].level)
+                addProgress(body.user_id, 'Archivo creado2', idLevel)
+                res.json(rows)
+            })
         })
     });
 })
