@@ -99,6 +99,12 @@
     position: relative;
 }
 
+.div-missions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .profile-username {
     color: dimgray;
 }

@@ -31,8 +31,22 @@ function Upload(props) {
         .then((response) => response.json())
         .then((data) => {
             props.reload();
-            props.success(true);
-            setTimeout(() => {props.success(false)}, 3000);
+            if(data.level_up == true) {
+                props.newLevelUp(props.user.level+1)
+                props.success(true);
+                setTimeout(() => {
+                    props.success(false);
+                    props.levelUp(true);
+                    setTimeout(() => {
+                        props.levelUp(false);
+                    }, 3000);
+                }, 3000);
+            } else {
+                props.success(true);
+                setTimeout(() => {
+                    props.success(false);
+                }, 3000);
+            }
         })
     }
 

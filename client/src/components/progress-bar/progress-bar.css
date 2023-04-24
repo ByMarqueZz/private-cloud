@@ -1,0 +1,39 @@
+.progress-bar-div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.progress-bar {
+    width: 80%;
+    height: 20px;
+    position: relative;
+    border-radius: 16px;
+}
+
+.progress-bar__progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    transition: width 1s;
+    border-radius: 16px;
+}
+
+.progress-bar__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #ade3e8;
+    width: 100%;
+    height: 20px;
+}
+
+.progress-bar__text {
+    width: 20%;
+    text-align: center;
+}
+
+.progress-bar__text p {
+    margin: 0;
+}

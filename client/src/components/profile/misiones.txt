@@ -5,33 +5,51 @@ Comparte un archivo o carpeta con otro usuario
 Cambia la configuración de privacidad de un archivo o carpeta
 Cambia tu imagen de perfil
 
-Niveles 6-10 (Intermedio):
+Niveles 5-10 (Intermedio):
 Sube 10 archivos
 Crea 5 carpetas
 Comparte 5 archivos o carpetas con otros usuarios
 Cambia la configuración de privacidad de 5 archivos o carpetas
 Crea 5 archivos desde 0
 
-Niveles 11-20 (Difícil):
+Niveles 10-15 (Difícil):
 Sube 50 archivos
 Crea 10 carpetas con contraseñas
-Comparte 10 archivos o carpetas con otros usuarios y da permiso para editarlos
-Utiliza la búsqueda avanzada para encontrar varios archivos específicos
+Comparte 10 archivos o carpetas con otros usuarios
 Cambia la configuración de privacidad de 10 archivos o carpetas
-Consigue 5 likes en tus archivos
+Crea 10 archivos desde 0
 
-Niveles 21-30 (Muy difícil):
-Sube 100 archivos
-Crea 20 carpetas con contraseñas
-Comparte 20 archivos o carpetas con otros usuarios y da permiso para editarlos
-Utiliza la búsqueda avanzada para encontrar varios archivos específicos con diferentes criterios
+Niveles 15-20 (Muy difícil):
+Sube 75 archivos
+Crea 15 carpetas con contraseñas
+Comparte 20 archivos o carpetas con otros usuarios
 Cambia la configuración de privacidad de 20 archivos o carpetas
-Consigue 10 likes en tus archivos
+Crea 20 archivos desde 0
 
-Niveles 31-40 (Extremadamente difícil):
-Sube 200 archivos
+Niveles 20-25 (Extremadamente difícil):
+Sube 100 archivos
 Crea 30 carpetas con contraseñas
-Comparte 30 archivos o carpetas con otros usuarios y da permiso para editarlos
-Utiliza la búsqueda avanzada para encontrar varios archivos específicos con diferentes criterios y combínalos en una carpeta
+Comparte 30 archivos o carpetas con otros usuarios
 Cambia la configuración de privacidad de 30 archivos o carpetas
-Consigue 20 likes en tus archivos
+Crea 20 archivos desde 0
+
+Niveles 25-30 (Imposible):
+Sube 150 archivos
+Crea 50 carpetas con contraseñas
+Comparte 50 archivos o carpetas con otros usuarios
+Cambia la configuración de privacidad de 50 archivos o carpetas
+Crea 50 archivos desde 0
+
+Niveles 30-35 (Sayayin nivel dios):
+Sube 200 archivos
+Crea 100 carpetas con contraseñas
+Comparte 100 archivos o carpetas con otros usuarios
+Cambia la configuración de privacidad de 100 archivos o carpetas
+Crea 100 archivos desde 0
+
+Niveles 35-40 (Te regalo mi página gratis):
+Sube 300 archivos
+Crea 200 carpetas con contraseñas
+Comparte 200 archivos o carpetas con otros usuarios
+Cambia la configuración de privacidad de 200 archivos o carpetas
+Crea 200 archivos desde 0

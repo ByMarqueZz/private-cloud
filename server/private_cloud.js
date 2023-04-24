@@ -37,7 +37,7 @@ app.use(fileUpload());
 const db_config = {
   host: '127.0.0.1',
   user: 'root',
-  password: '',
+  password: 'root',
   database: 'private_cloud'
 }
 
@@ -118,29 +118,14 @@ function getFrameIdLevel(level) {
     return idLevel;
 }
 
-app.get('/api/getMissions/:id/:level', async (req, res) => {
-    const { id, level } = req.params;
+app.get('/api/getMissions/:level', async (req, res) => {
+    const { level } = req.params;
     let idLevel = getFrameIdLevel(level)
-    connection.query(`
-    SELECT 
-    missions.id AS id, 
-    missions.name AS name, 
-    missions.description AS description,
-    missions.frame_id AS frame_id,
-    missions.points AS points,
-    missions.max_value AS max_value,
-    missions.callback AS callback,
-    users.id AS user_id, 
-    users.name AS user_name, 
-    CASE 
-      WHEN users_passed_missions.user_id = ? AND users_passed_missions.mission_id = missions.id THEN true 
-      ELSE false 
-    END AS passed
+    connection.query(` SELECT 
+    id, name, description, frame_id, points, max_value, callback
   FROM missions 
-  LEFT JOIN users_passed_missions ON missions.id = users_passed_missions.mission_id 
-  LEFT JOIN users ON users.id = users_passed_missions.user_id
   WHERE frame_id = ?
-        `, [id, idLevel], (err, rows, fields) => {
+        `, [idLevel], (err, rows, fields) => {
             if (err) throw err
             res.json(rows)
         })
@@ -168,8 +153,11 @@ app.post('/api/createFile', async (req, res) => {
             connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
                 if (err) throw err
                 let idLevel = getFrameIdLevel(rows[0].level)
-                addProgress(body.user_id, 'Archivo creado2', idLevel)
-                res.json(rows)
+                function callback(param) {
+                    console.log(param)
+                    res.json({level: rows[0], level_up: param})
+                }
+                addProgress(body.user_id, 'Archivo creado2', idLevel, callback)
             })
         })
     });
@@ -320,11 +308,13 @@ app.post('/api/editProfile', async (req, res) => {
                 if (err) throw err
                 connection.query('SELECT * FROM users WHERE hash = ?', [req.body.hash], (err, rows, fields) => {
                     if (err) throw err
-                    connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
+                    connection.query('SELECT id, level FROM users WHERE hash = ?', [req.body.hash], (err, rows, fields) => {
                         if (err) throw err
                         let idLevel = getFrameIdLevel(rows[0].level)
-                        addProgress(req.body.user_id, 'Foto de perfil actualizada', idLevel)
-                        res.json({ message: 'Perfil actualizado.' })
+                        function callback(param) {
+                            res.json({ message: 'Perfil actualizado.', level_up: param })
+                        }
+                        addProgress(rows[0].id, 'Foto de perfil actualizada', idLevel, callback)
                     })
                 })
             })
@@ -464,11 +454,13 @@ app.post('/api/sendFile' , async (req, res) => {
                 console.log('File copied')
                 connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [newUniqueName, userSelected.id, userSelected.username+'/Compartido', 0, body.file.type, body.file.user_id], (err, rows, fields) => {
                     if (err) throw err
-                    connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
+                    connection.query('SELECT level FROM users WHERE id = ?', [body.file.user_id], (err, rows, fields) => {
                         if (err) throw err
                         let idLevel = getFrameIdLevel(rows[0].level)
-                        addProgress(req.body.user_id, 'Compartido', idLevel)
-                        res.json({ message: 'Archivo enviado.' })
+                        function callback(param) {
+                            res.json({ message: 'Archivo enviado.', level_up: param })
+                        }
+                        addProgress(body.file.user_id, 'Compartido', idLevel, callback)
                     })
                 })
             })
@@ -534,6 +526,8 @@ app.post('/api/upload', async (req, res) => {
     }
 
     let files_in_path = fs.readdirSync('./'+path)
+    let level_up = false
+    let idLevel = 0
 
     for(let i=0; i<file.length; i++) {
         let fileName = file[i].name
@@ -551,14 +545,24 @@ app.post('/api/upload', async (req, res) => {
                     if (err) throw err
                     connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
                         if (err) throw err
-                        let idLevel = getFrameIdLevel(rows[0].level)
-                        addProgress(req.body.user_id, 'upload', idLevel)
+                        idLevel = getFrameIdLevel(rows[0].level)
+                        function notCallback(param) {
+                            console.log(param)
+                        }
+                        if(i == 0) {
+                            addProgress(req.body.user_id, 'upload', idLevel, notCallback)
+                        } else {
+                            addProgress(req.body.user_id, 'upload', idLevel, notCallback)
+                        }
                     })
                 })
             }
         })
+        function callback(param) {
+            res.json({message: 'Files uploaded', level_up: level_up})
+        }
+        addProgress(req.body.user_id, 'upload', idLevel, callback)
     }
-    res.json('Files uploaded')
 })
 
 function getUniqueFileName(path, fileName) {
@@ -606,13 +610,21 @@ app.post('/api/createFolder', async (req, res) => {
         connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
             if (err) throw err
             let idLevel = getFrameIdLevel(rows[0].level)
-            addProgress(req.body.user_id, 'Carpeta creada', idLevel)
-            res.json('Folder created')
+            let level_up = false
+            function callback(param) {
+                res.json({message: 'Folder created', level_up : param})
+            }
+            if(password) {
+                addProgress(req.body.user_id, 'Carpeta con contraseña creada', idLevel, callback)
+            } else {
+                addProgress(req.body.user_id, 'Carpeta creada', idLevel, callback)
+            }
+            console.log(level_up)
         })
     })
 })
 
-function addProgress(user_id, hecho, idLevel) {
+function addProgress(user_id, hecho, idLevel, callback) {
     if(idLevel != 1) {
         hecho = hecho + idLevel
     }
@@ -641,15 +653,18 @@ function addProgress(user_id, hecho, idLevel) {
                                 console.log({level, points})
                                 connection.query('UPDATE users SET points = ?, level = ? WHERE id = ?', [points, level, user_id], (err, rows, fields) => {
                                     if (err) throw err
+                                    callback(true)
                                 })
-        
                             })
+                        } else {
+                            callback(false)
                         }
                     })
+                } else {
+                    callback(false)
                 }
             })
         })
-        
     })
 }
 
@@ -728,7 +743,7 @@ app.post('/api/rename', async (req, res) => {
             if(formData.password == '' || formData.password == 'NULL' || formData.password == null || formData.password == undefined || formData.password == 'null') {
                 formData.password = null
             }
-    
+            let level_up = false
             // Si se ha renombrado correctamente, podemos realizar la consulta en la base de datos
             connection.query('UPDATE files SET name = ?, permissions = ?, password = ? WHERE name = ? AND path = ? AND type = ?', [formData.newName, formData.permission, formData.password, formData.lastName, formData.path, formData.type], (err, rows, fields) => {
                 if (err) throw err
@@ -747,8 +762,10 @@ app.post('/api/rename', async (req, res) => {
                                     connection.query('SELECT level FROM users WHERE id = ?', [formData.user], (err, rows, fields) => {
                                         if (err) throw err
                                         let idLevel = getFrameIdLevel(rows[0].level)
-                                        addProgress(formData.user, 'Carpeta Editada', idLevel)
-                                        res.json('Renamed')
+                                        function callback(param) {
+                                            res.json({message:'Renamed', level_up:param})
+                                        }
+                                        addProgress(formData.user, 'Carpeta Editada', idLevel, callback)
                                     })
                                 })
                             })
@@ -756,8 +773,10 @@ app.post('/api/rename', async (req, res) => {
                             connection.query('SELECT level FROM users WHERE id = ?', [formData.user], (err, rows, fields) => {
                                 if (err) throw err
                                 let idLevel = getFrameIdLevel(rows[0].level)
-                                addProgress(formData.user, 'Carpeta Editada', idLevel)
-                                res.json('Renamed')
+                                function callback(param) {
+                                    res.json({message:'Renamed', level_up:param})
+                                }
+                                addProgress(formData.user, 'Carpeta Editada', idLevel, callback)
                             })
                         }
                     })

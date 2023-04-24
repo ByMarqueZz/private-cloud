@@ -58,7 +58,7 @@ function Home(props) {
         .then(response => response.json())
         .then(data => {
             if(data.messageError) {
-                setNotDirectoryState(true)
+                setNotDirectoryState(true);
             } else {
                 let files = orderFiles(data.rows);
                 setFiles(files);
@@ -283,17 +283,17 @@ function Home(props) {
 
           {/*MODALS*/}
           {
-                showUpload ? <Upload success={setUploadSuccess} user={props.user} show={setShowUpload} path={props.path} url={props.url} reload={() => {
+                showUpload ? <Upload levelUp={props.setLevelUp} newLevelUp={props.setNewLevelUp} success={setUploadSuccess} user={props.user} show={setShowUpload} path={props.path} url={props.url} reload={() => {
                     setTimeout(() => {
                         getPath();
                     }, 500);
                 }}/> : ''
           }
           {
-                showCreateFolder ? <CreateFolder success={setCreateFolderSuccess} user={props.user} show={setShowCreateFolder} path={props.path} url={props.url} reload={getPath}/> : ''
+                showCreateFolder ? <CreateFolder levelUp={props.levelUp} newLevelUp={props.newLevelUp} success={setCreateFolderSuccess} user={props.user} show={setShowCreateFolder} path={props.path} url={props.url} reload={getPath}/> : ''
           }
           {
-                showCreateFile ? <CreateFile success={setCreateFileSuccess} user={props.user} show={setShowCreateFile} path={props.path} url={props.url} reload={getPath}/> : ''
+                showCreateFile ? <CreateFile levelUp={props.levelUp} newLevelUp={props.newLevelUp} success={setCreateFileSuccess} user={props.user} show={setShowCreateFile} path={props.path} url={props.url} reload={getPath}/> : ''
           }
           {
                 showDelete ? <Delete success={setDeleteSuccess} show={setShowDelete} type={type} file={fileDelete} path={props.path} url={props.url} reload={getPath}/> : ''
@@ -311,10 +311,10 @@ function Home(props) {
               showModalPassword3 ? <ModalPassword canBeEdit={true} showRename={setShowRename} file={fileRename} newPath={newPath} setPath={props.setPath} show={setShowModalPassword3} pathCanDownload={pathCanDownload} type={typeRename} pass={passwords} path={props.path} url={props.url} reload={getPath}/> : ''
           }
           {
-              showRename ? <Rename success={setRenameSuccess} show={setShowRename} type={typeRename} file={fileRename} path={props.path} url={props.url} reload={getPath} user={props.user}/> : ''
+              showRename ? <Rename levelUp={props.levelUp} newLevelUp={props.newLevelUp} success={setRenameSuccess} show={setShowRename} type={typeRename} file={fileRename} path={props.path} url={props.url} reload={getPath} user={props.user}/> : ''
           }
           {
-              showSendModal ? <Send show={setShowSendModal} type={typeSend} success={setSendSuccess} file={fileSend} path={props.path} url={props.url} reload={getPath}/> : ''
+              showSendModal ? <Send levelUp={props.levelUp} newLevelUp={props.newLevelUp} show={setShowSendModal} type={typeSend} success={setSendSuccess} file={fileSend} path={props.path} url={props.url} reload={getPath} user={props.user}/> : ''
           }
 
           {/*ALERTS*/}
@@ -322,7 +322,7 @@ function Home(props) {
               sendSuccess ? <div className='alert-success'><Alert severity="success">Enviado correctamente</Alert></div> : ''
           }
           {
-              createFolderSuccess ? <div className='alert-success'><Alert severity="success">Enviado correctamente</Alert></div> : ''
+              createFolderSuccess ? <div className='alert-success'><Alert severity="success">Creado correctamente</Alert></div> : ''
           }
           {
               deleteSuccess ? <div className='alert-success'><Alert severity="success">Eliminado correctamente</Alert></div> : ''
@@ -338,6 +338,9 @@ function Home(props) {
           }
           {
               createFileSuccess ? <div className='alert-success'><Alert severity="success">Creado correctamente</Alert></div> : ''
+          }
+          {
+              props.levelUp == false ? <div className='alert-success'><Alert severity="success">¡Enhorabuena has subido al nivel {props.newLevelUp}!</Alert></div> : ''
           }
     </div>
   );
