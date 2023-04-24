@@ -157,7 +157,7 @@ app.post('/api/createFile', async (req, res) => {
                     console.log(param)
                     res.json({level: rows[0], level_up: param})
                 }
-                addProgress(body.user_id, 'Archivo creado2', idLevel, callback)
+                addProgress(body.user_id, 'Archivo creado', idLevel, callback)
             })
         })
     });
@@ -546,24 +546,17 @@ app.post('/api/upload', async (req, res) => {
                     connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
                         if (err) throw err
                         idLevel = getFrameIdLevel(rows[0].level)
-                        function notCallback(param) {
-                            console.log(param)
+                        function callback(callbackParam) {
+                            res.json({message: 'Files uploaded', level_up: callbackParam})
                         }
-                        if(i == 0) {
-                            addProgress(req.body.user_id, 'upload', idLevel, notCallback)
-                        } else {
-                            addProgress(req.body.user_id, 'upload', idLevel, notCallback)
-                        }
+                        addProgress(req.body.user_id, 'upload', idLevel, callback)
                     })
                 })
             }
         })
-        function callback(param) {
-            res.json({message: 'Files uploaded', level_up: level_up})
-        }
-        addProgress(req.body.user_id, 'upload', idLevel, callback)
     }
 })
+
 
 function getUniqueFileName(path, fileName) {
     let fileCount = 0
@@ -632,38 +625,40 @@ function addProgress(user_id, hecho, idLevel, callback) {
         if (err) throw err
         connection.query('SELECT * FROM missions WHERE callback = ?', [hecho], (err, rows, fields) => {
             if (err) throw err
-            let mission = rows[0]
-            connection.query('SELECT count(*) as count FROM progress WHERE user_id = ? AND do = ?', [user_id, hecho], (err, rows, fields) => {
-                if (err) throw err
-                let count = rows[0].count
-                // Te has pasado la mision
-                if (count >= mission.max_value) {
-                    connection.query('SELECT * FROM users_passed_missions WHERE user_id = ? AND mission_id = (SELECT id FROM missions WHERE callback = ?)', [user_id, hecho], (err, rows, fields) => {
-                        if (err) throw err
-                        if(rows.length === 0) {
-                            connection.query('INSERT INTO users_passed_missions(user_id, mission_id) VALUES (?, (SELECT id FROM missions WHERE callback = ?))', [user_id, hecho], (err, rows, fields) => {
-                                if (err) throw err
-                            })
-                            connection.query('SELECT points FROM users WHERE id = ?', [user_id], (err, rows, fields) => {
-                                if (err) throw err
-                                let points = rows[0].points + mission.points
-                                let level = (40*points) / 8000
-                                level = Math.trunc(level)
-                                level = level + 1
-                                console.log({level, points})
-                                connection.query('UPDATE users SET points = ?, level = ? WHERE id = ?', [points, level, user_id], (err, rows, fields) => {
+            if (rows.length > 0) {
+                let mission = rows[0]
+                connection.query('SELECT count(*) as count FROM progress WHERE user_id = ? AND do = ?', [user_id, hecho], (err, rows, fields) => {
+                    if (err) throw err
+                    let count = rows[0].count
+                    // Te has pasado la mision
+                    if (count >= mission.max_value) {
+                        connection.query('SELECT * FROM users_passed_missions WHERE user_id = ? AND mission_id = (SELECT id FROM missions WHERE callback = ?)', [user_id, hecho], (err, rows, fields) => {
+                            if (err) throw err
+                            if(rows.length === 0) {
+                                connection.query('INSERT INTO users_passed_missions(user_id, mission_id) VALUES (?, (SELECT id FROM missions WHERE callback = ?))', [user_id, hecho], (err, rows, fields) => {
                                     if (err) throw err
-                                    callback(true)
                                 })
-                            })
-                        } else {
-                            callback(false)
-                        }
-                    })
-                } else {
-                    callback(false)
-                }
-            })
+                                connection.query('SELECT points FROM users WHERE id = ?', [user_id], (err, rows, fields) => {
+                                    if (err) throw err
+                                    let points = rows[0].points + mission.points
+                                    let level = (40*points) / 8000
+                                    level = Math.trunc(level)
+                                    level = level + 1
+                                    console.log({level, points})
+                                    connection.query('UPDATE users SET points = ?, level = ? WHERE id = ?', [points, level, user_id], (err, rows, fields) => {
+                                        if (err) throw err
+                                        callback(true)
+                                    })
+                                })
+                            } else {
+                                callback(false)
+                            }
+                        })
+                    } else {
+                        callback(false)
+                    }
+                })
+            }
         })
     })
 }
@@ -873,7 +868,7 @@ app.listen(port, () => {
 })
 
 // const server = https.createServer(options, app);
-
+//
 // server.listen(port, () => {
 //     console.log('Servidor HTTPS escuchando en el puerto ' + port);
 // });

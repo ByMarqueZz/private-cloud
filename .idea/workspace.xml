@@ -5,27 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="32894c48-c79d-4576-8a77-14a1ae9a8670" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client/src/components/progress-bar/progress-bar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/progress-bar/progress-bar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/create-file/create-file.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/create-file/create-file.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/create-folder/create-folder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/edit-profile/edit-profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/edit-profile/edit-profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/header/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/header/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/linear-progress/linear-progress.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/mission/mission.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/mission/mission.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/profile/misiones.txt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/misiones.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/profile/profile.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/profile.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/rename/rename.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/rename/rename.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/send/send.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/send/send.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/upload/upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/upload/upload.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/private_cloud.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/private_cloud.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/sql/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/sql/script.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,6 +87,7 @@
       <workItem from="1681884802609" duration="14222000" />
       <workItem from="1681971232020" duration="19127000" />
       <workItem from="1682316478065" duration="11558000" />
+      <workItem from="1682337541520" duration="2462000" />
     </task>
     <servers />
   </component>

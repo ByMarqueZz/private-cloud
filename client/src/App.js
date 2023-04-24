@@ -10,8 +10,8 @@ import EditProfile from './components/edit-profile/edit-profile';
 
 // URL de la API
 // export const url = 'http://192.168.1.136:8282';
-export const url = 'http://localhost:8282';
-// export const url = 'https://jointscounter.com:8282';
+// export const url = 'http://localhost:8282';
+export const url = 'https://jointscounter.com:8282';
 
 function App() {
     const [userHash, setUserHash] = useState(null);
@@ -24,6 +24,11 @@ function App() {
 
     useEffect(() => {
         isLogged();
+        if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object') {
+            for (let [key, value] of Object.entries(window.__REACT_DEVTOOLS_GLOBAL_HOOK__)) {
+                window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key] = typeof value === 'function' ? ()=>{} : null;
+            }
+        }
     }, []);
 
     function isLogged(hashPasado=null) {

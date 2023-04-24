@@ -31,6 +31,7 @@ function Upload(props) {
         .then((response) => response.json())
         .then((data) => {
             props.reload();
+            console.log(data)
             if(data.level_up == true) {
                 props.newLevelUp(props.user.level+1)
                 props.success(true);
