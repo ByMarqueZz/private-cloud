@@ -75,6 +75,37 @@
     height: 50px;
 }
 
+.level-number-header {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.6rem;
+}
+
+.estilo-marco-1-header {
+    bottom: -19.5%;
+    left: 50%;
+}
+.estilo-marco-2-header {
+    bottom: -18%;
+    left: 50%;
+}
+
+.estilo-marco-3-header {
+    bottom: -11.5%;
+    left: 50%;
+}
+
+.estilo-marco-4-header {
+    bottom: -11%;
+    left: 50%;
+}
+
+.estilo-marco-5-header {
+    bottom: -13%;
+    left: 50%;
+}
+
 @media screen and (max-width: 450px) {
     .titulo span {
         font-size: 1em;

@@ -26,6 +26,7 @@ function Profile(props) {
 
     useEffect(() => {
         getUser();
+        setTimeout(() => {getUser()}, 1000);
     }, [props.id_profile]);
 
     function getProfilePicture(image) {
@@ -46,7 +47,7 @@ function Profile(props) {
                     setUser(data[0]);
                     getProfilePicture(data[0].profile_picture);
                     getFrame(data[0].level);
-                    getMissions(data[0].id, data[0].level);
+                    getMissions(data[0].level);
                     setIsLoading(false);
                     getFollowers(data[0].id)
                     setPathDetails(data[0].username+'-');
@@ -59,11 +60,10 @@ function Profile(props) {
             })
     }
 
-    function getMissions(id, level) {
-        fetch(props.url+'/api/getMissions/'+id+'/'+level)
+    function getMissions(level) {
+        fetch(props.url+'/api/getMissions/'+level)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
                 setMissions(data);
                 setShowMissions(true);
             })

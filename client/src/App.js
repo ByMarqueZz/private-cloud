@@ -9,7 +9,8 @@ import Profile from './components/profile/profile';
 import EditProfile from './components/edit-profile/edit-profile';
 
 // URL de la API
-export const url = 'http://192.168.1.136:8282';
+// export const url = 'http://192.168.1.136:8282';
+export const url = 'http://localhost:8282';
 // export const url = 'https://jointscounter.com:8282';
 
 function App() {
@@ -18,6 +19,8 @@ function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [idProfile, setIdProfile] = useState(null);
     const [path, setPath] = useState(null);
+    const [levelUp, setLevelUp] = useState(false);
+    const [newLevelUp, setNewLevelUp] = useState(0);
 
     useEffect(() => {
         isLogged();
@@ -103,12 +106,12 @@ function App() {
       return (
         <>
           <BrowserRouter>
-              <Header setId={setIdProfile} url={url} user={user} logout={logout} setPath={setPath}/>
+              <Header setId={setIdProfile} levelUp={levelUp} newLevelUp={newLevelUp} url={url} user={user} logout={logout} setPath={setPath}/>
               <div className='main'>
                 <Routes>
-                      <Route path="/:path?" element={<RequireAuth hash={userHash}><Home url={url} path={path} setPath={setPath} user={user} isPublic={false} logout={logout}/></RequireAuth>}/>
+                      <Route path="/:path?" element={<RequireAuth hash={userHash}><Home levelUp={setLevelUp} newLevelUp={setNewLevelUp} url={url} path={path} setPath={setPath} user={user} isPublic={false} logout={logout}/></RequireAuth>}/>
                       <Route path="/profile/:id" element={<RequireAuth hash={userHash}><Profile id_profile={idProfile} user={user} url={url} userHash={userHash} logout={logout}></Profile></RequireAuth>}></Route>
-                      <Route path="/editProfile" element={<RequireAuth hash={userHash}><EditProfile url={url} hash={userHash} user={user}></EditProfile></RequireAuth>}></Route>
+                      <Route path="/editProfile" element={<RequireAuth hash={userHash}><EditProfile levelUp={setLevelUp} newLevelUp={setNewLevelUp} url={url} hash={userHash} user={user}></EditProfile></RequireAuth>}></Route>
                       **<Route path="*" element={<RequireAuth hash={userHash}><Home url={url} path={path} setPath={setPath} user={user} isPublic={false} logout={logout}/></RequireAuth>}></Route>**
                 </Routes>
               </div>

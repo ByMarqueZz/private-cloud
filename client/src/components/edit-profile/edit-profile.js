@@ -60,6 +60,11 @@ function EditProfile(props) {
             .then((data) => {
                 if(data) {
                     window.location.reload();
+                    props.newLevelUp(props.user.level+1)
+                    props.levelUp(true);
+                    setTimeout(() => {
+                        props.levelUp(false);
+                    }, 3000);
                 }
             })
     }

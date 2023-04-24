@@ -14,12 +14,14 @@ function Header(props) {
     const [imageProfile, setImageProfile] = useState('');
     const [styleSpan, setStyleSpan] = useState('');
     const [namePng, setNamePng] = useState('');
+    const [level, setLevel] = useState(0);
 
     useEffect(() => {
+        getUser();
         getUsers();
         getProfilePicture();
         getFrame(props.user.level);
-    }, []);
+    }, [props.levelUp]);
 
     function getProfilePicture() {
         fetch(props.url+'/api/image/'+props.user.profile_picture)
@@ -28,6 +30,16 @@ function Header(props) {
                 setImageProfile(URL.createObjectURL(blob));
             })
             .catch((err) => console.error(err));
+    }
+
+    function getUser() {
+        fetch(props.url+'/api/getUser/'+props.user.id)
+            .then((response) => response.json())
+            .then((data) => {
+                if(data[0]) {
+                    setLevel(data[0].level)
+                }
+            })
     }
 
     function getUsers() {
@@ -113,6 +125,7 @@ function Header(props) {
                                             <div className='div-child-marco'>
                                                 <img src={namePng} className='foto-marco'></img>
                                             </div>
+                                            <span className={'level-number-header '+styleSpan+'-header'}>{level}</span>
                                         </div>
                                     </Link>
                               </li>
