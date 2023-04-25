@@ -7,13 +7,11 @@ import CreateFolder from '../create-folder/create-folder';
 import Delete from '../delete/delete';
 import File from '../file/file';
 import Grid from '@mui/material/Grid';
-import PopoverOption from '../popover/popover';
-import PopoverPublic from '../popoverpublic/popoverpublic';
 import ModalPassword from '../modal-password/modal-password';
 import Rename from '../rename/rename';
 import Send from '../send/send';
 import Folder from '../folder/folder';
-import Alert from '@mui/material/Alert';
+import Alerts from '../alerts/alerts';
 import CreateFile from '../create-file/create-file';
 
 function Home(props) {
@@ -50,6 +48,15 @@ function Home(props) {
     useEffect(() => {
         getPath();
     }, [props.path]);
+
+    function callbackCreateFolder() {
+        setShowCreateFolder(false);
+        setCreateFolderSuccess(true);
+        setTimeout(() => {
+            setCreateFolderSuccess(false);
+        }, 3000);
+        getPath();
+    }
 
     function getPath() {
         setFiles([]);
@@ -290,7 +297,7 @@ function Home(props) {
                 }}/> : ''
           }
           {
-                showCreateFolder ? <CreateFolder levelUp={props.levelUp} newLevelUp={props.newLevelUp} success={setCreateFolderSuccess} user={props.user} show={setShowCreateFolder} path={props.path} url={props.url} reload={getPath}/> : ''
+                showCreateFolder ? <CreateFolder levelUp={props.levelUp} newLevelUp={props.newLevelUp} success={callbackCreateFolder} user={props.user} show={setShowCreateFolder} path={props.path} url={props.url} reload={getPath}/> : ''
           }
           {
                 showCreateFile ? <CreateFile levelUp={props.levelUp} newLevelUp={props.newLevelUp} success={setCreateFileSuccess} user={props.user} show={setShowCreateFile} path={props.path} url={props.url} reload={getPath}/> : ''
@@ -317,31 +324,8 @@ function Home(props) {
               showSendModal ? <Send levelUp={props.levelUp} newLevelUp={props.newLevelUp} show={setShowSendModal} type={typeSend} success={setSendSuccess} file={fileSend} path={props.path} url={props.url} reload={getPath} user={props.user}/> : ''
           }
 
-          {/*ALERTS*/}
-          {
-              sendSuccess ? <div className='alert-success'><Alert severity="success">Enviado correctamente</Alert></div> : ''
-          }
-          {
-              createFolderSuccess ? <div className='alert-success'><Alert severity="success">Creado correctamente</Alert></div> : ''
-          }
-          {
-              deleteSuccess ? <div className='alert-success'><Alert severity="success">Eliminado correctamente</Alert></div> : ''
-          }
-          {
-              renameSuccess ? <div className='alert-success'><Alert severity="success">Renombrado correctamente</Alert></div> : ''
-          }
-          {
-              uploadSuccess ? <div className='alert-success'><Alert severity="success">Subido correctamente</Alert></div> : ''
-          }
-          {
-              downloadSuccess ? <div className='alert-success'><Alert severity="success">Descargado correctamente</Alert></div> : ''
-          }
-          {
-              createFileSuccess ? <div className='alert-success'><Alert severity="success">Creado correctamente</Alert></div> : ''
-          }
-          {
-              props.levelUp == false ? <div className='alert-success'><Alert severity="success">¡Enhorabuena has subido al nivel {props.newLevelUp}!</Alert></div> : ''
-          }
+          <Alerts sendSuccess={sendSuccess} createFolderSuccess={createFolderSuccess} deleteSuccess={deleteSuccess} renameSuccess={renameSuccess} uploadSuccess={uploadSuccess} downloadSuccess={downloadSuccess} createFileSuccess={createFileSuccess} levelUp={props.levelUp}></Alerts>
+          
     </div>
   );
 }
