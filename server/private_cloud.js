@@ -22,24 +22,24 @@ app.use(fileUpload());
 /**
  * ANTES DE SUBIR A PRODUCCIÓN HAY QUE DESCOMENTAR lAS LINEAS DEL FINAL
  */
-// const options = {
-//     cert: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/fullchain.pem'),
-//     key: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/privkey.pem')
-// };
-// var db_config = {
-//     host: '127.0.0.1',
-//     user: 'root',
-//     password: 'tY3rbpYG8&@W1l^t.a',
-//     database: 'private_cloud'
-// }
+const options = {
+    cert: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/privkey.pem')
+};
+var db_config = {
+    host: '127.0.0.1',
+    user: 'root',
+    password: 'tY3rbpYG8&@W1l^t.a',
+    database: 'private_cloud'
+}
 
 //SERVIDOR LOCAL
-const db_config = {
-  host: '127.0.0.1',
-  user: 'root',
-  password: 'root',
-  database: 'private_cloud'
-}
+// const db_config = {
+//   host: '127.0.0.1',
+//   user: 'root',
+//   password: '',
+//   database: 'private_cloud'
+// }
 
 let connection
 function handleDisconnect() {
@@ -526,35 +526,38 @@ app.post('/api/upload', async (req, res) => {
     }
 
     let files_in_path = fs.readdirSync('./'+path)
-    let level_up = false
     let idLevel = 0
 
-    for(let i=0; i<file.length; i++) {
-        let fileName = file[i].name
-        if(files_in_path.includes(fileName)) {
-            fileName = getUniqueFileName(path, fileName)
-            file[i].name = fileName
-        }
-        let fileExtension = fileName.split('.').pop()
-        file[i].mv('./'+path+'/'+fileName, (err) => {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log('File uploaded')
-                connection.query('INSERT INTO files (name, path, user_id, type, permissions) VALUES (?, ?, ?, ?, ?)', [fileName, path, req.body.user_id, fileExtension, permissions], (err, rows, fields) => {
-                    if (err) throw err
-                    connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
-                        if (err) throw err
-                        idLevel = getFrameIdLevel(rows[0].level)
-                        function callback(callbackParam) {
-                            res.json({message: 'Files uploaded', level_up: callbackParam})
-                        }
-                        addProgress(req.body.user_id, 'upload', idLevel, callback)
-                    })
-                })
+    connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
+        if (err) throw err
+        idLevel = getFrameIdLevel(rows[0].level)
+        for(let i=0; i<file.length; i++) {
+            let fileName = file[i].name
+            if(files_in_path.includes(fileName)) {
+                fileName = getUniqueFileName(path, fileName)
+                file[i].name = fileName
             }
-        })
-    }
+            let fileExtension = fileName.split('.').pop()
+            file[i].mv('./'+path+'/'+fileName, (err) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log('File uploaded')
+                    connection.query('INSERT INTO files (name, path, user_id, type, permissions) VALUES (?, ?, ?, ?, ?)', [fileName, path, req.body.user_id, fileExtension, permissions], (err, rows, fields) => {
+                        if (err) throw err
+                        if(i != 0) {
+                            addProgress(req.body.user_id, 'upload', idLevel, (param) => {console.log(param)})
+                        }
+                    })
+                }
+            })
+        }
+         
+        function callback(callbackParam) {
+            res.json({message: 'Files uploaded', level_up: callbackParam})
+        }
+        addProgress(req.body.user_id, 'upload', idLevel, callback)
+    })  
 })
 
 
@@ -581,7 +584,8 @@ function getUniqueFolderName(path, folderName) {
     return name;
 }
 
-app.post('/api/createFolder', async (req, res) => {
+app.post('/api/createFolder', (req, res) => {
+    console.log(1)
     let path = req.body.path
     let folderName = req.body.name
 
@@ -603,7 +607,7 @@ app.post('/api/createFolder', async (req, res) => {
         connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
             if (err) throw err
             let idLevel = getFrameIdLevel(rows[0].level)
-            let level_up = false
+            
             function callback(param) {
                 res.json({message: 'Folder created', level_up : param})
             }
@@ -612,7 +616,6 @@ app.post('/api/createFolder', async (req, res) => {
             } else {
                 addProgress(req.body.user_id, 'Carpeta creada', idLevel, callback)
             }
-            console.log(level_up)
         })
     })
 })
@@ -647,14 +650,17 @@ function addProgress(user_id, hecho, idLevel, callback) {
                                     console.log({level, points})
                                     connection.query('UPDATE users SET points = ?, level = ? WHERE id = ?', [points, level, user_id], (err, rows, fields) => {
                                         if (err) throw err
+                                        console.log(true)
                                         callback(true)
                                     })
                                 })
                             } else {
+                                console.log(false)
                                 callback(false)
                             }
                         })
                     } else {
+                        console.log(false)
                         callback(false)
                     }
                 })
@@ -863,12 +869,12 @@ app.get('/api/sendMailVerification/:email', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Servidor HTTP listening on port ${port}`)
-})
+// app.listen(port, () => {
+//     console.log(`Servidor HTTP listening on port ${port}`)
+// })
 
-// const server = https.createServer(options, app);
-//
-// server.listen(port, () => {
-//     console.log('Servidor HTTPS escuchando en el puerto ' + port);
-// });
+const server = https.createServer(options, app);
+
+server.listen(port, () => {
+    console.log('Servidor HTTPS escuchando en el puerto ' + port);
+});
