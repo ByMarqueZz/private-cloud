@@ -37,10 +37,12 @@
   .file-input:hover {
     border-color: black;
     color: black;
+    cursor: pointer;
   }
   
   .file-input label {
     margin-bottom: 10px;
+    cursor: pointer;
   }
   
   #file-names-list {

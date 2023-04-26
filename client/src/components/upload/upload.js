@@ -51,6 +51,17 @@ function Upload(props) {
         })
     }
 
+    const handleDragOver = (event) => {
+        event.preventDefault();
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        for(let i = 0; i < event.dataTransfer.files.length; i++) {
+            setFiles((files) => [...files, event.dataTransfer.files[i]]);
+        }
+    };
+
     function onChangeSwitch(e) {
         if(e.target.checked) {
             setLabelSwitch('Público');
@@ -90,7 +101,7 @@ function Upload(props) {
                 <h3 className='tittle-modal'>Subir archivo</h3>
                 <div className='divInputLogin'>
                     <img src='/assets/expediente.png' className='iconLogin'/>
-                    <div className="file-input">
+                    <div className="file-input" onDragOver={handleDragOver} onDrop={handleDrop}>
                         <input type="file" className="form-control" id="file" hidden onChange={(event) => {
                             setFiles(event.target.files)
                         }} multiple />
