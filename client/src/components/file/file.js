@@ -60,7 +60,9 @@ function File(props) {
                                 <img className="parent-directory-button-div-image" src={imageDefault}></img>
                             </>
                         )}
-                        <span>{props.file.name}</span>
+                        {
+                            props.file.name.length > 20 ? <span className="span-file-name">{props.file.name.substring(0, 20)}...</span> : <span className="span-file-name">{props.file.name}</span>
+                        }
                     </div>
 
                     {

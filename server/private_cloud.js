@@ -10,7 +10,6 @@ const nodemailer = require("nodemailer");
 const https = require('https')
 const archiver = require('archiver');
 const path = require('path');
-const streamBuffers = require('stream-buffers');
 const port = 8282
 
 app.use(cors())
@@ -585,7 +584,7 @@ function getUniqueFolderName(path, folderName) {
 }
 
 app.post('/api/createFolder', (req, res) => {
-    console.log(1)
+    console.log(req.body)
     let path = req.body.path
     let folderName = req.body.name
 
@@ -596,29 +595,30 @@ app.post('/api/createFolder', (req, res) => {
     if(files_in_path.includes(folderName)) {
         folderName = getUniqueFolderName(path, folderName)
     }
-//    crear carpeta
+    //crear carpeta
     fs.mkdirSync('./'+path+'/'+folderName)
     let password = null
     if(req.body.password) {
         password = req.body.password
+    }
+    function callback(param) {
+        res.json({message: 'Folder created', level_up : param})
     }
     connection.query('INSERT INTO files (name, path, user_id, type, permissions, password) VALUES (?, ?, ?, ?, ?, ?)', [folderName, path, req.body.user_id, 'folder', req.body.permissions, password], (err, rows, fields) => {
         if (err) throw err
         connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
             if (err) throw err
             let idLevel = getFrameIdLevel(rows[0].level)
-            
-            function callback(param) {
-                res.json({message: 'Folder created', level_up : param})
-            }
             if(password) {
-                addProgress(req.body.user_id, 'Carpeta con contraseña creada', idLevel, callback)
+                addProgress(req.body.user_id, 'Carpeta con contraseña creada', idLevel, (param) => {console.log(param)})
             } else {
-                addProgress(req.body.user_id, 'Carpeta creada', idLevel, callback)
+                addProgress(req.body.user_id, 'Carpeta creada', idLevel, (param) => {console.log(param)})
             }
         })
     })
+    res.json({message: 'Folder created', level_up : false})
 })
+
 
 function addProgress(user_id, hecho, idLevel, callback) {
     if(idLevel != 1) {
@@ -647,7 +647,6 @@ function addProgress(user_id, hecho, idLevel, callback) {
                                     let level = (40*points) / 8000
                                     level = Math.trunc(level)
                                     level = level + 1
-                                    console.log({level, points})
                                     connection.query('UPDATE users SET points = ?, level = ? WHERE id = ?', [points, level, user_id], (err, rows, fields) => {
                                         if (err) throw err
                                         console.log(true)
@@ -655,12 +654,10 @@ function addProgress(user_id, hecho, idLevel, callback) {
                                     })
                                 })
                             } else {
-                                console.log(false)
                                 callback(false)
                             }
                         })
                     } else {
-                        console.log(false)
                         callback(false)
                     }
                 })
