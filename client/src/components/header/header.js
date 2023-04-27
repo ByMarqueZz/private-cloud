@@ -79,7 +79,7 @@ function Header(props) {
       <>
           <nav className="header navbar navbar-expand-lg bg-body-tertiary">
               <div className="container-fluid">
-                  <Link to='/' className="navbar-brand" onClick={() => {props.setPath(props.user.username)}}><span className="titulo"><img src='/assets/cloud-logo.png' className='logo-header'/></span></Link>
+                  <Link to='/' className="navbar-brand"><span className="titulo"><img src='/assets/cloud-logo.png' className='logo-header'/></span></Link>
                   <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                           data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                           aria-expanded="false" aria-label="Toggle navigation">
