@@ -228,7 +228,7 @@ function Home(props) {
           <div className='path-div'>
               <Grid container spacing={2}>
               {
-                  props.path.includes('-') ?
+                  props.path.includes('-') & props.isPublic == false ?
                             props.isPublic == false ? <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4}><Link className='link' onClick={() => {
                               props.setPath(props.path.split('-').slice(0, -1).join('-'))}
                           }>
@@ -256,7 +256,7 @@ function Home(props) {
                   : ''
               }
                   {
-                      publicPath.includes('-') ? props.isPublic == false ? <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4}><Link className='link' onClick={() => {
+                      publicPath.includes('-') & props.isPublic == true ? props.isPublic == false ? <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4}><Link className='link' onClick={() => {
                                   setPublicPath(publicPath.split('-').slice(0, -1).join('-'))}
                               }>
                                   <div className='parent-directory-button-div'>
