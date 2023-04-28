@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="32894c48-c79d-4576-8a77-14a1ae9a8670" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" beforeDir="false" afterPath="$PROJECT_DIR$/client/.firebase/hosting.YnVpbGQ.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/upload/upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/upload/upload.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/private_cloud.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/private_cloud.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/folder/folder.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/folder/folder.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/header/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/header/header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/profile.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +89,7 @@
       <workItem from="1681971232020" duration="19127000" />
       <workItem from="1682316478065" duration="11558000" />
       <workItem from="1682337541520" duration="2462000" />
+      <workItem from="1682580710698" duration="2583000" />
     </task>
     <servers />
   </component>

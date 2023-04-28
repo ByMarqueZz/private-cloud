@@ -44,10 +44,15 @@ function Home(props) {
   const [downloadSuccess, setDownloadSuccess] = useState(false);
   const [createFileSuccess, setCreateFileSuccess] = useState(false);
   const [notDirectoryState, setNotDirectoryState] = useState(false);
+  const [publicPath, setPublicPath] = useState(props.path);
 
     useEffect(() => {
-        getPath();
-    }, [props.path]);
+        if(props.isPublic) {
+            getPath(publicPath);
+        } else {
+            getPath();
+        }
+    }, [props.path, publicPath]);
 
     function callbackCreateFolder() {
         setShowCreateFolder(false);
@@ -58,10 +63,10 @@ function Home(props) {
         getPath();
     }
 
-    function getPath() {
+    function getPath(path=props.path) {
         setFiles([]);
         setIsLoading(true);
-        fetch(props.url + '/api/getPath/'+props.path)
+        fetch(props.url + '/api/getPath/'+path)
         .then(response => response.json())
         .then(data => {
             if(data.messageError) {
@@ -223,7 +228,7 @@ function Home(props) {
           <div className='path-div'>
               <Grid container spacing={2}>
               {
-                  props.path.includes('-') ?
+                  props.path.includes('-') & props.isPublic == false ?
                             props.isPublic == false ? <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4}><Link className='link' onClick={() => {
                               props.setPath(props.path.split('-').slice(0, -1).join('-'))}
                           }>
@@ -250,6 +255,33 @@ function Home(props) {
                               </div></Grid>
                   : ''
               }
+                  {
+                      publicPath.includes('-') & props.isPublic == true ? props.isPublic == false ? <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4}><Link className='link' onClick={() => {
+                                  setPublicPath(publicPath.split('-').slice(0, -1).join('-'))}
+                              }>
+                                  <div className='parent-directory-button-div'>
+                                      <div className='content-clickable-directory'>
+                                          <img className='parent-directory-button-div-image' src='/assets/carpeta_padre.png'></img>
+                                          <span>Directorio anterior</span>
+                                      </div>
+                                  </div>
+                              </Link></Grid> :
+                              <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4}>
+                                  <div className='parent-directory-button-div' onClick={() => {
+                                      setPublicPath(publicPath.split('-').slice(0, -1).join('-'));
+                                      //quita el ultimo directorio del path
+                                      let pathArray = publicPath.split('-');
+                                      pathArray.pop();
+                                      pathArray = pathArray.join('-');
+                                      props.setDetails(pathArray+'-');
+                                  }}>
+                                      <div className='content-clickable-directory'>
+                                          <img className='parent-directory-button-div-image' src='/assets/carpeta_padre.png'></img>
+                                          <span>Directorio anterior</span>
+                                      </div>
+                                  </div></Grid>
+                          : ''
+                  }
               {
                   isLoading == false ?
                       <>
@@ -275,7 +307,7 @@ function Home(props) {
                                       } else {
                                           return(
                                                 <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                                                    <Folder download={download} setPath={props.setPath} sendModal={sendToModal} renameModal={renameModal} showPass3={showPass3}  isPublic={props.isPublic} url={props.url} file={file} path={props.path} modalDelete={modalDelete} settingPath={settingPath}></Folder>
+                                                    <Folder download={download} setPublicPath={setPublicPath} setPath={props.setPath} sendModal={sendToModal} renameModal={renameModal} showPass3={showPass3}  isPublic={props.isPublic} url={props.url} file={file} path={props.path} modalDelete={modalDelete} settingPath={settingPath}></Folder>
                                                 </Grid>
                                               )
 

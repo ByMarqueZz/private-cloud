@@ -115,9 +115,9 @@ function App() {
               <div className='main'>
                 <Routes>
                       <Route path="/:path?" element={<RequireAuth hash={userHash}><Home levelUp={setLevelUp} newLevelUp={setNewLevelUp} url={url} path={path} setPath={setPath} user={user} isPublic={false} logout={logout}/></RequireAuth>}/>
-                      <Route path="/profile/:id" element={<RequireAuth hash={userHash}><Profile id_profile={idProfile} user={user} url={url} userHash={userHash} logout={logout}></Profile></RequireAuth>}></Route>
+                      <Route path="/profile/:id" element={<RequireAuth hash={userHash}><Profile id_profile={idProfile} user={user} url={url} userHash={userHash} setPath={setPath} logout={logout}></Profile></RequireAuth>}></Route>
                       <Route path="/editProfile" element={<RequireAuth hash={userHash}><EditProfile levelUp={setLevelUp} newLevelUp={setNewLevelUp} url={url} hash={userHash} user={user}></EditProfile></RequireAuth>}></Route>
-                      **<Route path="*" element={<RequireAuth hash={userHash}><Home url={url} path={path} setPath={setPath} user={user} isPublic={false} logout={logout}/></RequireAuth>}></Route>**
+                      **<Route path="*" element={<RequireAuth hash={userHash}><Home levelUp={setLevelUp} newLevelUp={setNewLevelUp} url={url} path={path} setPath={setPath} user={user} isPublic={false} logout={logout}/></RequireAuth>}></Route>**
                 </Routes>
               </div>
           </BrowserRouter>

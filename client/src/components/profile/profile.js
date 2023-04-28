@@ -230,7 +230,7 @@ function Profile(props) {
                     {
                         showFiles ? <div>
                             <p>{pathDetails}</p>
-                            <Home setDetails={setPathDetails} isPublic={true} url={props.url} path={user.username} logout={props.logout} user={props.user}></Home>
+                            <Home setDetails={setPathDetails} setPath={props.setPath} isPublic={true} url={props.url} path={user.username} logout={props.logout} user={props.user}></Home>
                         </div> : null
                     }
 
