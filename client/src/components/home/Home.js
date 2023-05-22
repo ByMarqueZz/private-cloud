@@ -171,6 +171,7 @@ function Home(props) {
     }
 
     function showPass3(file, type) {
+        setFileRename(file);
         setPasswords(file.password);
         setShowModalPassword3(true);
     }
@@ -347,7 +348,7 @@ function Home(props) {
           }
           {
               // Renombrar el archivo
-              showModalPassword3 ? <ModalPassword canBeEdit={true} showRename={setShowRename} file={fileRename} newPath={newPath} setPath={props.setPath} show={setShowModalPassword3} pathCanDownload={pathCanDownload} type={typeRename} pass={passwords} path={props.path} url={props.url} reload={getPath}/> : ''
+              showModalPassword3 ? <ModalPassword canBeEdit={true} showRename={setShowRename} file={fileRename} newPath={newPath} setPath={props.setPath} show={setShowModalPassword3} pathCanDownload={pathCanDownload} type={typeRename} pass={passwords} path={props.path} url={props.url} reload={getPath} setFileRename={setFileRename}/> : ''
           }
           {
               showRename ? <Rename levelUp={props.levelUp} newLevelUp={props.newLevelUp} success={setRenameSuccess} show={setShowRename} type={typeRename} file={fileRename} path={props.path} url={props.url} reload={getPath} user={props.user}/> : ''

@@ -34,6 +34,7 @@ function ModalPassword(props) {
                     });
             } else if(props.canBeEdit) {
                 props.show(false);
+                props.setFileRename(props.file)
                 props.showRename(true);
             } else {
                 props.setPath(props.newPath)
