@@ -301,7 +301,7 @@ function Home(props) {
                                       if (file.type != 'folder') {
                                           return (
                                                 <Grid item className='grid-item-home' xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                                                    <File sendModal={sendToModal} renameModal={renameModal} showPass3={showPass3} isPublic={props.isPublic} url={props.url} file={file} path={props.path} modalDelete={modalDelete} download={download}></File>
+                                                    <File sendModal={sendToModal} renameModal={renameModal} showPass3={showPass3} publicPath={publicPath} isPublic={props.isPublic} url={props.url} file={file} path={props.path} modalDelete={modalDelete} download={download}></File>
                                                 </Grid>
                                           )
                                       } else {

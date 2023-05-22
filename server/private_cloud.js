@@ -35,8 +35,9 @@ var db_config = {
 //SERVIDOR LOCAL
 // const db_config = {
 //   host: '127.0.0.1',
+//   port: 8889,
 //   user: 'root',
-//   password: '',
+//   password: 'root',
 //   database: 'private_cloud'
 // }
 
@@ -791,7 +792,7 @@ app.post('/api/rename', async (req, res) => {
 
 app.get('/api/solicitudRegistro/:email/:name/:surname/:password/:username', (req, res) => {
     const salt = bcrypt.genSaltSync(13);
-    connection.query('INSERT INTO users (email, name, surname, password, username, hash, profile_picture, level) VALUES (?, ?, ?, ?, ?, ?, ?, 1)', [req.params.email, req.params.name, req.params.surname, req.params.password, req.params.username, salt, './assets/perfil.png'], (err, rows, fields) => {
+    connection.query('INSERT INTO users (email, name, surname, password, username, hash, profile_picture, level, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [req.params.email, req.params.name, req.params.surname, req.params.password, req.params.username, salt, './assets/perfil.png', 1, 0], (err, rows, fields) => {
       if (err) throw err
       console.log('The solution is: ', rows)
     })
@@ -810,7 +811,11 @@ app.get('/api/icons/:type', (req, res) => {
     const { type } = req.params;
     connection.query('SELECT path FROM icons WHERE type = ?', [type], (err, rows, fields) => {
         if (err) throw err
-        res.json(rows)
+        if(rows.length > 0) {
+            res.json(rows)
+        } else {
+            res.json([{path:'/assets/file.png'}])
+        }
     })
 })
 
