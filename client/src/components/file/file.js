@@ -24,11 +24,16 @@ function File(props) {
                     setIsLoading(false);
                 })
         }
-        if (props.file.name.match(/\.(png|jpe?g)$/i)) {
-            fetch(`${props.url}/api/image/${props.path}/${props.file.name}`)
+        if (/\.(png|jpe?g)$/i.test(props.file.name)) {
+            let url = `${props.url}/api/image/${props.path}/${props.file.name}`;
+            if(props.isPublic) {
+                url = `${props.url}/api/image/${props.publicPath}/${props.file.name}`;
+            }
+            fetch(url)
                 .then((res) => res.blob())
                 .then((blob) => {
                     setImageUrl(URL.createObjectURL(blob));
+                    setIsLoading(false);
                 })
                 .catch((err) => console.error(err));
         }
@@ -53,8 +58,6 @@ function File(props) {
                     }>
                         {imageUrl ? (
                             <img className="parent-directory-button-div-image" src={imageUrl}></img>
-                        ) : props.file.name.match(/\.(png|jpe?g)$/i) ? (
-                            <div className="parent-directory-button-div-image-loading">Loading...</div>
                         ) : (
                             <>
                                 <img className="parent-directory-button-div-image" src={imageDefault}></img>

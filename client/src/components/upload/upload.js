@@ -11,7 +11,7 @@ function Upload(props) {
     const [permission, setPermission] = useState(true);
 
     useEffect(() => {
-        load();
+        console.log(files)
     }, []);
 
     function handleSubmit(event) {
@@ -72,25 +72,25 @@ function Upload(props) {
         }
     }
 
-    function load() {
-        const input = document.getElementById('file');
-        const namesList = document.getElementById('file-names-list');
-
-        input.addEventListener('change', () => {
-        const files = input.files;
-        if (files.length > 0) {
-            namesList.innerHTML = '';
-            for (let i = 0; i < files.length; i++) {
-            const li = document.createElement('li');
-            li.textContent = files[i].name;
-            li.style.textAlign = 'left'
-            namesList.appendChild(li);
-            }
-        } else {
-            namesList.innerHTML = 'Ningún archivo seleccionado';
-        }
-        });
-    }
+    // function load() {
+    //     const input = document.getElementById('file');
+    //     const namesList = document.getElementById('file-names-list');
+    //
+    //     input.addEventListener('change', () => {
+    //     const files = input.files;
+    //     if (files.length > 0) {
+    //         namesList.innerHTML = '';
+    //         for (let i = 0; i < files.length; i++) {
+    //         const li = document.createElement('li');
+    //         li.textContent = files[i].name;
+    //         li.style.textAlign = 'left'
+    //         namesList.appendChild(li);
+    //         }
+    //     } else {
+    //         namesList.innerHTML = 'Ningún archivo seleccionado';
+    //     }
+    //     });
+    // }
 
     return (
         <div className='div-upload-files'>
@@ -103,10 +103,22 @@ function Upload(props) {
                     <img src='/assets/expediente.png' className='iconLogin'/>
                     <div className="file-input" onDragOver={handleDragOver} onDrop={handleDrop}>
                         <input type="file" className="form-control" id="file" hidden onChange={(event) => {
-                            setFiles(event.target.files)
+                            if(event.target.files.length > 0) {
+                                for(let i = 0; i < event.target.files.length; i++) {
+                                    setFiles((files) => [...files, event.target.files[0]]);
+                                }
+                            }
                         }} multiple />
                         <label htmlFor="file">Seleccionar archivo</label>
-                        <span id="file-names-list">Ningún archivo seleccionado</span>
+                        <ul id="file-names-list">
+                            {
+                                files.length > 0 ? files.map((file, index) => {
+                                    return (
+                                        <li key={index} style={{textAlign: 'left'}}>{file.name}</li>
+                                    )
+                                }): 'Ningún archivo seleccionado'
+                            }
+                        </ul>
                     </div>
                 </div>
 
