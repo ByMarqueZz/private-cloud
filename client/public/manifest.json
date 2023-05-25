@@ -1,19 +1,19 @@
 {
-  "short_name": "Private Cloud",
-  "name": "Private Cloud App",
+  "short_name": "PrivateCloud",
+  "name": "PrivateCloud",
   "icons": [
     {
       "src": "assets/cloud-logo.png",
-      "type": "image/png",
-      "sizes": "64x64"
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
     },
     {
-      "src": "assets/cloud-logo.png",
+      "src": "assets/cloud-logo-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "assets/cloud-logo.png",
+      "src": "assets/cloud-logo-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
