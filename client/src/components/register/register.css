@@ -103,17 +103,14 @@
 .tituloLogin {
     padding-bottom: 5%;
 }
-.loginButtonImg {
-    width: 50px
-}
 .loginButton {
-    border: 0;
-    background-color: transparent;
     transition: 1s all;
+    width: 30%;
+    margin: 0 auto;
 }
 .loginButton:hover {
     cursor: pointer;
-    scale: 1.2;
+    scale: 1.1;
 }
 .miraSpam {
     color: red;

@@ -171,7 +171,7 @@ function EditProfile(props) {
                         </div>
                     </div>
 
-                    <button onClick={handleSubmit} type="submit" className='loginButtons btn'>Editar</button>
+                    <button onClick={handleSubmit} type="submit" className='loginButtons btn'>Guardar</button>
                 </form>
             </div>
         </div>

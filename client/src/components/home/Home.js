@@ -45,6 +45,7 @@ function Home(props) {
   const [createFileSuccess, setCreateFileSuccess] = useState(false);
   const [notDirectoryState, setNotDirectoryState] = useState(false);
   const [publicPath, setPublicPath] = useState(props.path);
+  const [maxSize, setMaxSize] = useState(false);
 
     useEffect(() => {
         if(props.isPublic) {
@@ -323,7 +324,7 @@ function Home(props) {
 
           {/*MODALS*/}
           {
-                showUpload ? <Upload levelUp={props.setLevelUp} newLevelUp={props.setNewLevelUp} success={setUploadSuccess} user={props.user} show={setShowUpload} path={props.path} url={props.url} reload={() => {
+                showUpload ? <Upload levelUp={props.setLevelUp} setMaxSize={setMaxSize} newLevelUp={props.setNewLevelUp} success={setUploadSuccess} user={props.user} show={setShowUpload} path={props.path} url={props.url} reload={() => {
                     setTimeout(() => {
                         getPath();
                     }, 500);
@@ -357,7 +358,7 @@ function Home(props) {
               showSendModal ? <Send levelUp={props.levelUp} newLevelUp={props.newLevelUp} show={setShowSendModal} type={typeSend} success={setSendSuccess} file={fileSend} path={props.path} url={props.url} reload={getPath} user={props.user}/> : ''
           }
 
-          <Alerts sendSuccess={sendSuccess} createFolderSuccess={createFolderSuccess} deleteSuccess={deleteSuccess} renameSuccess={renameSuccess} uploadSuccess={uploadSuccess} downloadSuccess={downloadSuccess} createFileSuccess={createFileSuccess} levelUp={props.levelUp}></Alerts>
+          <Alerts sendSuccess={sendSuccess} maxSize={maxSize} createFolderSuccess={createFolderSuccess} deleteSuccess={deleteSuccess} renameSuccess={renameSuccess} uploadSuccess={uploadSuccess} downloadSuccess={downloadSuccess} createFileSuccess={createFileSuccess} levelUp={props.levelUp}></Alerts>
           
     </div>
   );

@@ -67,7 +67,7 @@ function Login(props) {
                       <Link to='/register' className='linkRegister'>¿No tienes cuenta? Regístrate</Link>
                   </div>
 
-                  <button type="submit" className='loginButton'><img src='/assets/loginButton.png' className='loginButtonImg'/></button>
+                  <button onClick={handleSubmit} type="submit" className='loginButton btn btn-primary'>Iniciar sesión</button>
               </form>
           </div>
       </>

@@ -146,7 +146,7 @@ function Register(props) {
             
             <div className="form-floating inputLogin">
               <input type="text" className="form-control" id="floatingVerification" placeholder="Password" value={verification} onChange={(event) => setVerification(event.target.value)}/>
-              <label htmlFor="floatingPassword">Verificación correo</label>
+              <label htmlFor="floatingPassword">Código de verificación</label>
             </div>
           </div>
 
@@ -154,7 +154,7 @@ function Register(props) {
             Introduce bien todos los campos del registro
           </div>
 
-          <button onClick={handleSubmit} type="submit" className='loginButton'><img src='/assets/loginButton.png' className='loginButtonImg'/></button>
+          <button onClick={handleSubmit} type="submit" className='loginButton btn btn-primary'>Registrarse</button>
         </form>
       </div>
     );
@@ -233,11 +233,11 @@ function Register(props) {
             
             <div className="form-floating inputLogin">
               <input type="text" className="form-control" id="floatingVerification" placeholder="Password" value={verification} onChange={(event) => setVerification(event.target.value)}/>
-              <label htmlFor="floatingPassword">Verificación correo</label>
+              <label htmlFor="floatingPassword">Código de verificación</label>
             </div>
           </div>
 
-          <button onClick={handleSubmit} type="submit" className='loginButton'><img src='/assets/loginButton.png' className='loginButtonImg'/></button>
+          <button onClick={handleSubmit} type="submit" className='loginButton btn btn-primary'>Registrarse</button>
         </form>
       </div>
     );

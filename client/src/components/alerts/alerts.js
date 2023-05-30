@@ -28,6 +28,9 @@ function Alerts(props) {
             {
                 props.levelUp == false ? <div className='alert-success'><Alert severity="success">¡Enhorabuena has subido al nivel {props.newLevelUp}!</Alert></div> : ''
             }
+            {
+                props.maxSize ? <div className='alert-success'><Alert severity="error">El contenido que quieres subir pesa más de 200 mb</Alert></div> : ''
+            }
         </>
     );
 }

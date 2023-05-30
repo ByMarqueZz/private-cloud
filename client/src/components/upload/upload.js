@@ -10,11 +10,22 @@ function Upload(props) {
     const [labelSwitch, setLabelSwitch] = useState('Público');
     const [permission, setPermission] = useState(true);
 
-    useEffect(() => {
-        console.log(files)
-    }, []);
+    // useEffect(() => {
+    //     console.log(files)
+    // }, []);
 
     function handleSubmit(event) {
+        let sizes = 0;
+        for(let i = 0; i < files.length; i++) {
+            sizes += files[i].size;
+        }
+        if(sizes > 209715200) {
+            props.setMaxSize(true);
+            setTimeout(() => {
+                props.setMaxSize(false);
+            }, 3000);
+            return;
+        }
         props.show(false);
         event.preventDefault();
         const formData = new FormData();

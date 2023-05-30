@@ -82,12 +82,3 @@
 .loginButtonImg {
     width: 50px
 }
-.loginButton {
-    border: 0;
-    background-color: transparent;
-    transition: 1s all;
-}
-.loginButton:hover {
-    cursor: pointer;
-    scale: 1.2;
-}
