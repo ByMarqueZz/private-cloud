@@ -13,7 +13,8 @@ const PreviewModal = ({ isOpen, closeModal, file, url, path, download, type, sho
     const [readme, setReadme] = useState(null);
     const [i, setI] = useState(0);
     const [isInset, setIsInset] = useState(false);
-    const [canEditArray, setCanEditArray] = useState(['text/markdown', 'md', 'txt', 'html', 'css', 'js', 'json', 'py', 'java', 'c', 'cpp', 'cs', 'go', 'php', 'rb', 'sh', 'swift', 'ts', 'xml', 'yaml', 'yml', 'md', 'markdown', 'rtf']);
+    const [isImage, setIsImage] = useState(false);
+    const [canEditArray, setCanEditArray] = useState(['text/markdown', 'bat', 'txt', 'html', 'css', 'js', 'json', 'py', 'java', 'c', 'cpp', 'cs', 'go', 'php', 'rb', 'sh', 'swift', 'ts', 'xml', 'yaml', 'yml', 'md', 'markdown', 'rtf']);
 
     const handleLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
@@ -80,7 +81,7 @@ const PreviewModal = ({ isOpen, closeModal, file, url, path, download, type, sho
         if (i == 2) {
             return;
         }
-        if (file.type === 'text/markdown' || file.type === 'md' || file.type === 'txt') {
+        if (canEditArray.includes(file.type)) {
             let path;
             if (file.path.includes('/')) {
                 //    reemplaza la / por -
@@ -111,6 +112,7 @@ const PreviewModal = ({ isOpen, closeModal, file, url, path, download, type, sho
                 })
         } else if (file.type.startsWith('jpg') || file.type.startsWith('png') || file.type.startsWith('gif') || file.type.startsWith('jpeg')) {
             let path;
+            setIsImage(true);
             if (file.path.includes('/')) {
                 //    reemplaza la / por -
                 path = file.path.replace(/\//g, '-')

@@ -6,6 +6,10 @@
     width: 90%;
 }
 
+.isImageModalPreview {
+    width: 50%;
+}
+
 .buttonClosePreview {
     position: absolute;
     top: 1%;
@@ -24,7 +28,8 @@
 }
 
 .preview-image-type-file {
-    width: 100%;
+    width: 40%;
+    margin: 0 auto;
     display: flex;
 }
 
@@ -42,5 +47,11 @@
     }
     .preview-modal-content h2 {
         width: 70%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .preview-image-type-file {
+        width: 100%;
     }
 }
