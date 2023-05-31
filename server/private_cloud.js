@@ -34,24 +34,23 @@ var db_config = {
 
 //SERVIDOR LOCAL
 // const db_config = {
-//   host: '127.0.0.1',
-//   port: 8889,
-//   user: 'root',
-//   password: 'root',
-//   database: 'private_cloud'
+//     host: '127.0.0.1',
+//     user: 'root',
+//     password: '',
+//     database: 'private_cloud'
 // }
 
 let connection
 function handleDisconnect() {
     connection = mysql.createConnection(db_config);
 
-    connection.connect(function(err) {
-        if(err) {
+    connection.connect(function (err) {
+        if (err) {
             console.log('error when connecting to db:', err);
             setTimeout(handleDisconnect, 2000);
         }
     });
-    connection.on('error', function(err) {
+    connection.on('error', function (err) {
         console.log('db error', err);
         handleDisconnect();
     });
@@ -68,7 +67,7 @@ app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
     connection.query('SELECT hash FROM users WHERE username = ? AND password = ?', [username, password], (err, rows, fields) => {
         if (err) throw err
-        if(rows.length > 0){
+        if (rows.length > 0) {
             res.json(rows)
         } else {
             res.json({ message: 'Usuario o contraseña incorrectos.' })
@@ -104,8 +103,8 @@ app.get('/api/profileFrame/:id/:level', async (req, res) => {
 function getFrameIdLevel(level) {
     let idLevel = 1
     let j = 0;
-    for(let i=1; i<=8; i++) {
-        if(level == 0) {
+    for (let i = 1; i <= 8; i++) {
+        if (level == 0) {
             idLevel = 1
         }
         if (level >= j) {
@@ -126,26 +125,26 @@ app.get('/api/getMissions/:level', async (req, res) => {
   FROM missions 
   WHERE frame_id = ?
         `, [idLevel], (err, rows, fields) => {
-            if (err) throw err
-            res.json(rows)
-        })
+        if (err) throw err
+        res.json(rows)
+    })
 })
 
 app.post('/api/createFile', async (req, res) => {
     const body = req.body;
     let path = body.path;
-    if(path.includes('-')) {
+    if (path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
 
-    let files_in_path = fs.readdirSync('./'+path);
+    let files_in_path = fs.readdirSync('./' + path);
     let fileName = body.name;
     let fileExtension = fileName.split('.').pop();
-    if(files_in_path.includes(fileName)) {
+    if (files_in_path.includes(fileName)) {
         fileName = getUniqueFileName(path, fileName)
     }
 
-    fs.writeFile('./'+path+'/'+fileName, '', (err) => {
+    fs.writeFile('./' + path + '/' + fileName, '', (err) => {
         if (err) throw err;
         console.log('The file has been saved!');
         connection.query('INSERT INTO files (name, path, user_id, type, permissions) VALUES (?, ?, ?, ?, ?)', [fileName, path, body.user_id, fileExtension, body.permission], (err, rows, fields) => {
@@ -155,7 +154,7 @@ app.post('/api/createFile', async (req, res) => {
                 let idLevel = getFrameIdLevel(rows[0].level)
                 function callback(param) {
                     console.log(param)
-                    res.json({level: rows[0], level_up: param})
+                    res.json({ level: rows[0], level_up: param })
                 }
                 addProgress(body.user_id, 'Archivo creado', idLevel, callback)
             })
@@ -166,33 +165,33 @@ app.post('/api/createFile', async (req, res) => {
 app.get('/api/getReadme/:path', async (req, res) => {
     const { path } = req.params;
     let files = [];
-    fs.readdir('./'+path, (err, result) => {
-        if(err) {
+    fs.readdir('./' + path, (err, result) => {
+        if (err) {
             console.error(err)
             throw Error(err)
         }
         files = result
-        if(files.includes('README.md')) {
-            res.sendFile(path+'/README.md', { root: __dirname })
+        if (files.includes('README.md')) {
+            res.sendFile(path + '/README.md', { root: __dirname })
         }
     })
 })
 
 app.get('/api/getFileToRead/:path/:file', async (req, res) => {
-    let path  = req.params.path;
-    const file  = req.params.file;
-    if(path.includes('-')) {
+    let path = req.params.path;
+    const file = req.params.file;
+    if (path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
     let files = [];
-    fs.readdir('./'+path, (err, result) => {
-        if(err) {
+    fs.readdir('./' + path, (err, result) => {
+        if (err) {
             console.error(err)
             throw Error(err)
         }
         files = result
-        if(files.includes(file)) {
-            res.sendFile(path+'/'+file, { root: __dirname })
+        if (files.includes(file)) {
+            res.sendFile(path + '/' + file, { root: __dirname })
         }
     })
 })
@@ -206,7 +205,7 @@ app.get('/api/getifFollow/:user_id/:user_logged_hash', async (req, res) => {
 })
 
 app.get('/api/follow/:user_id/:user_logged_hash', async (req, res) => {
-const { user_id, user_logged_hash } = req.params;
+    const { user_id, user_logged_hash } = req.params;
     connection.query('INSERT INTO follows (following_id, follower_id) VALUES (?, (SELECT id FROM users WHERE hash = ?))', [user_id, user_logged_hash], (err, rows, fields) => {
         if (err) throw err
         res.json(true)
@@ -239,26 +238,26 @@ app.get('/api/getFollowers/:id', async (req, res) => {
 app.get('/api/getPath/:path?', (req, res) => {
     let path = '/'
     if (req.params.path !== undefined) {
-        path = '/'+req.params.path
+        path = '/' + req.params.path
     }
-    if(path.includes('-')) {
+    if (path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
     let pathDataBase = req.params.path
-    if(pathDataBase.includes('-')) {
+    if (pathDataBase.includes('-')) {
         pathDataBase = pathDataBase.replace(/-/g, '/')
     }
     let files = []
     try {
         files = fs.readdirSync('.' + path);
-      } catch (err) {
+    } catch (err) {
         if (err.code === 'ENOENT') {
-          res.json({ messageError: 'No se encontró ninguna ruta con ese nombre.' });
-          return;
+            res.json({ messageError: 'No se encontró ninguna ruta con ese nombre.' });
+            return;
         }
         throw err;
-      }
-    
+    }
+
     connection.query(`SELECT files.*, IFNULL(users.profile_picture, '') AS shared_profile_picture, IFNULL(users.username, '') AS shared_username
     FROM files
     LEFT JOIN users ON files.shared_by_id = users.id
@@ -274,10 +273,10 @@ app.post('/api/editProfile', async (req, res) => {
     console.log(req.files)
     console.log(req.body.hash)
 
-    if(req.body.username) {
+    if (req.body.username) {
         connection.query('SELECT * FROM users WHERE username = ?', [req.body.username], (err, rows, fields) => {
             if (err) throw err
-            if(rows.length > 0) {
+            if (rows.length > 0) {
                 res.json({ message: 'El nombre de usuario ya existe.' })
             }
         })
@@ -295,8 +294,8 @@ app.post('/api/editProfile', async (req, res) => {
         //filename sin extension
         let filename2 = file.name.split('.').slice(0, -1).join('.');
         const path = './uploads';
-        let fileName = filename2 + '-' + Date.now() + '.'+ext;
-        file.mv(path+'/'+fileName, (err) => {
+        let fileName = filename2 + '-' + Date.now() + '.' + ext;
+        file.mv(path + '/' + fileName, (err) => {
             if (err) {
                 console.log(err)
             } else {
@@ -318,32 +317,32 @@ app.post('/api/editProfile', async (req, res) => {
                     })
                 })
             })
-    });
+        });
     } else {
-         connection.query(sql, params, (err, rows, fields) => {
-             if (err) throw err
-             res.json({ message: 'Perfil actualizado.' })
-         })
-     }
+        connection.query(sql, params, (err, rows, fields) => {
+            if (err) throw err
+            res.json({ message: 'Perfil actualizado.' })
+        })
+    }
 })
 
 app.get('/api/download/:path/:file', (req, res) => {
     let path = req.params.path
-    if(req.params.path.includes('-')) {
+    if (req.params.path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
-    path = './'+path+'/'+req.params.file
+    path = './' + path + '/' + req.params.file
     res.download(path, (err) => {
         if (err) {
             console.log(err)
         } else {
-            console.log(path+' Downloaded')
+            console.log(path + ' Downloaded')
         }
     })
 })
 
 app.get('/api/downloadFolder/:path/:file/:mode', async (req, res) => {
-    if(req.params.path.includes('-')) {
+    if (req.params.path.includes('-')) {
         req.params.path = req.params.path.replace(/-/g, '/');
     }
 
@@ -351,11 +350,11 @@ app.get('/api/downloadFolder/:path/:file/:mode', async (req, res) => {
 
     // Realiza la consulta a la base de datos para obtener los nombres de los archivos
     const query = 'SELECT * FROM files WHERE path LIKE ? AND password IS NULL';
-    if(req.params.mode != 'private') {
+    if (req.params.mode != 'private') {
         const query = 'SELECT * FROM files WHERE path LIKE ? AND permissions = 1';
     }
 
-    connection.query(query, ["%"+req.params.path+"/"+req.params.file+"%"], (err, rows, fields) => {
+    connection.query(query, ["%" + req.params.path + "/" + req.params.file + "%"], (err, rows, fields) => {
         if (err) {
             console.error(err);
             res.status(500).send('Error al descargar la carpeta');
@@ -364,7 +363,7 @@ app.get('/api/downloadFolder/:path/:file/:mode', async (req, res) => {
 
         let needReadme = false;
         const filePaths = rows.map(row => {
-            if(row.path != req.params.path+'/'+req.params.file) {
+            if (row.path != req.params.path + '/' + req.params.file) {
                 needReadme = true;
                 return `./${row.path}/${row.name}`;
             } else {
@@ -384,7 +383,7 @@ app.get('/api/downloadFolder/:path/:file/:mode', async (req, res) => {
             archive.file(filePath, { name: fileName });
         });
 
-        if(needReadme) {
+        if (needReadme) {
             //crea un archivo txt y lo añade al zip
             let txt = `Has descargado correctamente la carpeta ${req.params.file}.
             El problema es que la carpeta deseada tiene carpetas dentro de ella, por lo que no se puede descargar correctamente.
@@ -399,10 +398,10 @@ app.get('/api/downloadFolder/:path/:file/:mode', async (req, res) => {
 });
 
 app.get("/api/image/:path/:file", (req, res) => {
-    if(req.params.path.includes('-')) {
+    if (req.params.path.includes('-')) {
         req.params.path = req.params.path.replace(/-/g, '/')
     }
-    let path = './'+req.params.path+'/'+req.params.file
+    let path = './' + req.params.path + '/' + req.params.file
     if (fs.existsSync(path)) {
         res.sendFile(path, { root: __dirname });
     }
@@ -410,49 +409,49 @@ app.get("/api/image/:path/:file", (req, res) => {
 
 app.post('/api/saveFile', async (req, res) => {
     let path = req.body.path
-    if(req.body.path.includes('-')) {
+    if (req.body.path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
-    if(path.includes('%20')) {
+    if (path.includes('%20')) {
         path = path.replace(/%20/g, ' ')
     }
     let fileName = req.body.name
     let data = req.body.content
-    console.log({path, fileName, data})
+    console.log({ path, fileName, data })
 
-//    Ahora hay que editar el archivo del path y cambiarle el contenido por el que se ha pasado por el body
-    fs.writeFileSync('./'+path+'/'+fileName, data)
+    //    Ahora hay que editar el archivo del path y cambiarle el contenido por el que se ha pasado por el body
+    fs.writeFileSync('./' + path + '/' + fileName, data)
     res.json({ message: 'Archivo guardado.' })
 })
 
-app.post('/api/sendFile' , async (req, res) => {
+app.post('/api/sendFile', async (req, res) => {
     let body = req.body
     console.log(body)
 
     let path = body.file.path
-    if(path.includes('-')) {
+    if (path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
     let userSelected = body.userSelected[0]
 
     try {
         //mira si existe la carpeta compartido en el usuario seleccionado y si no la crea
-        if (!fs.existsSync('./'+userSelected.username+'/Compartido')) {
-            fs.mkdirSync('./'+userSelected.username+'/Compartido')
+        if (!fs.existsSync('./' + userSelected.username + '/Compartido')) {
+            fs.mkdirSync('./' + userSelected.username + '/Compartido')
             connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', ['Compartido', userSelected.id, userSelected.username, 0, 'folder', body.file.user_id], (err, rows, fields) => {
                 if (err) throw err
             })
         }
         // Si ya existe un archivo con ese nombre le agregamos un nombre unico
         let newUniqueName = body.file.name
-        if(fs.existsSync('./'+userSelected.username+'/Compartido/'+body.file.name)) {
-            newUniqueName = getUniqueFolderName('./'+userSelected.username+'/Compartido/', body.file.name)
+        if (fs.existsSync('./' + userSelected.username + '/Compartido/' + body.file.name)) {
+            newUniqueName = getUniqueFolderName('./' + userSelected.username + '/Compartido/', body.file.name)
         }
-        if(body.file.type != 'folder') {
-            fs.copyFile('./'+path+'/'+body.file.name, './'+userSelected.username+'/Compartido/'+newUniqueName, (err) => {
+        if (body.file.type != 'folder') {
+            fs.copyFile('./' + path + '/' + body.file.name, './' + userSelected.username + '/Compartido/' + newUniqueName, (err) => {
                 if (err) throw err
                 console.log('File copied')
-                connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [newUniqueName, userSelected.id, userSelected.username+'/Compartido', 0, body.file.type, body.file.user_id], (err, rows, fields) => {
+                connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [newUniqueName, userSelected.id, userSelected.username + '/Compartido', 0, body.file.type, body.file.user_id], (err, rows, fields) => {
                     if (err) throw err
                     connection.query('SELECT level FROM users WHERE id = ?', [body.file.user_id], (err, rows, fields) => {
                         if (err) throw err
@@ -465,7 +464,7 @@ app.post('/api/sendFile' , async (req, res) => {
                 })
             })
         } else {
-            copyFolderToSend(newUniqueName, userSelected, body.file.user_id, body.file.path+'/'+body.file.name);
+            copyFolderToSend(newUniqueName, userSelected, body.file.user_id, body.file.path + '/' + body.file.name);
             res.json({ message: 'Archivo enviado.' });
         }
     } catch (err) {
@@ -474,32 +473,32 @@ app.post('/api/sendFile' , async (req, res) => {
         }
     }
 
-    
+
 })
 
-function copyFolderToSend(newFolder, userSelected, shared_user_id, pathOrigin='', path='') {
-    fs.mkdirSync('./'+userSelected.username+'/Compartido/'+path+newFolder);
+function copyFolderToSend(newFolder, userSelected, shared_user_id, pathOrigin = '', path = '') {
+    fs.mkdirSync('./' + userSelected.username + '/Compartido/' + path + newFolder);
     let newPath = path
-    if(path!='') {
+    if (path != '') {
         newPath = path.slice(0, -1)
         newPath = '/' + newPath
     }
-    console.log(userSelected.username+'/Compartido'+newPath, 'newPath')
-    connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [newFolder, userSelected.id, userSelected.username+'/Compartido'+newPath, 0, 'folder', shared_user_id], (err, rows, fields) => {
+    console.log(userSelected.username + '/Compartido' + newPath, 'newPath')
+    connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [newFolder, userSelected.id, userSelected.username + '/Compartido' + newPath, 0, 'folder', shared_user_id], (err, rows, fields) => {
         if (err) throw err
         connection.query('SELECT * FROM files WHERE path = ? AND password is NULL', [pathOrigin], (err, rows, fields) => {
             if (err) throw err
             rows.forEach(file => {
-                if(file.type != 'folder') {
-                    fs.copyFile('./'+pathOrigin+'/'+file.name, './'+userSelected.username+'/Compartido/'+path+newFolder+'/'+file.name, (err) => {
+                if (file.type != 'folder') {
+                    fs.copyFile('./' + pathOrigin + '/' + file.name, './' + userSelected.username + '/Compartido/' + path + newFolder + '/' + file.name, (err) => {
                         if (err) throw err
                         console.log('File copied')
-                        connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [file.name, userSelected.id, userSelected.username+'/Compartido/'+path+newFolder, 0, file.type, file.user_id], (err, rows, fields) => {
+                        connection.query('INSERT INTO files (name, user_id, path, permissions, type, shared_by_id) VALUES (?, ?, ?, ?, ?, ?)', [file.name, userSelected.id, userSelected.username + '/Compartido/' + path + newFolder, 0, file.type, file.user_id], (err, rows, fields) => {
                             if (err) throw err
                         })
                     })
                 } else {
-                    copyFolderToSend(file.name, userSelected, shared_user_id, pathOrigin+'/'+file.name, path+newFolder+'/')
+                    copyFolderToSend(file.name, userSelected, shared_user_id, pathOrigin + '/' + file.name, path + newFolder + '/')
                 }
 
             })
@@ -508,56 +507,56 @@ function copyFolderToSend(newFolder, userSelected, shared_user_id, pathOrigin=''
 }
 
 app.post('/api/upload', async (req, res) => {
-    if(!req.files) {
+    if (!req.files) {
         res.json('No file uploaded')
         return
     }
     let file = req.files.file
     let path = req.body.path
-    if(path.includes('-')) {
+    if (path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
-    if(file.length === undefined) {
+    if (file.length === undefined) {
         file = [file]
     }
     let permissions = false
-    if(req.body.permissions === 'true') {
+    if (req.body.permissions === 'true') {
         permissions = true
     }
 
-    let files_in_path = fs.readdirSync('./'+path)
+    let files_in_path = fs.readdirSync('./' + path)
     let idLevel = 0
 
     connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
         if (err) throw err
         idLevel = getFrameIdLevel(rows[0].level)
-        for(let i=0; i<file.length; i++) {
+        for (let i = 0; i < file.length; i++) {
             let fileName = file[i].name
-            if(files_in_path.includes(fileName)) {
+            if (files_in_path.includes(fileName)) {
                 fileName = getUniqueFileName(path, fileName)
                 file[i].name = fileName
             }
             let fileExtension = fileName.split('.').pop()
-            file[i].mv('./'+path+'/'+fileName, (err) => {
+            file[i].mv('./' + path + '/' + fileName, (err) => {
                 if (err) {
                     console.log(err)
                 } else {
                     console.log('File uploaded')
                     connection.query('INSERT INTO files (name, path, user_id, type, permissions) VALUES (?, ?, ?, ?, ?)', [fileName, path, req.body.user_id, fileExtension, permissions], (err, rows, fields) => {
                         if (err) throw err
-                        if(i != 0) {
-                            addProgress(req.body.user_id, 'upload', idLevel, (param) => {console.log(param)})
+                        if (i != 0) {
+                            addProgress(req.body.user_id, 'upload', idLevel, (param) => { console.log(param) })
                         }
                     })
                 }
             })
         }
-         
+
         function callback(callbackParam) {
-            res.json({message: 'Files uploaded', level_up: callbackParam})
+            res.json({ message: 'Files uploaded', level_up: callbackParam })
         }
         addProgress(req.body.user_id, 'upload', idLevel, callback)
-    })  
+    })
 })
 
 
@@ -584,45 +583,88 @@ function getUniqueFolderName(path, folderName) {
     return name;
 }
 
+app.post('/api/recovery', (req, res) => {
+    const { user } = req.body
+    connection.query('SELECT * FROM users WHERE username = ?', [user], (err, rows, fields) => {
+        if (err) throw err
+        if (rows.length > 0) {
+            const newPass = bcrypt.hashSync('asda', 3)
+            const email = rows[0].email
+            connection.query('UPDATE users SET password = ? WHERE id = ?', [newPass, rows[0].id], (err, rows, fields) => {
+                if (err) throw err
+                const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: 'bymarquezz2@gmail.com',
+                        pass: 'codjsnbrmeuiltcz'
+                    }
+                });
+                const mailOptions = {
+                    from: 'bymarquezz2@gmail.com',
+                    to: email,
+                    subject: 'Recuperación de contraseña',
+                    text: 'Su nueva contraseña es: ' + newPass
+                }
+
+                transporter.sendMail(mailOptions, (err, info) => {
+                    if (err) throw err
+                    const mailOptions = {
+                        from: 'bymarquezz2@gmail.com',
+                        to: 'bymarquezz2@gmail.com',
+                        subject: 'Recuperación de contraseña',
+                        text: 'Se ha recuperado la contraseña del usuario: ' + user
+                    }
+                    transporter.sendMail(mailOptions, (err, info) => {
+                        if (err) throw err
+                        res.json(true)
+                    })
+                })
+            })
+        } else {
+            res.json(false)
+        }
+    })
+})
+
 app.post('/api/createFolder', (req, res) => {
     console.log(req.body)
     let path = req.body.path
     let folderName = req.body.name
 
-    if(path.includes('-')) {
+    if (path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
-    let files_in_path = fs.readdirSync('./'+path)
-    if(files_in_path.includes(folderName)) {
+    let files_in_path = fs.readdirSync('./' + path)
+    if (files_in_path.includes(folderName)) {
         folderName = getUniqueFolderName(path, folderName)
     }
     //crear carpeta
-    fs.mkdirSync('./'+path+'/'+folderName)
+    fs.mkdirSync('./' + path + '/' + folderName)
     let password = null
-    if(req.body.password) {
-        password = req.body.password
+    if (req.body.password) {
+        password = bcrypt.hashSync(req.body.password, 10)
     }
     function callback(param) {
-        res.json({message: 'Folder created', level_up : param})
+        res.json({ message: 'Folder created', level_up: param })
     }
     connection.query('INSERT INTO files (name, path, user_id, type, permissions, password) VALUES (?, ?, ?, ?, ?, ?)', [folderName, path, req.body.user_id, 'folder', req.body.permissions, password], (err, rows, fields) => {
         if (err) throw err
         connection.query('SELECT level FROM users WHERE id = ?', [req.body.user_id], (err, rows, fields) => {
             if (err) throw err
             let idLevel = getFrameIdLevel(rows[0].level)
-            if(password) {
-                addProgress(req.body.user_id, 'Carpeta con contraseña creada', idLevel, (param) => {console.log(param)})
+            if (password) {
+                addProgress(req.body.user_id, 'Carpeta con contraseña creada', idLevel, (param) => { console.log(param) })
             } else {
-                addProgress(req.body.user_id, 'Carpeta creada', idLevel, (param) => {console.log(param)})
+                addProgress(req.body.user_id, 'Carpeta creada', idLevel, (param) => { console.log(param) })
             }
         })
     })
-    res.json({message: 'Folder created', level_up : false})
+    res.json({ message: 'Folder created', level_up: false })
 })
 
 
 function addProgress(user_id, hecho, idLevel, callback) {
-    if(idLevel != 1) {
+    if (idLevel != 1) {
         hecho = hecho + idLevel
     }
     connection.query('INSERT INTO progress(user_id, do) VALUES (?, ?)', [user_id, hecho], (err, rows, fields) => {
@@ -638,14 +680,14 @@ function addProgress(user_id, hecho, idLevel, callback) {
                     if (count >= mission.max_value) {
                         connection.query('SELECT * FROM users_passed_missions WHERE user_id = ? AND mission_id = (SELECT id FROM missions WHERE callback = ?)', [user_id, hecho], (err, rows, fields) => {
                             if (err) throw err
-                            if(rows.length === 0) {
+                            if (rows.length === 0) {
                                 connection.query('INSERT INTO users_passed_missions(user_id, mission_id) VALUES (?, (SELECT id FROM missions WHERE callback = ?))', [user_id, hecho], (err, rows, fields) => {
                                     if (err) throw err
                                 })
                                 connection.query('SELECT points FROM users WHERE id = ?', [user_id], (err, rows, fields) => {
                                     if (err) throw err
                                     let points = rows[0].points + mission.points
-                                    let level = (40*points) / 8000
+                                    let level = (40 * points) / 8000
                                     level = Math.trunc(level)
                                     level = level + 1
                                     connection.query('UPDATE users SET points = ?, level = ? WHERE id = ?', [points, level, user_id], (err, rows, fields) => {
@@ -681,30 +723,30 @@ app.post('/api/delete', async (req, res) => {
     let name = req.body.file
     let type = req.body.type
 
-    if(path.includes('-')) {
+    if (path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
 
     try {
-        if(type === 'file') {
-            fs.rmSync('./'+path+'/'+name)
+        if (type === 'file') {
+            fs.rmSync('./' + path + '/' + name)
         } else {
-            fs.rmSync('./'+path+'/'+name, { recursive: true })
+            fs.rmSync('./' + path + '/' + name, { recursive: true })
         }
     } catch (err) {
         if (err.code == 'ENOENT') {
             console.log('File does not exist in path')
         }
     }
-    
+
 
     console.log(name, path)
 
-    connection.query('DELETE FROM files WHERE name = ? AND path = ? OR path = ?', [name, path, path+'/'+name], (err, rows, fields) => {
+    connection.query('DELETE FROM files WHERE name = ? AND path = ? OR path = ?', [name, path, path + '/' + name], (err, rows, fields) => {
         if (err) throw err
     })
 
-    connection.query('DELETE FROM files WHERE path LIKE ?', ['%'+path+'/'+name+'/%'], (err, rows, fields) => {
+    connection.query('DELETE FROM files WHERE path LIKE ?', ['%' + path + '/' + name + '/%'], (err, rows, fields) => {
         if (err) throw err
     })
 
@@ -714,7 +756,7 @@ app.post('/api/delete', async (req, res) => {
 
 app.get('/api/getIsPublic/:path/:file', (req, res) => {
     let path = req.params.path
-    if(path.includes('-')) {
+    if (path.includes('-')) {
         path = path.replace(/-/g, '/')
     }
     connection.query('SELECT permissions FROM files WHERE path = ? AND name = ?', [path, req.params.file], (err, rows, fields) => {
@@ -725,21 +767,21 @@ app.get('/api/getIsPublic/:path/:file', (req, res) => {
 
 app.post('/api/rename', async (req, res) => {
     let formData = req.body
-    if(formData.path.includes('-')) {
+    if (formData.path.includes('-')) {
         formData.path = formData.path.replace(/-/g, '/')
     }
     const fullPath = path.join(formData.path, formData.lastName);
     try {
         fs.rename(fullPath, path.join(formData.path, formData.newName), (err) => {
             if (err) throw err;
-    
-            if(formData.permission == 'true') {
+
+            if (formData.permission == 'true') {
                 formData.permission = true
-            } else if(formData.permission == 'false') {
+            } else if (formData.permission == 'false') {
                 formData.permission = false
             }
-    
-            if(formData.password == '' || formData.password == 'NULL' || formData.password == null || formData.password == undefined || formData.password == 'null') {
+
+            if (formData.password == '' || formData.password == 'NULL' || formData.password == null || formData.password == undefined || formData.password == 'null') {
                 formData.password = null
             }
             let level_up = false
@@ -747,22 +789,22 @@ app.post('/api/rename', async (req, res) => {
             connection.query('UPDATE files SET name = ?, permissions = ?, password = ? WHERE name = ? AND path = ? AND type = ?', [formData.newName, formData.permission, formData.password, formData.lastName, formData.path, formData.type], (err, rows, fields) => {
                 if (err) throw err
                 // Sus subcarpetas y archivos
-                connection.query('UPDATE files SET path = ? WHERE path = ?', [formData.path+'/'+formData.newName, formData.path+'/'+formData.lastName], (err, rows, fields) => {
+                connection.query('UPDATE files SET path = ? WHERE path = ?', [formData.path + '/' + formData.newName, formData.path + '/' + formData.lastName], (err, rows, fields) => {
                     if (err) throw err
                     // Vemos si hay subcarpetas en subcarpetas y pillamos todos los archivos
-                    connection.query('SELECT * FROM files WHERE path LIKE ?', ['%'+formData.path+'/'+formData.lastName+'/%'], (err, rows, fields) => {
-                        if(err) throw err
-                        if(rows.length > 0) {
+                    connection.query('SELECT * FROM files WHERE path LIKE ?', ['%' + formData.path + '/' + formData.lastName + '/%'], (err, rows, fields) => {
+                        if (err) throw err
+                        if (rows.length > 0) {
                             rows.forEach(file => {
                                 let oldPath = file.path
                                 let newPath = oldPath.replace(formData.lastName, formData.newName)
                                 connection.query('UPDATE files SET path = ? WHERE id = ?', [newPath, file.id], (err, rows, fields) => {
-                                    if(err) throw err
+                                    if (err) throw err
                                     connection.query('SELECT level FROM users WHERE id = ?', [formData.user], (err, rows, fields) => {
                                         if (err) throw err
                                         let idLevel = getFrameIdLevel(rows[0].level)
                                         function callback(param) {
-                                            res.json({message:'Renamed', level_up:param})
+                                            res.json({ message: 'Renamed', level_up: param })
                                         }
                                         addProgress(formData.user, 'Carpeta Editada', idLevel, callback)
                                     })
@@ -773,7 +815,7 @@ app.post('/api/rename', async (req, res) => {
                                 if (err) throw err
                                 let idLevel = getFrameIdLevel(rows[0].level)
                                 function callback(param) {
-                                    res.json({message:'Renamed', level_up:param})
+                                    res.json({ message: 'Renamed', level_up: param })
                                 }
                                 addProgress(formData.user, 'Carpeta Editada', idLevel, callback)
                             })
@@ -787,16 +829,16 @@ app.post('/api/rename', async (req, res) => {
             console.log('File does not exist in path')
         }
     }
-    
+
 })
 
 app.get('/api/solicitudRegistro/:email/:name/:surname/:password/:username', (req, res) => {
     const salt = bcrypt.genSaltSync(13);
     connection.query('INSERT INTO users (email, name, surname, password, username, hash, profile_picture, level, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [req.params.email, req.params.name, req.params.surname, req.params.password, req.params.username, salt, './assets/perfil.png', 1, 0], (err, rows, fields) => {
-      if (err) throw err
-      console.log('The solution is: ', rows)
+        if (err) throw err
+        console.log('The solution is: ', rows)
     })
-    fs.mkdirSync('./'+req.params.username)
+    fs.mkdirSync('./' + req.params.username)
     res.json(true)
 });
 
@@ -811,10 +853,10 @@ app.get('/api/icons/:type', (req, res) => {
     const { type } = req.params;
     connection.query('SELECT path FROM icons WHERE type = ?', [type], (err, rows, fields) => {
         if (err) throw err
-        if(rows.length > 0) {
+        if (rows.length > 0) {
             res.json(rows)
         } else {
-            res.json([{path:'/assets/file.png'}])
+            res.json([{ path: '/assets/file.png' }])
         }
     })
 })
@@ -835,8 +877,8 @@ app.get('/api/sendMailVerification/:email', (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-        user: 'bymarquezz2@gmail.com',
-        pass: 'codjsnbrmeuiltcz'
+            user: 'bymarquezz2@gmail.com',
+            pass: 'codjsnbrmeuiltcz'
         }
     });
 
@@ -847,26 +889,26 @@ app.get('/api/sendMailVerification/:email', (req, res) => {
         text: `Bienvenido a Private-Cloud, tu codigo de verificacion es: ${numeroAleatorio}`
     };
 
-    transporter.sendMail(mailOptions, function(error, info){
+    transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-        console.log(error);
-        } else {
-        const mailOptions = {
-            from: 'bymarquezz2@gmail.com',
-            to: 'bymarquezz2@gmail.com',
-            subject: 'Usuario registrandose',
-            text: `Alguien se está registrando con el correo: ${email}`
-        };
-
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
             console.log(error);
-            } else {
-            console.log('Email sent: ' + info.response);
+        } else {
+            const mailOptions = {
+                from: 'bymarquezz2@gmail.com',
+                to: 'bymarquezz2@gmail.com',
+                subject: 'Usuario registrandose',
+                text: `Alguien se está registrando con el correo: ${email}`
+            };
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    res.json(numeroAleatorio);
+                }
+            });
             res.json(numeroAleatorio);
-            }
-        });
-        res.json(numeroAleatorio);
         }
     });
 });

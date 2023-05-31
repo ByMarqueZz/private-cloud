@@ -48,7 +48,7 @@ function Folder(props) {
 
                     {
                         props.isPublic == false ?
-                            <PopoverOption sendModal={props.sendModal} renameModal={props.renameModal} showPass3={props.showPass3} url={props.url} renameModal={props.renameModal} file={props.file} type={'folder'} modalDelete={props.modalDelete} path={props.path} download={props.download}/>
+                            <PopoverOption sendModal={props.sendModal} renameModal={props.renameModal} showPass3={props.showPass3} url={props.url} file={props.file} type={'folder'} modalDelete={props.modalDelete} path={props.path} download={props.download}/>
                             : <PopoverPublic url={props.url} file={props.file} type='folder' path={props.file.path} download={props.download}/>
                     }
                 </div>

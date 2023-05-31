@@ -7,6 +7,7 @@ import Header from './components/header/header';
 import Register from './components/register/register';
 import Profile from './components/profile/profile';
 import EditProfile from './components/edit-profile/edit-profile';
+import Recovery from './components/recovery/recovery';
 
 // URL de la API
 // export const url = 'http://192.168.1.136:8282';
@@ -103,6 +104,7 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Login user={null} functionLogged={isLogged} url={url}/>}></Route>
                             <Route path="/register" element={<Register user={null} functionLogged={isLogged} url={url}/>}></Route>
+                            <Route path="/recovery" element={<Recovery url={url}/>}></Route>
                             **<Route path="*" element={<Login user={null} functionLogged={isLogged} url={url}/>}></Route>**
                         </Routes>
                     </div>

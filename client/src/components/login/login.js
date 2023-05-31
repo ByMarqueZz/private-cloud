@@ -67,6 +67,10 @@ function Login(props) {
                       <Link to='/register' className='linkRegister'>¿No tienes cuenta? Regístrate</Link>
                   </div>
 
+                  <div className='divLinkRegister'>
+                      <Link to='/recovery' className='linkRegister'>¿Has olvidado la contraseña?</Link>
+                  </div>
+
                   <button onClick={handleSubmit} type="submit" className='loginButton btn btn-primary'>Iniciar sesión</button>
               </form>
           </div>

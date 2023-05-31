@@ -1,9 +1,4 @@
 import {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import TextField from '@mui/material/TextField';
 import './modal-password.css'
 
 function ModalPassword(props) {
