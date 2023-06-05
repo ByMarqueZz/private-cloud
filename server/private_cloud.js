@@ -35,8 +35,9 @@ var db_config = {
 //SERVIDOR LOCAL
 // const db_config = {
 //     host: '127.0.0.1',
+//     port: '8889',
 //     user: 'root',
-//     password: '',
+//     password: 'root',
 //     database: 'private_cloud'
 // }
 
@@ -584,8 +585,8 @@ function getUniqueFolderName(path, folderName) {
 }
 
 app.post('/api/recovery', (req, res) => {
-    const { user } = req.body
-    connection.query('SELECT * FROM users WHERE username = ?', [user], (err, rows, fields) => {
+    const { user, email } = req.body
+    connection.query('SELECT * FROM users WHERE username = ? AND email = ?', [user, email], (err, rows, fields) => {
         if (err) throw err
         if (rows.length > 0) {
             const newPass = bcrypt.hashSync('asda', 3)
