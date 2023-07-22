@@ -22,13 +22,13 @@ app.use(fileUpload());
  * ANTES DE SUBIR A PRODUCCIÓN HAY QUE DESCOMENTAR lAS LINEAS DEL FINAL
  */
 const options = {
-    cert: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/fullchain.pem'),
-    key: fs.readFileSync('/etc/letsencrypt/live/jointscounter.com/privkey.pem')
+    cert: fs.readFileSync('/Certbot/live/cloudinghub.com/fullchain.pem'),
+    key: fs.readFileSync('/Certbot/live/cloudinghub.com/privkey.pem')
 };
 var db_config = {
     host: '127.0.0.1',
     user: 'root',
-    password: 'tY3rbpYG8&@W1l^t.a',
+    password: '',
     database: 'private_cloud'
 }
 
