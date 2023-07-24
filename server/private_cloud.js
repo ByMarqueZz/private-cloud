@@ -26,7 +26,7 @@ const options = {
     key: fs.readFileSync('/Certbot/live/cloudinghub.com/privkey.pem')
 };
 var db_config = {
-    host: '127.0.0.1',
+    host: 'cloudinghub.com',
     user: 'root',
     password: '',
     database: 'private_cloud'
