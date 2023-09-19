@@ -2,7 +2,7 @@
 
 ## Conceptos básicos e idea
 
-Private Cloud es una aplicación basada en una mezcla entre Google Drive y GitHub. Busca ser una nube digital privada, accesible desde cualquier parte del mundo en la que poder subir, bajar, editar o compartir archivos a tiempo real y sin importar donde estés. El objetivo es cumplir las funciones que nos ofrecen las nubes convencionales pero siendo algo privado y solo accesible por la persona que despliega la página, además de añadir mejoras que no existen en las nubes convencionales como crear carpetas con contraseñas o compartir con un click a otro usuario. También se garantiza la integridad de los datos ya que a no ser que inicies sesión con el usuario correspondiente no se podrán ver dichos archivos privados, garantizando la privacidad de los mismos. Enlace a producción: https://notas-dfcec.web.app
+Private Cloud es una aplicación basada en una mezcla entre Google Drive y GitHub. Busca ser una nube digital privada, accesible desde cualquier parte del mundo en la que poder subir, bajar, editar o compartir archivos a tiempo real y sin importar donde estés. El objetivo es cumplir las funciones que nos ofrecen las nubes convencionales pero siendo algo privado y solo accesible por la persona que despliega la página, además de añadir mejoras que no existen en las nubes convencionales como crear carpetas con contraseñas o compartir con un click a otro usuario. También se garantiza la integridad de los datos ya que a no ser que inicies sesión con el usuario correspondiente no se podrán ver dichos archivos privados, garantizando la privacidad de los mismos. Enlace a producción: https://cloud.cloudinghub.com
 
 ## Registro e inicio de sesión
 
