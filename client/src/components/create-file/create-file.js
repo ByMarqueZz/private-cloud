@@ -23,22 +23,23 @@ function CreateFile(props) {
             },
             body: JSON.stringify({name, permission, path: props.path, user_id: props.user.id}),
         })
-            .then((response) => response.json())
+            .then((response) => {
+                response.json()
+            })
             .then((data) => {
-                console.log(data)
                 props.reload();
                 if(data.level_up == true) {
                     props.newLevelUp(props.user.level+1)
                     props.success(true);
                     setTimeout(() => {
-                        props.success(false);
+                        props.success();
                         props.levelUp(true);
                         setTimeout(() => {
                             props.levelUp(false);
                         }, 3000);
                     }, 3000);
                 } else {
-                    props.success(true);
+                    props.success();
                     setTimeout(() => {
                         props.success(false);
                     }, 3000);

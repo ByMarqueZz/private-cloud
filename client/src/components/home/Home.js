@@ -64,6 +64,15 @@ function Home(props) {
         getPath();
     }
 
+    function callbackCreateFile() {
+        setShowCreateFile(false);
+        setCreateFileSuccess(true);
+        setTimeout(() => {
+            setCreateFileSuccess(false);
+        }, 3000);
+        getPath();
+    }
+
     function getPath(path=props.path) {
         setFiles([]);
         setIsLoading(true);
@@ -334,7 +343,7 @@ function Home(props) {
                 showCreateFolder ? <CreateFolder levelUp={props.levelUp} newLevelUp={props.newLevelUp} success={callbackCreateFolder} user={props.user} show={setShowCreateFolder} path={props.path} url={props.url} reload={getPath}/> : ''
           }
           {
-                showCreateFile ? <CreateFile levelUp={props.levelUp} newLevelUp={props.newLevelUp} success={setCreateFileSuccess} user={props.user} show={setShowCreateFile} path={props.path} url={props.url} reload={getPath}/> : ''
+                showCreateFile ? <CreateFile levelUp={props.levelUp} newLevelUp={props.newLevelUp} success={callbackCreateFile} user={props.user} show={setShowCreateFile} path={props.path} url={props.url} reload={getPath}/> : ''
           }
           {
                 showDelete ? <Delete success={setDeleteSuccess} show={setShowDelete} type={type} file={fileDelete} path={props.path} url={props.url} reload={getPath}/> : ''
