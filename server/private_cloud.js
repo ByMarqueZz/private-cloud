@@ -10,7 +10,7 @@ const nodemailer = require("nodemailer");
 const https = require('https')
 const archiver = require('archiver');
 const path = require('path');
-const port = 8282
+const port = 3000
 
 app.use(cors())
 app.use(express.json());
