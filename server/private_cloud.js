@@ -7,7 +7,7 @@ const mysql = require('mysql')
 const bcrypt = require('bcrypt')
 const fileUpload = require('express-fileupload')
 const nodemailer = require("nodemailer");
-const https = require('https')
+const http = require('http')
 const archiver = require('archiver');
 const path = require('path');
 const port = 3000
@@ -918,9 +918,7 @@ app.get('/api/sendMailVerification/:email', (req, res) => {
 //     console.log(`Servidor HTTP listening on port ${port}`)
 // })
 
-const server = https.createServer({
-    port: port,
-}, app);
+const server = http.createServer(app);
 
 server.listen(port, () => {
     console.log('Servidor HTTPS escuchando en el puerto ' + port);
