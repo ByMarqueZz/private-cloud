@@ -11,7 +11,7 @@ import Recovery from './components/recovery/recovery';
 
 // URL de la API
 // export const url = 'http://192.168.1.136:8282';
-export const url = 'https://cloudinghub.com:8282';
+export const url = 'https://private-cloud-api.app.cloudinghub.com';
 // export const url = 'https://jointscounter.com:8282';
 
 function App() {
