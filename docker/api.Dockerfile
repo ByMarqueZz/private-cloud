@@ -10,11 +10,14 @@ COPY server/package*.json ./
 # Instala las dependencias del proyecto
 RUN npm install
 
+# Instala pm2 globalmente
+RUN npm install -g pm2
+
 # Copia el resto de los archivos del proyecto al contenedor
 COPY server/ .
 
 # Expone el puerto en el que la aplicación escuchará
 EXPOSE 3000
 
-# Comando para iniciar la aplicación
-CMD ["npm", "start"]
+# Usa pm2 para iniciar la aplicación
+CMD ["pm2-runtime", "private_cloud.js"]
