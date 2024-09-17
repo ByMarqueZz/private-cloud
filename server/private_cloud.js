@@ -27,8 +27,8 @@ const options = {
 };
 var db_config = {
     host: 'cloudinghub.com',
-    user: 'root',
-    password: '',
+    user: 'panel',
+    password: '4c7msFKYBeL7iCa',
     database: 'private_cloud'
 }
 
@@ -918,7 +918,7 @@ app.get('/api/sendMailVerification/:email', (req, res) => {
 //     console.log(`Servidor HTTP listening on port ${port}`)
 // })
 
-const server = https.createServer(options, app);
+const server = https.createServer({}, app);
 
 server.listen(port, () => {
     console.log('Servidor HTTPS escuchando en el puerto ' + port);
