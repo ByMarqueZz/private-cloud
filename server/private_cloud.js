@@ -918,7 +918,9 @@ app.get('/api/sendMailVerification/:email', (req, res) => {
 //     console.log(`Servidor HTTP listening on port ${port}`)
 // })
 
-const server = https.createServer({}, app);
+const server = https.createServer({
+    port: port,
+}, app);
 
 server.listen(port, () => {
     console.log('Servidor HTTPS escuchando en el puerto ' + port);
