@@ -1,4 +1,4 @@
 {
   "schemaVersion": 2,
-  "dockerfilePath": "./docker/api.Dockerfile"
+  "dockerfilePath": "./docker/web.Dockerfile"
 }
